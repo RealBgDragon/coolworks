@@ -1,0 +1,18 @@
+{
+    "name": "martin/coolworks",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "RealBgDragon",
+            "email": "128041836+RealBgDragon@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
