@@ -14,8 +14,10 @@ class AuthController extends Controller
     public function login(Request $request, Response $response)
     {
         $loginForm = new LoginForm();
+        $user = new User();
         if ($request->isPost()) {
             $loginForm->loadData($request->getBody());
+            $user->setAdmin(false);
             if ($loginForm->validate() && $loginForm->login()) {
                 $response->redirect('/');
                 return;
@@ -29,10 +31,12 @@ class AuthController extends Controller
     public function admin(Request $request, Response $response)
     {
         $loginForm = new LoginForm();
+        $user = new User();
         if ($request->isPost()) {
             $loginForm->loadData($request->getBody());
+            $user->setAdmin(true);
             if ($loginForm->validate() && $loginForm->login()) {
-                $response->redirect('/');
+                $response->redirect('/wcp/home');
                 return;
             }
         }

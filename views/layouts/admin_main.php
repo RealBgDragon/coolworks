@@ -8,101 +8,61 @@
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f1f1f1;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-            padding-top: 1rem;
-        }
-
-        .sidebar .nav-link {
-            color: #ffffff;
-        }
-
-        .sidebar .nav-link.active {
-            background-color: #007bff;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: #0056b3;
-        }
-
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-light .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="d-flex">
-        <nav class="sidebar flex-column bg-dark">
-            <a class="navbar-brand ms-3" href="#">Admin</a>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users">Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/settings">Settings</a>
-                </li>
-            </ul>
-        </nav>
-        <div class="content">
-            <nav class="navbar navbar-light bg-primary mb-4">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">MyApp</a>
-                    <ul class="navbar-nav ms-auto">
-                        <?php if (Application::isGuest()): ?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/login">Login</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/register">Register</a>
-                            </li>
-                        <?php else: ?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/logout">Welcome
-                                    <?php echo Application::$app->user->getDisplayName(); ?> (Logout)</a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </div>
-            </nav>
-
-            <div class="container-fluid">
-                <?php if (Application::$app->session->getFlash('success')): ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <?php echo Application::$app->session->getFlash('success'); ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <?php endif ?>
-
-                <div class="content">
-                    {{content}}
-                </div>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
-
         </div>
+    </nav>
+    <div class="container mt-4">
+        <?php if (Application::$app->session->getFlash('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo Application::$app->session->getFlash('success'); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif ?>
 
+        <div class="content">
+            {{content}}
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -39,6 +39,11 @@ class LoginForm extends Model
             $this->addError('password', 'Password is incorrect');
             return false;
         }
-        return Application::$app->login($user);
+        /* if (!($this->password == $user->password)) {
+            $this->addError('password', 'Password is incorrect');
+            return false;
+        } */
+        $type = $user->getAdmin();
+        return Application::$app->login($user, $type);
     }
 }

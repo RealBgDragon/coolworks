@@ -14,4 +14,13 @@ class SiteController extends Controller
         ];
         return $this->render('home', $params);
     }
+
+    public function adminHome()
+    {
+        $params = [
+            'name' => "Admin BgDragon"
+        ];
+        $this->setLayout('admin_main');
+        return $this->render('admin_home', $params);
+    }
 }

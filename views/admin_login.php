@@ -12,21 +12,23 @@ if (!isset($model)) {
     $model = new LoginForm();
 } ?>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center bg-primary text-white">
-                    Admin Login
-                </div>
-                <div class="card-body">
-                    <?php echo $form->field($model, 'email') ?>
-                    <?php echo $form->field($model, 'password')->passwordField() ?>
-                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                </div>
-            </div>
-        </div>
+
+
+
+
+
+<form>
+    <div class="form-group">
+        <?php echo $form->field($model, 'email') ?>
     </div>
-</div>
+    <div class="form-group">
+        <?php echo $form->field($model, 'password')->passwordField() ?>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 <?php Form::end() ?>

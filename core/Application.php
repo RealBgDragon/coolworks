@@ -5,6 +5,7 @@ namespace app\core;
 class Application
 {
     public static string $ROOT_DIR;
+
     public string $userClass;
     public Router $router;
     public Request $request;
@@ -54,12 +55,17 @@ class Application
         $this->controller = $controller;
     }
 
-    public function login(DbModel $user)
+    public function login(DbModel $user, bool $type)
     {
         $this->user = $user;
         $primaryKey = $user->primaryKey();
         $primaryValue = $user->{$primaryKey};
-        $this->session->set('user', $primaryValue);
+        if ($type) {
+            $this->session->set('admin', $primaryValue);
+        } else {
+            $this->session->set('user', $primaryValue);
+        }
+
         return true;
     }
 

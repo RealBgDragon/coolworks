@@ -17,11 +17,26 @@ class User extends UserModel
     public int $status = self::STATUS_INACTIVE;
     public string $password = '';
     public string $rePassword = '';
+    public bool $isAdmin = true;
+
+    public function setAdmin(bool $isItAdmin)
+    {
+        global $isAdmin;
+        $isAdmin = $isItAdmin;
+    }
+
+    public function getAdmin()
+    {
+        global $isAdmin;
+        return $isAdmin;
+    }
 
     public function tableName(): string
     {
-        return 'users';
+        global $isAdmin;
+        return $isAdmin ? 'admins' : 'users';
     }
+
 
     public function primaryKey(): string
     {

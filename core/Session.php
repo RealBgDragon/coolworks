@@ -4,6 +4,7 @@ namespace app\core;
 
 class Session
 {
+    //TODO secure the sassion with the useragent and with the ip
     protected const FLASH_KEY = 'flash_messages';
     public function __construct()
     {
