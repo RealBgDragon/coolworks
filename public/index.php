@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use app\controllers\SiteController;
 use app\core\Application;
 use app\controllers\AuthController;
+use app\controllers\AdminController;
 use app\models\User;
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -32,6 +33,6 @@ $app->router->get('/logout', [AuthController::class, 'logout']);
 $app->router->get('/wcp', [AuthController::class, 'admin']);
 $app->router->post('/wcp', [AuthController::class, 'admin']);
 
-$app->router->get('/wcp/home', [SiteController::class, 'adminHome']);
+$app->router->get('/wcp/home', [AdminController::class, 'adminHome']);
 
 $app->run();

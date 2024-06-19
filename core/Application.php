@@ -29,7 +29,10 @@ class Application
 
         $this->db = new Database($config['db']);
 
-        $primaryValue = $this->session->get('user');
+        $primaryValue = $this->session->get('admin');
+        if (!$primaryValue) {
+            $primaryValue = $this->session->get('user');
+        }
         if ($primaryValue) {
             $userInstance = new $this->userClass();
             $primaryKey = $userInstance->primaryKey();
@@ -73,10 +76,21 @@ class Application
     {
         $this->user = null;
         $this->session->remove('user');
+        $this->session->remove('admin');
     }
 
     public static function isGuest()
     {
         return !self::$app->user;
+    }
+
+    public function isAdmin(): bool
+    {
+        if ($this->session->get('admin')) {
+            return true;
+
+        } else {
+            return false;
+        }
     }
 }
