@@ -20,6 +20,22 @@ class ModelController extends Controller
 
     }
 
+    public function uploadFile()
+    {
+        $fileName = $_FILES["imageFile"]["name"];
+
+        if ($_FILES["imageFile"]["size"] > 0) {
+            $fileName = $_FILES["imageFile"]["name"];
+
+            $uploadDirectory = "C:/xampp/htdocs/coolworks/website_images/";
+            $fileName = uniqid() . "-" . basename($_FILES['imageFile']['name']);
+            $uploadPath = $uploadDirectory . $fileName;
+
+            move_uploaded_file($_FILES['imageFile']['tmp_name'], $uploadPath);
+
+        }
+    }
+
     public function addModels(Request $request, Response $response)
     {
         $this->checkIfAdmin();

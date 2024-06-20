@@ -49,13 +49,8 @@ abstract class DbModel extends Model
             $statement->execute();
             return true;
         } catch (PDOException $e) {
-            echo "Error executing SQL statement: " . $e->getMessage();
-            die();
             return false;
         } catch (Exception $e) {
-            // Handle other exceptions
-            echo "An error occurred: " . $e->getMessage();
-            die();
             return false;
         }
     }

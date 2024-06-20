@@ -1,4 +1,7 @@
-<?php use app\core\Application; ?>
+<?php use app\core\Application;
+use app\models\User;
+
+?>
 <!doctype html>
 <html lang="en">
 
