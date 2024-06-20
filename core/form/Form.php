@@ -21,4 +21,9 @@ class Form
     {
         return new Field($model, $attribute);
     }
+
+    public function slider(Model $model, $attribute)
+    {
+        return new Slider($model, $attribute);
+    }
 }

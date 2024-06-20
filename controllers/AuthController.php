@@ -49,6 +49,7 @@ class AuthController extends Controller
     public function logout(Request $request, Response $response)
     {
         Application::$app->logout();
-        $response->redirect('/');
+        $url = $_SERVER['HTTP_REFERER'];
+        $response->redirect($url);
     }
 }

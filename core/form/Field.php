@@ -32,10 +32,10 @@ class Field
                 </div>
                 </div>'
             ,
-            $this->model->getLabel($this->attribute),
-            $this->type,
-            $this->attribute,
-            $this->model->{$this->attribute} ?? '',
+            $this->model->getLabel($this->attribute),   //label
+            $this->type,                                //type
+            $this->attribute,                           //name
+            $this->model->{$this->attribute} ?? '',     //value
             $this->model->hasError($this->attribute) ? ' is-invalid' : '',
             $this->model->getFirstError($this->attribute)
         );

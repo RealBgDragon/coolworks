@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use app\controllers\ModelController;
 use app\controllers\SiteController;
 use app\core\Application;
 use app\controllers\AuthController;
@@ -34,5 +35,10 @@ $app->router->get('/wcp', [AuthController::class, 'admin']);
 $app->router->post('/wcp', [AuthController::class, 'admin']);
 
 $app->router->get('/wcp/home', [AdminController::class, 'adminHome']);
+
+$app->router->get('/wcp/models', [ModelController::class, 'models']);
+
+$app->router->get('/wcp/add-models', [ModelController::class, 'addModels']);
+$app->router->post('/wcp/add-models', [ModelController::class, 'addModels']);
 
 $app->run();
