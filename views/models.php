@@ -7,8 +7,8 @@
             <div class="card">
                 <?php $src = $model['model_id']; ?>
                 <img src="/<?php echo "./uploads/$src/img.png"; ?>" class="card-img-top img-fluid" alt="Model Image"
-                    style="width: 300px; height: 300px;">
-
+                    style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
+                    data-model-id="<?php echo $model['model_id']; ?>" onclick="showModelDetails(this)">
                 <div class="card-body">
                     <p class="card-text"><?php echo $model['first_name'] . ' ' . $model['last_name'] ?></p>
                     <p class="card-text"><?php echo $model['age'] ?></p>
@@ -16,4 +16,26 @@
             </div>
         </div>
     <?php endforeach; ?>
+</div>
+
+<div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelModalLabel">Model Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modelModalBody">
+                <div class="row">
+                    <img src="/<?php echo "./uploads/$src/img.png"; ?>" class="card-img-top img-fluid" alt="Model Image"
+                        style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
+                        data-model-id="<?php echo $model['model_id']; ?>" onclick="showModelDetails(this)">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

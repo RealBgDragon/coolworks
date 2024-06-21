@@ -42,7 +42,7 @@ class ModelController extends Controller
                     $productID = $photoModel->getId();
                     $uploadFileDir = './uploads/' . $productID . '/';
                     if (!is_dir($uploadFileDir)) {
-                        mkdir($uploadFileDir, 0777, true);
+                        mkdir($uploadFileDir, 0777, true); //change to 755
                     }
 
                     $newFileName = md5(time() . $fileName) . '.' . $fileExtension;

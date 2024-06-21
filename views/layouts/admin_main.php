@@ -75,15 +75,20 @@ use app\models\User;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Get the slider and value display elements
-        const slider = document.getElementById("customRange2");
-        const sliderValue = document.getElementById("sliderValue");
+        function showModelDetails(img) {
+            var modelId = $(img).data('model-id');
+            var modelName = $(img).closest('.card').find('.card-body p:first').text();
+            var modelAge = $(img).closest('.card').find('.card-body p:last').text();
+            var imageSrc = $(img).attr('src');
 
-        // Update the value display when the slider value changes
-        slider.addEventListener("input", function () {
-            sliderValue.textContent = this.value;
-        });
+            $('#modalModelImage').attr('src', imageSrc);
+            $('#modelName').text(modelName);
+            $('#modelAge').text(modelAge);
+
+            $('#modelModal').modal('show');
+        }
     </script>
 </body>
 

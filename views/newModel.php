@@ -28,3 +28,15 @@ if (!isset($model)) {
 <button type="submit" class="btn btn-primary">Submit</button>
 
 <?php Form::end() ?>
+
+<script>
+    // Get the slider and value display elements
+    const slider = document.getElementById("customRange2");
+    const sliderValue = document.getElementById("sliderValue");
+
+    // Update the value display when the slider value changes
+    slider.addEventListener("input", function () {
+        sliderValue.textContent = this.value;
+    });
+</script>
+<script src="c:\xampp\htdocs\coolworks\views\newModel.js"></script>
