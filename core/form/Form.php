@@ -6,9 +6,15 @@ use app\core\Model;
 
 class Form
 {
-    public static function begun($action, $method)
+    public static function begun($action, $method, $attributes = [])
     {
-        echo sprintf('<form action="%s" method="%s">', $action, $method);
+        $attributeStr = '';
+
+        foreach ($attributes as $key => $value) {
+            $attributeStr = sprintf(' %s="%s"', $key, $value);
+        }
+
+        echo sprintf('<form action="%s" method="%s"%s>', $action, $method, $attributeStr);
         return new Form();
     }
 
@@ -25,5 +31,10 @@ class Form
     public function slider(Model $model, $attribute)
     {
         return new Slider($model, $attribute);
+    }
+
+    public function video($attribute)
+    {
+        return new Video($attribute);
     }
 }

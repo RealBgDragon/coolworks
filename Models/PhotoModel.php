@@ -10,6 +10,7 @@ use app\models\User;
 class PhotoModel extends DbModel
 {
 
+    public $model_id = '';
     public $first_name = '';
     public $last_name = '';
     public $image_url = '';
@@ -28,6 +29,11 @@ class PhotoModel extends DbModel
     public function primaryKey(): string
     {
         return 'model_id';
+    }
+
+    public function getId()
+    {
+        return $this->model_id;
     }
 
     public function rules(): array
@@ -50,6 +56,11 @@ class PhotoModel extends DbModel
         ];
     }
 
+    public function getModel()
+    {
+        return $this->getAll();
+    }
+
     public function createNew()
     {
         $attributes = $this->attributes();
@@ -57,12 +68,14 @@ class PhotoModel extends DbModel
         foreach ($attributes as $attr) {
             $params["$attr"] = $this->{$attr};
         }
-        $user = $this->addNew($params);
-        if (!$user) {
+        $user = $this->addNew($params); //contains the userId
+        if (!isset($user)) {
             $this->addError('error', 'Model wasn`t added successfully');
             return false;
         } else {
+            $this->model_id = $user;
             return true;
         }
     }
+
 }

@@ -27,4 +27,10 @@ class Controller
             return;
         }
     }
+
+    public function userMessage($type, $message)
+    {
+        $session = new Session();
+        $session->setFlash("$type", "$message");
+    }
 }

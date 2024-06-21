@@ -27,6 +27,16 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
+    public function getAll()
+    {
+        $tableName = static::tableName();
+        $sql = "SELECT * FROM $tableName";
+        $statement = self::prepare($sql);
+
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function addNew($params)
     {
         try {
@@ -47,7 +57,8 @@ abstract class DbModel extends Model
                 $statement->bindValue($paramNumber++, $value); // Use numeric index
             }
             $statement->execute();
-            return true;
+            /* $this->id =  */
+            return self::getLastId();
         } catch (PDOException $e) {
             return false;
         } catch (Exception $e) {
@@ -59,4 +70,10 @@ abstract class DbModel extends Model
     {
         return Application::$app->db->pdo->prepare($sql);
     }
+
+    public static function getLastId()
+    {
+        return Application::$app->db->pdo->lastInsertId();
+    }
+
 }

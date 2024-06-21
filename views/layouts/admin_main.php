@@ -60,6 +60,11 @@ use app\models\User;
                 <?php echo Application::$app->session->getFlash('error'); ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        <?php elseif (Application::$app->session->getFlash('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo Application::$app->session->getFlash('success'); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php endif; ?>
 
         <div class="content">

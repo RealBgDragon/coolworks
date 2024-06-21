@@ -13,27 +13,12 @@ class ModelController extends Controller
 
     public function models()
     {
+        $photoModel = new PhotoModel;
         $this->checkIfAdmin();
-        $images = glob('../*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+        $modelsData = $photoModel->getModel();
         $this->setLayout('admin_main');
-        return $this->render('models', ['images' => $images]);
+        return $this->render('models', ['modelsData' => $modelsData]);
 
-    }
-
-    public function uploadFile()
-    {
-        $fileName = $_FILES["imageFile"]["name"];
-
-        if ($_FILES["imageFile"]["size"] > 0) {
-            $fileName = $_FILES["imageFile"]["name"];
-
-            $uploadDirectory = "C:/xampp/htdocs/coolworks/website_images/";
-            $fileName = uniqid() . "-" . basename($_FILES['imageFile']['name']);
-            $uploadPath = $uploadDirectory . $fileName;
-
-            move_uploaded_file($_FILES['imageFile']['tmp_name'], $uploadPath);
-
-        }
     }
 
     public function addModels(Request $request, Response $response)
@@ -42,15 +27,45 @@ class ModelController extends Controller
         $photoModel = new PhotoModel();
         if ($request->isPost()) {
             $photoModel->loadData($request->getBody());
-            if ($photoModel->createNew()) {
-                $response->redirect('/wcp/home');
-                return;
+
+            if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['image_url']['tmp_name'];
+                $fileName = $_FILES['image_url']['name'];
+                $fileSize = $_FILES['image_url']['size'];
+                $fileType = $_FILES['image_url']['type'];
+                $fileNameCmps = explode(".", $fileName);
+                $fileExtension = strtolower(end($fileNameCmps));
+
+                $allowedfileExtensions = ['jpg', 'gif', 'png'];
+
+                if ($photoModel->createNew() && in_array($fileExtension, $allowedfileExtensions)) {
+                    $productID = $photoModel->getId();
+                    $uploadFileDir = './uploads/' . $productID . '/';
+                    if (!is_dir($uploadFileDir)) {
+                        mkdir($uploadFileDir, 0777, true);
+                    }
+
+                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                    $dest_path = $uploadFileDir . $newFileName;
+
+                    if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                        $photoModel->image_url = $dest_path; // Save the path to the model
+                        $this->userMessage('success', 'Model was sucessfuly added');
+                        $response->redirect('/wcp/home');
+                        return;
+                    } else {
+                        $this->userMessage('error', 'There was an error moving the uploaded file.');
+                    }
+                } else {
+                    $this->userMessage('error', 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions));
+                }
+            } else {
+                $this->userMessage('error', 'There was an error uploading the file.');
             }
         }
         $this->setLayout('admin_main');
         return $this->render('newModel', [
             'model' => $photoModel
         ]);
-        /* return $this->render('newModel'); */
     }
 }

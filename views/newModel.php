@@ -4,7 +4,7 @@ use app\core\form\Form;
 use app\core\form\Slider;
 use app\models\PhotoModel;
 
-$form = Form::begun('', "post");
+$form = Form::begun('', "post", ['enctype' => 'multipart/form-data']);
 
 if (!isset($model)) {
     $model = new PhotoModel();
