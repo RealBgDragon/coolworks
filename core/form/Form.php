@@ -33,8 +33,8 @@ class Form
         return new Slider($model, $attribute);
     }
 
-    public function video($attribute)
+    public function video()
     {
-        return new Video($attribute);
+        return new Video();
     }
 }

@@ -7,6 +7,7 @@ use app\controllers\SiteController;
 use app\core\Application;
 use app\controllers\AuthController;
 use app\controllers\AdminController;
+use app\controllers\SelectionController;
 use app\models\User;
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -44,5 +45,7 @@ $app->router->get('/wcp/add-models', [ModelController::class, 'addModels']);
 $app->router->post('/wcp/add-models', [ModelController::class, 'addModels']);
 
 $app->router->get('/wcp/projects', [ProjectsController::class, 'projects']);
+
+$app->router->get('/wcp/selection', [SelectionController::class, 'selection']);
 
 $app->run();

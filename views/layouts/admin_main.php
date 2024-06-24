@@ -1,7 +1,5 @@
-<?php use app\core\Application;
-use app\models\User;
+<?php use app\core\Application; ?>
 
-?>
 <!doctype html>
 <html lang="en">
 
@@ -13,7 +11,6 @@ use app\models\User;
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-YWznkfwAOYW2CWjRD9mfzaRJn5C0TuhD7UPIjcleDAWFINQZvLpNd7UHONtVxvyUp}*">
-
 </head>
 
 <body>
@@ -35,6 +32,9 @@ use app\models\User;
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/wcp/projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/wcp/selection"><i class="fas fa-camera"></i> Selection</a>
                     </li>
                 </ul>
                 <?php if (Application::isGuest()): ?>
