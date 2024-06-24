@@ -15,9 +15,28 @@ class ModelController extends Controller
     {
         $photoModel = new PhotoModel;
         $this->checkIfAdmin();
-        $modelsData = $photoModel->getModel();
+
+        $sort = $_GET['sort'] ?? 'name';
+        $order = $_GET['order'] ?? 'asc';
+        $filter = [
+            'age_min' => $_GET['age_min'] ?? null,
+            'age_max' => $_GET['age_max'] ?? null,
+            'height_min' => $_GET['height_min'] ?? null,
+            'height_max' => $_GET['height_max'] ?? null,
+        ];
+
+        $modelsData = $photoModel->getAll($sort, $order, $filter);
         $this->setLayout('admin_main');
-        return $this->render('models', ['modelsData' => $modelsData]);
+        return $this->render('models', [
+            'modelsData' => $modelsData,
+            'currentSort' => $sort,
+            'currentOrder' => $order,
+            'currentFilter' => $filter
+        ]);
+    }
+
+    public function sortModels()
+    {
 
     }
 

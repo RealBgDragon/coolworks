@@ -38,6 +38,7 @@ $app->router->post('/wcp', [AuthController::class, 'admin']);
 $app->router->get('/wcp/home', [AdminController::class, 'adminHome']);
 
 $app->router->get('/wcp/models', [ModelController::class, 'models']);
+$app->router->post('/wcp/models', [ModelController::class, 'models']);
 
 $app->router->get('/wcp/add-models', [ModelController::class, 'addModels']);
 $app->router->post('/wcp/add-models', [ModelController::class, 'addModels']);

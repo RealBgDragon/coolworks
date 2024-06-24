@@ -27,14 +27,54 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getAll()
+    public function getAll($sort = 'name', $order = 'asc', $filter = [])
     {
         $tableName = static::tableName();
-        $sql = "SELECT * FROM $tableName";
+        $sql = "SELECT *, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM $tableName WHERE 1=1";
+
+        // Apply filters
+        if (!empty($filter['age_min'])) {
+            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) >= :age_min";
+        }
+        if (!empty($filter['age_max'])) {
+            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) <= :age_max";
+        }
+        if (!empty($filter['height_min'])) {
+            $sql .= " AND height >= :height_min";
+        }
+        if (!empty($filter['height_max'])) {
+            $sql .= " AND height <= :height_max";
+        }
+
+        // Apply sorting
+        $allowedSortColumns = ['name', 'age', 'height'];
+        $sort = in_array($sort, $allowedSortColumns) ? $sort : 'name';
+        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+
+        if ($sort === 'age') {
+            $sql .= " ORDER BY TIMESTAMPDIFF(YEAR, birthday, CURDATE()) $order";
+        } else {
+            $sql .= " ORDER BY $sort $order";
+        }
+
         $statement = self::prepare($sql);
 
+        // Bind filter parameters
+        if (!empty($filter['age_min'])) {
+            $statement->bindValue(':age_min', $filter['age_min']);
+        }
+        if (!empty($filter['age_max'])) {
+            $statement->bindValue(':age_max', $filter['age_max']);
+        }
+        if (!empty($filter['height_min'])) {
+            $statement->bindValue(':height_min', $filter['height_min']);
+        }
+        if (!empty($filter['height_max'])) {
+            $statement->bindValue(':height_max', $filter['height_max']);
+        }
+
         $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(Application::$app->db->pdo::FETCH_ASSOC);
     }
 
     public function addNew($params)
@@ -54,10 +94,9 @@ abstract class DbModel extends Model
 
             $paramNumber = 1;
             foreach ($params as $key => $value) {
-                $statement->bindValue($paramNumber++, $value); // Use numeric index
+                $statement->bindValue($paramNumber++, $value); // Use numeric index 
             }
             $statement->execute();
-            /* $this->id =  */
             return self::getLastId();
         } catch (PDOException $e) {
             return false;

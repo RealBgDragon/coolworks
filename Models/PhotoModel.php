@@ -11,8 +11,7 @@ class PhotoModel extends DbModel
 {
 
     public $model_id = '';
-    public $first_name = '';
-    public $last_name = '';
+    public $name = '';
     public $image_url = '';
     public $age = '';
 
@@ -23,7 +22,7 @@ class PhotoModel extends DbModel
 
     public function attributes(): array
     {
-        return ['first_name', 'last_name', 'image_url', 'age'];
+        return ['name', 'image_url', 'age'];
     }
 
     public function primaryKey(): string
@@ -39,8 +38,7 @@ class PhotoModel extends DbModel
     public function rules(): array
     {
         return [
-            'first_name' => [Model::RULE_REQUIRED],
-            'last_name' => [Model::RULE_REQUIRED],
+            'name' => [Model::RULE_REQUIRED],
             /* 'image_url' => [Model::RULE_REQUIRED], */
             'age' => [Model::RULE_REQUIRED]
         ];
@@ -49,8 +47,7 @@ class PhotoModel extends DbModel
     public function labels(): array
     {
         return [
-            'first_name' => 'First name',
-            'last_name' => 'Last name',
+            'name' => 'Name',
             'image_url' => 'Image',
             'age' => 'Age'
         ];
