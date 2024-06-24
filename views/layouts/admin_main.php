@@ -76,20 +76,7 @@ use app\models\User;
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function showModelDetails(img) {
-            var modelId = $(img).data('model-id');
-            var modelName = $(img).closest('.card').find('.card-body p:first').text();
-            var modelAge = $(img).closest('.card').find('.card-body p:last').text();
-            var imageSrc = $(img).attr('src');
 
-            $('#modalModelImage').attr('src', imageSrc);
-            $('#modelName').text(modelName);
-            $('#modelAge').text(modelAge);
-
-            $('#modelModal').modal('show');
-        }
-    </script>
 </body>
 
 </html>

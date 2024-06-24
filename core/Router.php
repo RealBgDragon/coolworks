@@ -63,6 +63,7 @@ class Router
 
     protected function renderOnlyView($view, $params)
     {
+        ob_start();
         foreach ($params as $key => $value) {
             $$key = $value;
         }
