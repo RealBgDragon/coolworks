@@ -1,0 +1,25 @@
+#age_slider {
+    height: 10px;
+    background: #e9ecef;
+    border: none;
+    border-radius: 5px;
+}
+#age_slider .ui-slider-range {
+    background: #007bff;
+}
+#age_slider .ui-slider-handle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    border: none;
+    cursor: pointer;
+}
+#age_slider .ui-slider-handle:focus {
+    outline: none;
+}
+#age_range {
+    width: 100px;
+    text-align: center;
+    color: #007bff !important;
+}

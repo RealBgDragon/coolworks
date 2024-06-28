@@ -32,6 +32,9 @@ class AuthController extends Controller
     {
         $loginForm = new LoginForm();
         $user = new User();
+        if (isset($_SESSION['admin'])) {
+            $response->redirect('/wcp/home');
+        }
         if ($request->isPost()) {
             $loginForm->loadData($request->getBody());
             $user->setAdmin(true);

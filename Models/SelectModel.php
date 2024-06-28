@@ -7,29 +7,25 @@ use app\core\DbModel;
 use app\core\Model;
 use app\models\User;
 
-class PhotoModel extends DbModel
+class SelectModel extends DbModel
 {
 
+    public $admin_id = '';
     public $model_id = '';
-    public $name = '';
-    public $phone = '';
-    public $birthday = '';
-    public $weight = '';
-    public $height = '';
 
     public function tableName(): string
     {
-        return 'model';
+        return 'selected_models';
     }
 
     public function attributes(): array
     {
-        return ['name', 'phone', 'birthday', 'weight', 'height'];
+        return ['admin_id', 'model_id'];
     }
 
     public function primaryKey(): string
     {
-        return 'model_id';
+        return 'id';
     }
 
     public function getId()
@@ -40,23 +36,14 @@ class PhotoModel extends DbModel
     public function rules(): array
     {
         return [
-            'name' => [Model::RULE_REQUIRED],
-            'phone' => [Model::RULE_REQUIRED],
-            'height' => [Model::RULE_REQUIRED],
-            'birthday' => [Model::RULE_REQUIRED],
-            'weight' => [Model::RULE_REQUIRED],
+            'admin_id' => [Model::RULE_REQUIRED],
+            'model_id' => [Model::RULE_REQUIRED]
         ];
     }
 
     public function labels(): array
     {
-        return [
-            'name' => 'Name',
-            'phone' => 'Phone',
-            'height' => 'Height',
-            'weight' => 'Weight',
-            'birthday' => 'Date of birth'
-        ];
+        return [];
     }
 
     public function getModel()
@@ -68,11 +55,12 @@ class PhotoModel extends DbModel
     {
         $attributes = $this->attributes();
         $params = array_fill_keys(array_map(fn($attr) => "$attr", $attributes), null);
+        var_dump($params);
         foreach ($attributes as $attr) {
             $params["$attr"] = $this->{$attr};
         }
-        $user = $this->addNew($params); //contains the userId
-        if (!isset($user)) {
+        $user = $this->addNew($params);
+        if (!isset($user) || $user == false) {
             $this->addError('error', 'Model wasn`t added successfully');
             return false;
         } else {

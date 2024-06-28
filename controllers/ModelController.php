@@ -6,21 +6,34 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\PhotoModel;
+use app\models\SelectModel;
 
 
 class ModelController extends Controller
 {
 
-    public function models()
+    public function models(Request $request, Response $response)
     {
         $photoModel = new PhotoModel;
+        $selectModel = new SelectModel;
         $this->checkIfAdmin();
+        if ($request->isPost()) {
+            $selectModel->loadData($request->getBody());
 
+            if ($selectModel->createNew()) {
+                $this->userMessage('success', 'Model was successfully added');
+                $response->redirect('/wcp/models');
+                return;
+            }
+        }
         $sort = $_GET['sort'] ?? 'name';
         $order = $_GET['order'] ?? 'asc';
+        $age_range = explode(' - ', $_GET['age_range'] ?? '0 - 100');
+        $age_min = (int) trim($age_range[0]);
+        $age_max = (int) trim($age_range[1]);
         $filter = [
-            'age_min' => $_GET['age_min'] ?? null,
-            'age_max' => $_GET['age_max'] ?? null,
+            'age_min' => $age_min,
+            'age_max' => $age_max,
             'height_min' => $_GET['height_min'] ?? null,
             'height_max' => $_GET['height_max'] ?? null,
         ];
@@ -35,10 +48,6 @@ class ModelController extends Controller
         ]);
     }
 
-    public function sortModels()
-    {
-
-    }
 
     public function addModels(Request $request, Response $response)
     {
@@ -61,16 +70,16 @@ class ModelController extends Controller
                     $productID = $photoModel->getId();
                     $uploadFileDir = './uploads/' . $productID . '/';
                     if (!is_dir($uploadFileDir)) {
-                        mkdir($uploadFileDir, 0777, true); //change to 755
+                        mkdir($uploadFileDir, 0755, true);
                     }
 
-                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                    $newFileName = 'img.' . $fileExtension; // Renaming the file to 'img'
                     $dest_path = $uploadFileDir . $newFileName;
 
                     if (move_uploaded_file($fileTmpPath, $dest_path)) {
                         $photoModel->image_url = $dest_path; // Save the path to the model
-                        $this->userMessage('success', 'Model was sucessfuly added');
-                        $response->redirect('/wcp/home');
+                        $this->userMessage('success', 'Model was successfully added');
+                        $response->redirect('/wcp/models');
                         return;
                     } else {
                         $this->userMessage('error', 'There was an error moving the uploaded file.');
@@ -87,4 +96,5 @@ class ModelController extends Controller
             'model' => $photoModel
         ]);
     }
+
 }

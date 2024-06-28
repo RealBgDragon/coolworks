@@ -13,11 +13,13 @@ if (!isset($model)) {
 
 <div class="row">
     <div class="col-md-6">
-        <?php echo $form->field($model, 'first_name') ?>
-        <?php echo $form->field($model, 'last_name') ?>
-        <?php echo $form->slider($model, 'age') ?>
+        <?php echo $form->field($model, 'name') ?>
+        <?php echo $form->field($model, 'phone')->numberField() ?>
+        <?php echo $form->field($model, 'height')->numberField() ?>
     </div>
     <div class="col-md-6">
+        <?php echo $form->field($model, 'weight')->numberField() ?>
+        <?php echo $form->field($model, 'birthday')->dateField() ?>
         <div class="mb-3">
             <label for="image_url" class="form-label">Image</label>
             <input class="form-control" type="file" id="image_url" name="image_url" value="/">
@@ -25,7 +27,7 @@ if (!isset($model)) {
     </div>
 </div>
 
-<button type="submit" class="btn btn-primary">Submit</button>
+<button type="submit" class="btn btn-primary">Add model</button>
 
 <?php Form::end() ?>
 
