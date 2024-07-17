@@ -105,6 +105,25 @@ abstract class DbModel extends Model
         }
     }
 
+    public function remove($id)
+    {
+        try {
+            $tableName = static::tableName();
+            $sql = "DELETE FROM $tableName WHERE model_id = :id";
+            $statement = self::prepare($sql);
+            $statement->bindValue(':id', $id);
+
+            $statement->execute();
+            return true;
+        } catch (PDOException $e) {
+            $this->addError('error', 'Database error: ' . $e->getMessage());
+            return false;
+        } catch (Exception $e) {
+            $this->addError('error', 'General error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
     public static function prepare($sql)
     {
         return Application::$app->db->pdo->prepare($sql);

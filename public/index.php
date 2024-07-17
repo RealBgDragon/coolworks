@@ -47,5 +47,6 @@ $app->router->post('/wcp/add-models', [ModelController::class, 'addModels']);
 $app->router->get('/wcp/projects', [ProjectsController::class, 'projects']);
 
 $app->router->get('/wcp/selection', [SelectionController::class, 'selection']);
+$app->router->post('/wcp/selection', [SelectionController::class, 'selection']);
 
 $app->run();
