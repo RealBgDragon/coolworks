@@ -70,6 +70,21 @@
     <?php endforeach; ?>
 </div>
 
+<div class="row">
+    <div class="col-md-12">
+        <nav>
+            <ul class="pagination justify-content-center">
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item <?php echo $currentPage == $i ? 'active' : ''; ?>">
+                        <a class="page-link" href="/wcp/models?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
 <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">

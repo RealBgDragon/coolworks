@@ -27,7 +27,7 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getAll($sort = 'name', $order = 'asc', $filter = [])
+    public function getAll($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
     {
         $tableName = static::tableName();
         $sql = "SELECT *, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM $tableName WHERE 1=1";
@@ -57,6 +57,52 @@ abstract class DbModel extends Model
             $sql .= " ORDER BY $sort $order";
         }
 
+        // Apply pagination
+        $sql .= " LIMIT :limit OFFSET :offset";
+
+        $statement = self::prepare($sql);
+
+        // Bind filter parameters
+        if (!empty($filter['age_min'])) {
+            $statement->bindValue(':age_min', $filter['age_min']);
+        }
+        if (!empty($filter['age_max'])) {
+            $statement->bindValue(':age_max', $filter['age_max']);
+        }
+        if (!empty($filter['height_min'])) {
+            $statement->bindValue(':height_min', $filter['height_min']);
+        }
+        if (!empty($filter['height_max'])) {
+            $statement->bindValue(':height_max', $filter['height_max']);
+        }
+
+        // Bind pagination parameters
+        $statement->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $statement->bindValue(':offset', $offset, \PDO::PARAM_INT);
+
+        $statement->execute();
+        return $statement->fetchAll(Application::$app->db->pdo::FETCH_ASSOC);
+    }
+
+    public function countAll($filter = [])
+    {
+        $tableName = static::tableName();
+        $sql = "SELECT COUNT(*) as total FROM $tableName WHERE 1=1";
+
+        // Apply filters
+        if (!empty($filter['age_min'])) {
+            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) >= :age_min";
+        }
+        if (!empty($filter['age_max'])) {
+            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) <= :age_max";
+        }
+        if (!empty($filter['height_min'])) {
+            $sql .= " AND height >= :height_min";
+        }
+        if (!empty($filter['height_max'])) {
+            $sql .= " AND height <= :height_max";
+        }
+
         $statement = self::prepare($sql);
 
         // Bind filter parameters
@@ -74,7 +120,7 @@ abstract class DbModel extends Model
         }
 
         $statement->execute();
-        return $statement->fetchAll(Application::$app->db->pdo::FETCH_ASSOC);
+        return $statement->fetchColumn();
     }
 
     public function addNew($params)

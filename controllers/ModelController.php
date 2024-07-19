@@ -6,26 +6,18 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\PhotoModel;
-use app\models\SelectModel;
-
 
 class ModelController extends Controller
 {
-
     public function models(Request $request, Response $response)
     {
-        $photoModel = new PhotoModel;
-        $selectModel = new SelectModel;
+        $photoModel = new PhotoModel();
         $this->checkIfAdmin();
-        if ($request->isPost()) {
-            $selectModel->loadData($request->getBody());
 
-            if ($selectModel->createNew()) {
-                $this->userMessage('success', 'Model was successfully added');
-                $response->redirect('/wcp/models');
-                return;
-            }
+        if ($request->isPost()) {
+            // Handle the form submission logic here
         }
+
         $sort = $_GET['sort'] ?? 'name';
         $order = $_GET['order'] ?? 'asc';
         $age_range = explode(' - ', $_GET['age_range'] ?? '0 - 100');
@@ -38,21 +30,30 @@ class ModelController extends Controller
             'height_max' => $_GET['height_max'] ?? null,
         ];
 
-        $modelsData = $photoModel->getAll($sort, $order, $filter);
+        $page = $_GET['page'] ?? 1;
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+
+        $modelsData = $photoModel->getAll($sort, $order, $filter, $limit, $offset);
+        $totalModels = $photoModel->countAll($filter);
+        $totalPages = ceil($totalModels / $limit);
+
         $this->setLayout('admin_main');
         return $this->render('models', [
             'modelsData' => $modelsData,
             'currentSort' => $sort,
             'currentOrder' => $order,
-            'currentFilter' => $filter
+            'currentFilter' => $filter,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
-
 
     public function addModels(Request $request, Response $response)
     {
         $this->checkIfAdmin();
         $photoModel = new PhotoModel();
+
         if ($request->isPost()) {
             $photoModel->loadData($request->getBody());
 
@@ -73,28 +74,24 @@ class ModelController extends Controller
                         mkdir($uploadFileDir, 0755, true);
                     }
 
-                    $newFileName = 'img.' . $fileExtension; // Renaming the file to 'img'
+                    $newFileName = 'img.' . $fileExtension;
                     $dest_path = $uploadFileDir . $newFileName;
 
                     if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                        $photoModel->image_url = $dest_path; // Save the path to the model
-                        $this->userMessage('success', 'Model was successfully added');
                         $response->redirect('/wcp/models');
                         return;
-                    } else {
-                        $this->userMessage('error', 'There was an error moving the uploaded file.');
                     }
                 } else {
-                    $this->userMessage('error', 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions));
+                    $photoModel->addError('image_url', 'Error moving the file to the upload directory.');
                 }
             } else {
-                $this->userMessage('error', 'There was an error uploading the file.');
+                $photoModel->addError('image_url', 'Error uploading the file.');
             }
         }
+
         $this->setLayout('admin_main');
-        return $this->render('newModel', [
+        return $this->render('model_create', [
             'model' => $photoModel
         ]);
     }
-
 }
