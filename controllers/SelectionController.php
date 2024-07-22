@@ -5,23 +5,39 @@ namespace app\controllers;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
-use app\models\SelectModel;// Assuming there is a Model class to fetch model data
+use app\models\SelectModel;
 
 class SelectionController extends Controller
 {
     public function selection(Request $request, Response $response)
     {
-        $selectModel = new SelectModel;
+        $selectModel = new SelectModel();
         $this->checkIfAdmin();
+
         if ($request->isPost()) {
             $selectModel->loadData($request->getBody());
 
-            if ($selectModel->removeSelection()) {
-                $this->userMessage('success', 'Model was successfully removed');
+            if (isset($_POST['save_selection'])) {
+                if ($selectModel->saveSelection()) {
+                    $this->userMessage('success', 'Selection was successfully saved');
+                } else {
+                    $this->userMessage('error', 'Selection could not be saved');
+                }
+                $response->redirect('/wcp/selection');
+                return;
+            }
+
+            if (isset($_POST['remove_selection'])) {
+                if ($selectModel->removeSelection()) {
+                    $this->userMessage('success', 'Model was successfully removed');
+                } else {
+                    $this->userMessage('error', 'Model could not be removed');
+                }
                 $response->redirect('/wcp/selection');
                 return;
             }
         }
+
         $sort = $_GET['sort'] ?? 'name';
         $order = $_GET['order'] ?? 'asc';
         $age_range = explode(' - ', $_GET['age_range'] ?? '0 - 100');
@@ -33,11 +49,9 @@ class SelectionController extends Controller
             'height_min' => $_GET['height_min'] ?? null,
             'height_max' => $_GET['height_max'] ?? null,
         ];
-
-        // Get selected model IDs
-        $selectedModelIds = $selectModel->getSelectedModelIds();
-
-        // Get detailed info for selected models
+        $selection_options = $selectModel->getSelections();
+        $selection_name = $_GET['selection_name'] ?? '';
+        $selectedModelIds = $selectModel->getSelectedModelIds($selection_name);
         $modelsData = $selectModel->getModelsByIds($selectedModelIds, $sort, $order, $filter);
 
         $this->setLayout('admin_main');
@@ -45,8 +59,9 @@ class SelectionController extends Controller
             'modelsData' => $modelsData,
             'currentSort' => $sort,
             'currentOrder' => $order,
-            'currentFilter' => $filter
+            'currentFilter' => $filter,
+            'selectionName' => $selection_name,
+            'selectionOptions' => $selection_options
         ]);
     }
-
 }

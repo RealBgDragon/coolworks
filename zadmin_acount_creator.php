@@ -40,8 +40,8 @@ function createAdminAccount($conn, $adminUsername, $adminEmail, $adminPassword)
 }
 
 // Example usage
-$adminUsername = "martin";
-$adminEmail = "martin06200508@gmail.com";
+$adminUsername = "Test";
+$adminEmail = "test06200508@gmail.com";
 $adminPassword = "123";
 createAdminAccount($conn, $adminUsername, $adminEmail, $adminPassword);
 

@@ -11,6 +11,7 @@ class SelectModel extends DbModel
 {
     public $admin_id = '';
     public $model_id = '';
+    public $selection_name = null;
 
     public function tableName(): string
     {
@@ -19,7 +20,7 @@ class SelectModel extends DbModel
 
     public function attributes(): array
     {
-        return ['admin_id', 'model_id'];
+        return ['admin_id', 'model_id', 'selection_name'];
     }
 
     public function primaryKey(): string
@@ -35,8 +36,9 @@ class SelectModel extends DbModel
     public function rules(): array
     {
         return [
-            'admin_id' => [Model::RULE_REQUIRED],
-            'model_id' => [Model::RULE_REQUIRED]
+            'admin_id' => [self::RULE_REQUIRED],
+            'model_id' => [self::RULE_REQUIRED],
+            'selection_name' => [self::RULE_REQUIRED]
         ];
     }
 
@@ -83,13 +85,25 @@ class SelectModel extends DbModel
         }
     }
 
-    // New method to get selected model IDs
-    public function getSelectedModelIds()
+    public function getSelectedModelIds($selection_name = '')
     {
         $info = 'model_id';
-        return $this->getSpecificInfo($info);
+        $admin_id = $_SESSION['admin'];
+        if ($selection_name === '') {
+            $cond = "selection_name IS NULL";
+        } else {
+            $cond = "selection_name = :selection_name";
+        }
+        $condition = "admin_id = :admin_id AND $cond";
+        $params = ['admin_id' => $admin_id, 'selection_name' => $selection_name];
+        return $this->getSpecificInfo($info, $condition, $params);
     }
 
+    public function getSelections()
+    {
+        $info = 'selection_name';
+        return $this->getSpecificInfo($info);
+    }
     // New method to get detailed info about selected models
     public function getModelsByIds($ids, $sort = 'name', $order = 'asc', $filter = [])
     {
@@ -138,5 +152,17 @@ class SelectModel extends DbModel
 
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function saveSelection()
+    {
+        $modelIds = $this->getSelectedModelIds();
+
+        $sql = "UPDATE " . $this->tableName() . " SET selection_name = :selection_name WHERE selection_name IS NULL AND model_id IN (" . implode(',', $modelIds) . ")";
+        $statement = self::prepare($sql);
+
+        $statement->bindValue(':selection_name', $this->selection_name);
+
+        return $statement->execute();
     }
 }

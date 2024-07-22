@@ -1,10 +1,30 @@
 $(document).ready(function () {
+    // Function to get query parameters from URL
+    function getQueryParams() {
+        var params = {};
+        var queryString = window.location.search.slice(1);
+        var queryArray = queryString.split("&");
+        for (var i = 0; i < queryArray.length; i++) {
+            var pair = queryArray[i].split("=");
+            params[pair[0]] = decodeURIComponent(pair[1]);
+        }
+        return params;
+    }
+
+    // Extract the age range from the query parameters
+    var params = getQueryParams();
+    var ageRange = params.age_range
+        ? params.age_range.split("+-+").map(Number)
+        : [10, 100];
+    var ageMin = ageRange[0];
+    var ageMax = ageRange[1];
+
     // Initialize the age range slider
     $("#age_slider").slider({
         range: true,
         min: 10, // Minimum age is 10
         max: 100, // Maximum age is 100
-        values: [10, 100], // Default values
+        values: [ageMin, ageMax], // Default values
         slide: function (event, ui) {
             $("#age_range").val(ui.values[0] + " - " + ui.values[1]);
         },

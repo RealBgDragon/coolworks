@@ -68,7 +68,7 @@
                     <p class="card-text"><?php echo $model['height']; ?></p>
                     <p class="card-text"><?php echo $model['age'] ?></p>
                     <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
-                    <input type="text" name="admin_id" style="display:none;" value="3">
+                    <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
                     <button type="submit" class="btn btn-primary">Select model</button>
                     <?php Form::end() ?>
                 </div>

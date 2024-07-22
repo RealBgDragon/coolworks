@@ -23,3 +23,26 @@
     text-align: center;
     color: #007bff !important;
 }
+
+.form-group a {
+    text-decoration: none; /* Removes underline from links */
+    color: #007bff; /* Sets a blue color for the links */
+    font-weight: bold; /* Makes the link text bold */
+    font-size: 16px; /* Sets the font size */
+    display: inline-block; /* Allows padding and margin to be applied */
+    padding: 10px; /* Adds padding inside the link */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for form-group */
+.form-group:hover {
+    background-color: #e9ecef; /* Changes background color on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Increases shadow on hover */
+}
+
+/* Hover effect for anchor tags */
+.form-group a:hover {
+    color: #0056b3; /* Darkens the link color on hover */
+    background-color: #e2e6ea; /* Adds a background color on hover */
+    border-radius: 3px; /* Rounds the corners of the background color */
+}
