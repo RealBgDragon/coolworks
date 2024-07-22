@@ -2,7 +2,7 @@ $(document).ready(function () {
     // Initialize the age range slider
     $("#age_slider").slider({
         range: true,
-        min: 10, // Minimum age is 18
+        min: 10, // Minimum age is 10
         max: 100, // Maximum age is 100
         values: [10, 100], // Default values
         slide: function (event, ui) {
@@ -29,6 +29,8 @@ $(document).ready(function () {
         var modelWeight = $(img).data("model-weight");
         var modelBirthday = $(img).data("model-birthday");
         var modelPhone = $(img).data("model-phone");
+        var eyeColor = $(img).data("eye-color");
+        var hairColor = $(img).data("hair-color");
         var imageSrc = $(img).attr("src");
 
         $("#modalModelImage").attr("src", imageSrc);
@@ -38,6 +40,8 @@ $(document).ready(function () {
         $("#modelWeight").text(modelWeight);
         $("#modelBirthday").text(modelBirthday);
         $("#modelPhone").text(modelPhone);
+        $("#modelEyeColor").text(eyeColor);
+        $("#modelHairColor").text(hairColor);
 
         $("#modelModal").modal("show");
     };

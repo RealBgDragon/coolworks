@@ -57,6 +57,13 @@ class ModelController extends Controller
         if ($request->isPost()) {
             $photoModel->loadData($request->getBody());
 
+            // Handle eye color and hair color
+            $eyeColorOption = isset($request->getBody()['eye_color']) ? $request->getBody()['eye_color'] : 0;
+            $hairColorOption = isset($request->getBody()['hair_color']) ? $request->getBody()['hair_color'] : 0;
+            $options = $eyeColorOption | $hairColorOption;
+            $photoModel->options = $options;
+
+            // File upload handling
             if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['image_url']['tmp_name'];
                 $fileName = $_FILES['image_url']['name'];
@@ -65,9 +72,9 @@ class ModelController extends Controller
                 $fileNameCmps = explode(".", $fileName);
                 $fileExtension = strtolower(end($fileNameCmps));
 
-                $allowedfileExtensions = ['jpg', 'gif', 'png'];
+                $allowedFileExtensions = ['jpg', 'gif', 'png'];
 
-                if ($photoModel->createNew() && in_array($fileExtension, $allowedfileExtensions)) {
+                if ($photoModel->createNew() && in_array($fileExtension, $allowedFileExtensions)) {
                     $productID = $photoModel->getId();
                     $uploadFileDir = './uploads/' . $productID . '/';
                     if (!is_dir($uploadFileDir)) {
@@ -75,14 +82,16 @@ class ModelController extends Controller
                     }
 
                     $newFileName = 'img.' . $fileExtension;
-                    $dest_path = $uploadFileDir . $newFileName;
+                    $destPath = $uploadFileDir . $newFileName;
 
-                    if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                    if (move_uploaded_file($fileTmpPath, $destPath)) {
                         $response->redirect('/wcp/models');
                         return;
+                    } else {
+                        $photoModel->addError('image_url', 'Error moving the file to the upload directory.');
                     }
                 } else {
-                    $photoModel->addError('image_url', 'Error moving the file to the upload directory.');
+                    $photoModel->addError('image_url', 'Invalid file extension or error creating the model.');
                 }
             } else {
                 $photoModel->addError('image_url', 'Error uploading the file.');
@@ -90,7 +99,7 @@ class ModelController extends Controller
         }
 
         $this->setLayout('admin_main');
-        return $this->render('model_create', [
+        return $this->render('newModel', [
             'model' => $photoModel
         ]);
     }

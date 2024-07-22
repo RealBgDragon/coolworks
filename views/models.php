@@ -5,14 +5,14 @@
 
 <div class="row mb-4">
     <div class="col-md-12">
-        <?php use app\core\form\Form;
+        <?php use app\core\form\Form; ?>
 
-        $form = Form::begun('', "get"); ?>
+        <?php $form = Form::begun('', "get"); ?>
+
         <div class="form-group mr-2">
             <label for="sort">Sort by:</label>
             <select name="sort" id="sort" class="form-control ml-2">
-                <option value="name" <?php echo $currentSort === 'name' ? 'selected' : ''; ?> use app\core\form\Form;>
-                    Name</option>
+                <option value="name" <?php echo $currentSort === 'name' ? 'selected' : ''; ?>>Name</option>
                 <option value="age" <?php echo $currentSort === 'age' ? 'selected' : ''; ?>>Age</option>
                 <option value="height" <?php echo $currentSort === 'height' ? 'selected' : ''; ?>>Height</option>
             </select>
@@ -39,13 +39,17 @@
             <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
                 value="<?php echo $currentFilter['height_max']; ?>">
         </div>
+
         <button type="submit" class="btn btn-primary">Apply</button>
         <?php $form::end(); ?>
     </div>
 </div>
 
 <div class="row">
-    <?php foreach ($modelsData as $model): ?>
+    <?php foreach ($modelsData as $model) {
+        $eyeColor = isset($model['eye_color']) ? $model['eye_color'] : 'Unknown';
+        $hairColor = isset($model['hair_color']) ? $model['hair_color'] : 'Unknown';
+        ?>
         <div class="col-md-3 mb-4">
             <div class="card">
                 <img src="/uploads/<?php echo $model['model_id']; ?>/img.png" class="card-img-top img-fluid"
@@ -54,7 +58,9 @@
                     data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
                     data-model-weight="<?php echo $model['weight']; ?>"
                     data-model-birthday="<?php echo $model['birthday']; ?>"
-                    data-model-phone="<?php echo $model['phone']; ?>" onclick="showModelDetails(this)">
+                    data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
+                    data-hair-color="<?php echo $hairColor; ?>" onclick="showModelDetails(this)">
+
                 <div class="card-body">
                     <?php $form = Form::begun('', "post"); ?>
                     <p class="card-text"><?php echo $model['name'] ?></p>
@@ -67,7 +73,7 @@
                 </div>
             </div>
         </div>
-    <?php endforeach; ?>
+    <?php } ?>
 </div>
 
 <div class="row">
@@ -83,7 +89,6 @@
         </nav>
     </div>
 </div>
-
 
 <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel"
     aria-hidden="true">
@@ -107,11 +112,14 @@
                         <p>Weight: <span id="modelWeight"></span></p>
                         <p>Birthday: <span id="modelBirthday"></span></p>
                         <p>Phone: <span id="modelPhone"></span></p>
+                        <p>Eye Color: <span id="modelEyeColor"></span></p>
+                        <p>Hair Color: <span id="modelHairColor"></span></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <script src="/js/models.js"></script>

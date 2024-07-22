@@ -9,13 +9,13 @@ use app\models\User;
 
 class PhotoModel extends DbModel
 {
-
     public $model_id = '';
     public $name = '';
     public $phone = '';
     public $birthday = '';
     public $weight = '';
     public $height = '';
+    public $options = 0; // This will store eye color and hair color options as a single integer
 
     public function tableName(): string
     {
@@ -24,17 +24,17 @@ class PhotoModel extends DbModel
 
     public function attributes(): array
     {
-        return ['name', 'phone', 'birthday', 'weight', 'height'];
-    }
-
-    public function primaryKey(): string
-    {
-        return 'model_id';
+        return ['name', 'phone', 'birthday', 'weight', 'height', 'options'];
     }
 
     public function getId()
     {
         return $this->model_id;
+    }
+
+    public function primaryKey(): string
+    {
+        return 'model_id';
     }
 
     public function rules(): array
@@ -79,6 +79,26 @@ class PhotoModel extends DbModel
             $this->model_id = $user;
             return true;
         }
+    }
+
+    public function setEyeColor($eyeColor)
+    {
+        $this->options = ($this->options & ~7) | $eyeColor; // Clear eye color bits and set new value
+    }
+
+    public function getEyeColor()
+    {
+        return $this->options & 7; // Get eye color bits
+    }
+
+    public function setHairColor($hairColor)
+    {
+        $this->options = ($this->options & ~56) | $hairColor; // Clear hair color bits and set new value
+    }
+
+    public function getHairColor()
+    {
+        return $this->options & 56; // Get hair color bits
     }
 
 }
