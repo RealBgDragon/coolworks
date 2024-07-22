@@ -6,16 +6,24 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\PhotoModel;
+use app\models\SelectModel;
 
 class ModelController extends Controller
 {
     public function models(Request $request, Response $response)
     {
         $photoModel = new PhotoModel();
+        $selectModel = new SelectModel();
         $this->checkIfAdmin();
 
         if ($request->isPost()) {
-            // Handle the form submission logic here
+            $selectModel->loadData($request->getBody());
+
+            if ($selectModel->createNew()) {
+                $this->userMessage('success', 'Model was successfully added');
+                $response->redirect('/wcp/models');
+                return;
+            }
         }
 
         $sort = $_GET['sort'] ?? 'name';
@@ -58,10 +66,10 @@ class ModelController extends Controller
             $photoModel->loadData($request->getBody());
 
             // Handle eye color and hair color
-            $eyeColorOption = isset($request->getBody()['eye_color']) ? $request->getBody()['eye_color'] : 0;
-            $hairColorOption = isset($request->getBody()['hair_color']) ? $request->getBody()['hair_color'] : 0;
-            $options = $eyeColorOption | $hairColorOption;
-            $photoModel->options = $options;
+            $eyeColorOption = isset($request->getBody()['eye_color']) ? (int) $request->getBody()['eye_color'] : 0;
+            $hairColorOption = isset($request->getBody()['hair_color']) ? (int) $request->getBody()['hair_color'] : 0;
+            $photoModel->setEyeColor($eyeColorOption);
+            $photoModel->setHairColor($hairColorOption);
 
             // File upload handling
             if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] === UPLOAD_ERR_OK) {

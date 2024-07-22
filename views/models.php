@@ -5,7 +5,8 @@
 
 <div class="row mb-4">
     <div class="col-md-12">
-        <?php use app\core\form\Form; ?>
+        <?php use app\core\form\Form;
+        use app\core\form\ModelOptions; ?>
 
         <?php $form = Form::begun('', "get"); ?>
 
@@ -47,8 +48,8 @@
 
 <div class="row">
     <?php foreach ($modelsData as $model) {
-        $eyeColor = isset($model['eye_color']) ? $model['eye_color'] : 'Unknown';
-        $hairColor = isset($model['hair_color']) ? $model['hair_color'] : 'Unknown';
+        $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
+        $hairColor = ModelOptions::getHairColorName($model['hair_color']);
         ?>
         <div class="col-md-3 mb-4">
             <div class="card">

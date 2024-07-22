@@ -15,7 +15,8 @@ class PhotoModel extends DbModel
     public $birthday = '';
     public $weight = '';
     public $height = '';
-    public $options = 0; // This will store eye color and hair color options as a single integer
+    public $eye_color = 0; // New column for eye color
+    public $hair_color = 0; // New column for hair color
 
     public function tableName(): string
     {
@@ -24,7 +25,7 @@ class PhotoModel extends DbModel
 
     public function attributes(): array
     {
-        return ['name', 'phone', 'birthday', 'weight', 'height', 'options'];
+        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color'];
     }
 
     public function getId()
@@ -83,22 +84,21 @@ class PhotoModel extends DbModel
 
     public function setEyeColor($eyeColor)
     {
-        $this->options = ($this->options & ~7) | $eyeColor; // Clear eye color bits and set new value
+        $this->eye_color = $eyeColor;
     }
 
     public function getEyeColor()
     {
-        return $this->options & 7; // Get eye color bits
+        return $this->eye_color;
     }
 
     public function setHairColor($hairColor)
     {
-        $this->options = ($this->options & ~56) | $hairColor; // Clear hair color bits and set new value
+        $this->hair_color = $hairColor;
     }
 
     public function getHairColor()
     {
-        return $this->options & 56; // Get hair color bits
+        return $this->hair_color;
     }
-
 }

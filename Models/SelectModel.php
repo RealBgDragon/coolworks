@@ -86,10 +86,8 @@ class SelectModel extends DbModel
     // New method to get selected model IDs
     public function getSelectedModelIds()
     {
-        $sql = "SELECT model_id FROM " . $this->tableName();
-        $statement = self::prepare($sql);
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $info = 'model_id';
+        return $this->getSpecificInfo($info);
     }
 
     // New method to get detailed info about selected models

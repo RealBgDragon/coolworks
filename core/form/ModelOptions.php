@@ -16,4 +16,32 @@ class ModelOptions
     {
         return ($options & $option) === $option;
     }
+
+    public static function getEyeColorName($eyeColor)
+    {
+        switch ($eyeColor) {
+            case self::EYE_COLOR_BLUE:
+                return 'Blue';
+            case self::EYE_COLOR_GREEN:
+                return 'Green';
+            case self::EYE_COLOR_BROWN:
+                return 'Brown';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    public static function getHairColorName($hairColor)
+    {
+        switch ($hairColor) {
+            case self::HAIR_COLOR_BLONDE:
+                return 'Blonde';
+            case self::HAIR_COLOR_BROWN:
+                return 'Brown';
+            case self::HAIR_COLOR_BLACK:
+                return 'Black';
+            default:
+                return 'Unknown';
+        }
+    }
 }

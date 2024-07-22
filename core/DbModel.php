@@ -27,6 +27,15 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
+    public function getSpecificInfo($info)
+    {
+        $tableName = static::tableName();
+        $sql = "SELECT $info FROM " . $tableName;
+        $statement = self::prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
     public function getAll($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
     {
         $tableName = static::tableName();
