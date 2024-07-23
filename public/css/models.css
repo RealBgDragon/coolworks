@@ -32,7 +32,7 @@
     display: inline-block; /* Allows padding and margin to be applied */
     padding: 10px; /* Adds padding inside the link */
     transition: color 0.3s, background-color 0.3s; /* Smooth transition for hover effects */
-}
+}   
 
 /* Hover effect for anchor tags */
 .form-group a:hover {

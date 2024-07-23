@@ -27,10 +27,12 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getSpecificInfo($info, $condition = '1=1', $params = [])
+    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '')
     {
-        $tableName = static::tableName();
-        $sql = "SELECT $info FROM " . $tableName . " WHERE " . $condition;
+        if ($table === '') {
+            $table = static::tableName();
+        }
+        $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
         $statement = self::prepare($sql);
         $statement->execute($params);
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -167,6 +169,24 @@ abstract class DbModel extends Model
             $sql = "DELETE FROM $tableName WHERE model_id = :id";
             $statement = self::prepare($sql);
             $statement->bindValue(':id', $id);
+
+            $statement->execute();
+            return true;
+        } catch (PDOException $e) {
+            $this->addError('error', 'Database error: ' . $e->getMessage());
+            return false;
+        } catch (Exception $e) {
+            $this->addError('error', 'General error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function removeAll()
+    {
+        try {
+            $tableName = static::tableName();
+            $sql = "DELETE FROM $tableName";
+            $statement = self::prepare($sql);
 
             $statement->execute();
             return true;

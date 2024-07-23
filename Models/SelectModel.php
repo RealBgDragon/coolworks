@@ -12,7 +12,7 @@ class SelectModel extends DbModel
     public $admin_id = '';
     public $model_id = '';
     public $selection_name = null;
-
+    public $tableName = 'selected_models';
     public function tableName(): string
     {
         return 'selected_models';
@@ -89,20 +89,35 @@ class SelectModel extends DbModel
     {
         $info = 'model_id';
         $admin_id = $_SESSION['admin'];
-        if ($selection_name === '') {
-            $cond = "selection_name IS NULL";
+        $params = ['admin_id' => $admin_id];
+
+        if ($selection_name == '') {
+            $cond = "1=1";
+            $table = '';
+            $condition = "admin_id = :admin_id AND " . $cond;
         } else {
-            $cond = "selection_name = :selection_name";
+            $table = 'saved_selections';
+            $cond = "admin_id = :admin_id AND name = :selection_name";
+            $params['selection_name'] = $selection_name;
+
+            $selection_ids = $this->getSpecificInfo('id', $cond, $params, $table);
+
+            $info = 'model_id';
+            $table = 'selection_items';
+            $condition = "selection_id IN (" . implode(',', array_fill(0, count($selection_ids), '?')) . ")";
+            /* $cond = '1=1'; */
+            $params = $selection_ids;
         }
-        $condition = "admin_id = :admin_id AND $cond";
-        $params = ['admin_id' => $admin_id, 'selection_name' => $selection_name];
-        return $this->getSpecificInfo($info, $condition, $params);
+
+
+        return $this->getSpecificInfo($info, $condition, $params, $table);
     }
 
     public function getSelections()
     {
-        $info = 'selection_name';
-        return $this->getSpecificInfo($info);
+        $info = 'name';
+        $table = 'saved_selections';
+        return $this->getSpecificInfo($info, '1=1', [], $table);
     }
     // New method to get detailed info about selected models
     public function getModelsByIds($ids, $sort = 'name', $order = 'asc', $filter = [])
@@ -156,13 +171,27 @@ class SelectModel extends DbModel
 
     public function saveSelection()
     {
+        $admin_id = $_SESSION['admin'];
         $modelIds = $this->getSelectedModelIds();
 
-        $sql = "UPDATE " . $this->tableName() . " SET selection_name = :selection_name WHERE selection_name IS NULL AND model_id IN (" . implode(',', $modelIds) . ")";
+        $sql = "INSERT INTO saved_selections (name, admin_id) VALUES (:name, :admin_id)";
+
         $statement = self::prepare($sql);
+        $statement->bindParam(':name', $this->selection_name);
+        $statement->bindParam(':admin_id', $admin_id);
+        $statement->execute();
+        $selection_id = self::getLastId();
+        foreach ($modelIds as $modelId) {
 
-        $statement->bindValue(':selection_name', $this->selection_name);
+            $sql = "INSERT INTO selection_items (selection_id, model_id) VALUES (:selection_id, :model_id)";
+            $statement = self::prepare($sql);
+            $statement->bindParam(':selection_id', $selection_id);
+            $statement->bindParam(':model_id', $modelId);
+            $statement->execute();
+        }
 
-        return $statement->execute();
+        $this->removeAll();
+
+        return true;
     }
 }

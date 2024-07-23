@@ -50,7 +50,7 @@ class SelectionController extends Controller
             'height_max' => $_GET['height_max'] ?? null,
         ];
         $selection_options = $selectModel->getSelections();
-        $selection_name = $_GET['selection_name'] ?? null;
+        $selection_name = $_GET['name'] ?? null;
         $selectedModelIds = $selectModel->getSelectedModelIds($selection_name);
         $modelsData = $selectModel->getModelsByIds($selectedModelIds, $sort, $order, $filter);
 

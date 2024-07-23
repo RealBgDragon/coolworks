@@ -4,6 +4,10 @@ use app\core\form\ModelOptions;
 ?>
 <link rel="stylesheet" href="/css/models.css">
 <div class="col-md-auto d-flex justify-content-start mb-4">
+    <h3>Saved selections:</h3>
+    <div class="form-group">
+        <a href="selection">New, </a>
+    </div>
     <?php $last = '';
     foreach ($selectionOptions as $selection) {
         if ($selection === $last) {
@@ -12,7 +16,7 @@ use app\core\form\ModelOptions;
         $last = $selection;
         ?>
         <div class="form-group">
-            <a href="selection?selection_name=<?php echo $selection ?>"><?php echo $selection ?> </a>
+            <a href="selection?name=<?php echo $selection ?>"><?php echo $selection ?>, </a>
         </div>
     <?php } ?>
 </div>
@@ -25,45 +29,6 @@ use app\core\form\ModelOptions;
     <button type="submit" name="save_selection" class="btn btn-primary btn-sm">Save selection <i
             class="fas fa-plus ml-2"></i></button>
     <?php $form::end(); ?>
-</div>
-<div class="row mb-4">
-    <div class="col-md-12">
-        <?php
-        $form = Form::begun('', "get"); ?>
-        <div class="form-group mr-2">
-            <label for="sort">Sort by:</label>
-            <select name="sort" id="sort" class="form-control ml-2">
-                <option value="name" <?php echo $currentSort === 'name' ? 'selected' : ''; ?> use app\core\form\Form;>
-                    Name</option>
-                <option value="age" <?php echo $currentSort === 'age' ? 'selected' : ''; ?>>Age</option>
-                <option value="height" <?php echo $currentSort === 'height' ? 'selected' : ''; ?>>Height</option>
-            </select>
-        </div>
-        <div class="form-group mr-2">
-            <label for="order">Order:</label>
-            <select name="order" id="order" class="form-control ml-2">
-                <option value="asc" <?php echo $currentOrder === 'asc' ? 'selected' : ''; ?>>Ascending</option>
-                <option value="desc" <?php echo $currentOrder === 'desc' ? 'selected' : ''; ?>>Descending</option>
-            </select>
-        </div>
-
-        <div class="form-group mr-2">
-            <label for="age_range">Age Range:</label>
-            <input type="text" id="age_range" name="age_range" readonly
-                style="border:0; color:#f6931f; font-weight:bold;">
-            <div id="age_slider" style="width: 400px; margin: 10px;"></div>
-        </div>
-
-        <div class="form-group mr-2">
-            <label for="height_min">Height:</label>
-            <input type="number" name="height_min" id="height_min" class="form-control ml-2" placeholder="Min"
-                value="<?php echo $currentFilter['height_min']; ?>">
-            <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
-                value="<?php echo $currentFilter['height_max']; ?>">
-        </div>
-        <button type="submit" class="btn btn-primary">Apply</button>
-        <?php $form::end(); ?>
-    </div>
 </div>
 
 <div class="row">
