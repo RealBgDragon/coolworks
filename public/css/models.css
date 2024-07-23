@@ -34,12 +34,6 @@
     transition: color 0.3s, background-color 0.3s; /* Smooth transition for hover effects */
 }
 
-/* Hover effect for form-group */
-.form-group:hover {
-    background-color: #e9ecef; /* Changes background color on hover */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Increases shadow on hover */
-}
-
 /* Hover effect for anchor tags */
 .form-group a:hover {
     color: #0056b3; /* Darkens the link color on hover */
