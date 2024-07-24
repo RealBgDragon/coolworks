@@ -40,7 +40,6 @@
             <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
                 value="<?php echo $currentFilter['height_max']; ?>">
         </div>
-
         <button type="submit" class="btn btn-primary">Apply</button>
         <?php $form::end(); ?>
     </div>
