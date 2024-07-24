@@ -36,6 +36,8 @@ class ModelController extends Controller
             'age_max' => $age_max,
             'height_min' => $_GET['height_min'] ?? null,
             'height_max' => $_GET['height_max'] ?? null,
+            'eye_color' => $_GET['eye_color'] ?? null,
+            'hair_color' => $_GET['hair_color'] ?? null,
         ];
 
         $page = $_GET['page'] ?? 1;

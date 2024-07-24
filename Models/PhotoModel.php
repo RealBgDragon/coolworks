@@ -101,4 +101,19 @@ class PhotoModel extends DbModel
     {
         return $this->hair_color;
     }
+
+    function getImagePath($modelId)
+    {
+        $baseDir = dirname(__DIR__) . "/public/uploads/{$modelId}/";
+        $pngPath = $baseDir . "img.png";
+        $jpgPath = $baseDir . "img.jpg";
+
+        if (file_exists($pngPath)) {
+            return "/uploads/{$modelId}/img.png";
+        } elseif (file_exists($jpgPath)) {
+            return "/uploads/{$modelId}/img.jpg";
+        } else {
+            return "/uploads/{$modelId}/img.png";
+        }
+    }
 }

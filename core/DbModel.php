@@ -56,6 +56,12 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $sql .= " AND height <= :height_max";
         }
+        if (!empty($filter['eye_color'])) {
+            $sql .= " AND eye_color = :eye_color";
+        }
+        if (!empty($filter['hair_color'])) {
+            $sql .= " AND hair_color = :hair_color";
+        }
 
         // Apply sorting
         $allowedSortColumns = ['name', 'age', 'height'];
@@ -86,14 +92,21 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $statement->bindValue(':height_max', $filter['height_max']);
         }
+        if (!empty($filter['eye_color'])) {
+            $statement->bindValue(':eye_color', $filter['eye_color']);
+        }
+        if (!empty($filter['hair_color'])) {
+            $statement->bindValue(':hair_color', $filter['hair_color']);
+        }
 
         // Bind pagination parameters
         $statement->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $statement->bindValue(':offset', $offset, \PDO::PARAM_INT);
 
         $statement->execute();
-        return $statement->fetchAll(Application::$app->db->pdo::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
 
     public function countAll($filter = [])
     {
@@ -113,6 +126,12 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $sql .= " AND height <= :height_max";
         }
+        if (!empty($filter['eye_color'])) {
+            $sql .= " AND eye_color = :eye_color";
+        }
+        if (!empty($filter['hair_color'])) {
+            $sql .= " AND hair_color = :hair_color";
+        }
 
         $statement = self::prepare($sql);
 
@@ -129,10 +148,17 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $statement->bindValue(':height_max', $filter['height_max']);
         }
+        if (!empty($filter['eye_color'])) {
+            $statement->bindValue(':eye_color', $filter['eye_color']);
+        }
+        if (!empty($filter['hair_color'])) {
+            $statement->bindValue(':hair_color', $filter['hair_color']);
+        }
 
         $statement->execute();
-        return $statement->fetchColumn();
+        return $statement->fetch(\PDO::FETCH_ASSOC)['total'];
     }
+
 
     public function addNew($params)
     {

@@ -6,7 +6,10 @@
 <div class="row mb-4">
     <div class="col-md-12">
         <?php use app\core\form\Form;
-        use app\core\form\ModelOptions; ?>
+        use app\core\form\ModelOptions;
+        use app\models\PhotoModel;
+
+        ?>
 
         <?php $form = Form::begun('', "get"); ?>
 
@@ -40,6 +43,30 @@
             <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
                 value="<?php echo $currentFilter['height_max']; ?>">
         </div>
+        <div class="form-group mr-2">
+            <label for="eye_color">Eye Color:</label>
+            <select name="eye_color" id="eye_color" class="form-control ml-2">
+                <option value="">Any</option>
+                <?php foreach ([ModelOptions::EYE_COLOR_BLUE, ModelOptions::EYE_COLOR_GREEN, ModelOptions::EYE_COLOR_BROWN] as $value) { ?>
+                    <option value="<?php echo $value; ?>" <?php echo $currentFilter['eye_color'] == $value ? 'selected' : ''; ?>>
+                        <?php echo ModelOptions::getEyeColorName($value); ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="form-group mr-2">
+            <label for="hair_color">Hair Color:</label>
+            <select name="hair_color" id="hair_color" class="form-control ml-2">
+                <option value="">Any</option>
+                <?php foreach ([ModelOptions::HAIR_COLOR_BLONDE, ModelOptions::HAIR_COLOR_BROWN, ModelOptions::HAIR_COLOR_BLACK] as $value) { ?>
+                    <option value="<?php echo $value; ?>" <?php echo $currentFilter['hair_color'] == $value ? 'selected' : ''; ?>>
+                        <?php echo ModelOptions::getHairColorName($value); ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Apply</button>
         <?php $form::end(); ?>
     </div>
@@ -52,7 +79,8 @@
         ?>
         <div class="col-md-3 mb-4">
             <div class="card">
-                <img src="/uploads/<?php echo $model['model_id']; ?>/img.png" class="card-img-top img-fluid"
+                <?php $photoModel = new PhotoModel() ?>
+                <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>" class="card-img-top img-fluid"
                     alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
                     data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
                     data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
