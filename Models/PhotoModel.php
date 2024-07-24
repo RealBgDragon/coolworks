@@ -116,4 +116,33 @@ class PhotoModel extends DbModel
             return "/uploads/{$modelId}/img.png";
         }
     }
+
+    function getAllImagePaths($modelId)
+    {
+        $baseDir = dirname(__DIR__) . "/public/uploads/{$modelId}/";
+        $imagePaths = [];
+
+        // Check if the directory exists
+        if (is_dir($baseDir)) {
+            // Get all files in the directory
+            $files = scandir($baseDir);
+
+            // Define allowed image extensions
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+            foreach ($files as $file) {
+                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                // Check if the file is an image
+                if (in_array($extension, $allowedExtensions)) {
+                    // Add the full path to the image paths array
+                    $imagePaths[] = "/uploads/{$modelId}/" . $file;
+                }
+            }
+        }
+
+        // Join the image paths with commas and return as a single string
+        return implode(',', $imagePaths);
+    }
+
 }

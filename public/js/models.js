@@ -51,9 +51,23 @@ $(document).ready(function () {
         var modelPhone = $(img).data("model-phone");
         var eyeColor = $(img).data("eye-color");
         var hairColor = $(img).data("hair-color");
-        var imageSrc = $(img).attr("src");
+        /* var imageSrc = $(img).attr("src"); */
 
-        $("#modalModelImage").attr("src", imageSrc);
+        var imageSrcString = $(img).data("model-srcs");
+        var imageSrcs = imageSrcString.split(",").map((src) => src.trim());
+
+        $("#carouselInner").empty();
+
+        // Populate the carousel with images
+        imageSrcs.forEach(function (imageSrc, index) {
+            var activeClass = index === 0 ? "active" : "";
+            var carouselItem = `<div class="carousel-item ${activeClass}">
+                            <img src="${imageSrc}" class="d-block w-100" alt="Model Image">
+                        </div>`;
+            $("#carouselInner").append(carouselItem);
+        });
+
+        /* $("#modalModelImage").attr("src", imageSrc); */
         $("#modelName").text(modelName);
         $("#modelAge").text(modelAge);
         $("#modelHeight").text(modelHeight);
@@ -75,5 +89,12 @@ $(document).ready(function () {
         var maxAge = ageRange[1];
 
         console.log("Filtering with age range:", minAge, "-", maxAge);
+    });
+    $(".carousel-control-prev").click(function () {
+        $("#modelCarousel").carousel("prev");
+    });
+
+    $(".carousel-control-next").click(function () {
+        $("#modelCarousel").carousel("next");
     });
 });

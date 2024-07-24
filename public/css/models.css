@@ -32,11 +32,30 @@
     display: inline-block; /* Allows padding and margin to be applied */
     padding: 10px; /* Adds padding inside the link */
     transition: color 0.3s, background-color 0.3s; /* Smooth transition for hover effects */
-}   
+}
 
 /* Hover effect for anchor tags */
 .form-group a:hover {
     color: #0056b3; /* Darkens the link color on hover */
     background-color: #e2e6ea; /* Adds a background color on hover */
     border-radius: 3px; /* Rounds the corners of the background color */
+}
+
+.custom-carousel-control {
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.5
+    ); /* semi-transparent black background */
+    width: 5%; /* adjust width as needed */
+}
+
+.custom-carousel-control:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* darker on hover */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black; /* replace with your desired color */
 }

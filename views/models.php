@@ -86,6 +86,7 @@
                     data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
                     data-model-weight="<?php echo $model['weight']; ?>"
                     data-model-birthday="<?php echo $model['birthday']; ?>"
+                    data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                     data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
                     data-hair-color="<?php echo $hairColor; ?>" onclick="showModelDetails(this)">
 
@@ -131,7 +132,19 @@
             <div class="modal-body" id="modelModalBody">
                 <div class="row">
                     <div class="col-md-6">
-                        <img id="modalModelImage" src="" class="img-fluid" alt="Model Image">
+                        <div id="modelCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="carouselInner">
+                                <!-- Images will be dynamically added here -->
+                            </div>
+                            <a class="carousel-control-prev" href="#modelCarousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" style="color: black"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#modelCarousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <h4 id="modelName"></h4>
