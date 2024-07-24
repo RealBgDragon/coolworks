@@ -32,8 +32,8 @@ if (!isset($model)) {
         <?php echo $form->field($model, 'weight')->numberField() ?>
         <?php echo $form->field($model, 'birthday')->dateField() ?>
         <div class="mb-3">
-            <label for="image_url" class="form-label">Image</label>
-            <input class="form-control" type="file" id="image_url" name="image_url" value="/">
+            <label for="main_image" class="form-label">Main Image</label>
+            <input class="form-control" type="file" id="main_image" name="main_image">
         </div>
         <label for="hair_color">Hair Color:</label>
         <div class="radio-group">
@@ -44,22 +44,16 @@ if (!isset($model)) {
             <label><input type="radio" name="hair_color" value="<?php echo ModelOptions::HAIR_COLOR_BLONDE; ?>">
                 Blonde</label>
         </div>
+        <div class="mb-3">
+            <label for="additional_images" class="form-label">Additional Images</label>
+            <input class="form-control" type="file" id="additional_images" name="additional_images[]" multiple>
+        </div>
     </div>
-
 </div>
 
 <button type="submit" class="btn btn-primary">Add model</button>
 
 <?php Form::end() ?>
 
-<script>
-    // Get the slider and value display elements
-    const slider = document.getElementById("customRange2");
-    const sliderValue = document.getElementById("sliderValue");
 
-    // Update the value display when the slider value changes
-    slider.addEventListener("input", function () {
-        sliderValue.textContent = this.value;
-    });
-</script>
 <script src="c:\xampp\htdocs\coolworks\views\newModel.js"></script>

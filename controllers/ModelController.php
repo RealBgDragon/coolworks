@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
+use app\core\Session;
 use app\models\PhotoModel;
 use app\models\SelectModel;
 
@@ -63,6 +64,8 @@ class ModelController extends Controller
     {
         $this->checkIfAdmin();
         $photoModel = new PhotoModel();
+        $session = new Session();
+
 
         if ($request->isPost()) {
             $photoModel->loadData($request->getBody());
@@ -73,20 +76,18 @@ class ModelController extends Controller
             $photoModel->setEyeColor($eyeColorOption);
             $photoModel->setHairColor($hairColorOption);
 
-            // File upload handling
-            if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] === UPLOAD_ERR_OK) {
-                $fileTmpPath = $_FILES['image_url']['tmp_name'];
-                $fileName = $_FILES['image_url']['name'];
-                $fileSize = $_FILES['image_url']['size'];
-                $fileType = $_FILES['image_url']['type'];
+            // Main image upload handling
+            if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['main_image']['tmp_name'];
+                $fileName = $_FILES['main_image']['name'];
                 $fileNameCmps = explode(".", $fileName);
                 $fileExtension = strtolower(end($fileNameCmps));
 
                 $allowedFileExtensions = ['jpg', 'gif', 'png'];
 
                 if ($photoModel->createNew() && in_array($fileExtension, $allowedFileExtensions)) {
-                    $productID = $photoModel->getId();
-                    $uploadFileDir = './uploads/' . $productID . '/';
+                    $modelId = $photoModel->getId();
+                    $uploadFileDir = './uploads/' . $modelId . '/';
                     if (!is_dir($uploadFileDir)) {
                         mkdir($uploadFileDir, 0755, true);
                     }
@@ -94,18 +95,47 @@ class ModelController extends Controller
                     $newFileName = 'img.' . $fileExtension;
                     $destPath = $uploadFileDir . $newFileName;
 
-                    if (move_uploaded_file($fileTmpPath, $destPath)) {
-                        $response->redirect('/wcp/models');
-                        return;
-                    } else {
-                        $photoModel->addError('image_url', 'Error moving the file to the upload directory.');
+                    if (!move_uploaded_file($fileTmpPath, $destPath)) {
+                        $photoModel->addError('error', 'Error moving the main image to the upload directory.');
                     }
                 } else {
-                    $photoModel->addError('image_url', 'Invalid file extension or error creating the model.');
+                    $photoModel->addError('error', 'Invalid file extension or error creating the model.');
                 }
             } else {
-                $photoModel->addError('image_url', 'Error uploading the file.');
+                $photoModel->addError('error', 'Error uploading the main image.');
             }
+
+            // Additional images upload handling
+            if (isset($_FILES['additional_images']) && !empty($_FILES['additional_images']['name'][0])) {
+                $allowedFileExtensions = ['jpg', 'gif', 'png'];
+
+                foreach ($_FILES['additional_images']['tmp_name'] as $key => $tmp_name) {
+                    $fileName = $_FILES['additional_images']['name'][$key];
+                    $fileNameCmps = explode(".", $fileName);
+                    $fileExtension = strtolower(end($fileNameCmps));
+
+                    if (in_array($fileExtension, $allowedFileExtensions)) {
+                        $newFileName = uniqid() . '.' . $fileExtension;
+                        $destPath = $uploadFileDir . $newFileName;
+
+                        if (!move_uploaded_file($tmp_name, $destPath)) {
+                            $photoModel->addError('error', 'Error moving an additional image to the upload directory.');
+                        }
+                    } else {
+                        $photoModel->addError('error', 'Invalid file extension for additional images.');
+                    }
+                }
+            }
+            if ($photoModel->hasError('error')) {
+                $msg = $photoModel->getFirstError('error');
+                $session->setFlash('error', "$msg");
+
+                $this->setLayout('admin_main');
+                return $this->render('newModel', ['model' => $photoModel]);
+            }
+
+            $response->redirect('/wcp/models');
+            return;
         }
 
         $this->setLayout('admin_main');
@@ -113,4 +143,5 @@ class ModelController extends Controller
             'model' => $photoModel
         ]);
     }
+
 }

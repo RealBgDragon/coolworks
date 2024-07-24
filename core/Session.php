@@ -8,7 +8,8 @@ class Session
     protected const FLASH_KEY = 'flash_messages';
     public function __construct()
     {
-        session_start();
+        if (!(session_status() === 2))
+            session_start();
 
         $flashMessages = $_SESSION[self::FLASH_KEY] ?? [];
 

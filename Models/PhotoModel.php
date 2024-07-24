@@ -72,7 +72,7 @@ class PhotoModel extends DbModel
         foreach ($attributes as $attr) {
             $params["$attr"] = $this->{$attr};
         }
-        $user = $this->addNew($params); //contains the userId
+        $user = $this->addNew($params);
         if (!isset($user)) {
             $this->addError('error', 'Model wasn`t added successfully');
             return false;
