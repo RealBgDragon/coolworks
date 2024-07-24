@@ -76,7 +76,19 @@ use app\core\form\ModelOptions;
             <div class="modal-body" id="modelModalBody">
                 <div class="row">
                     <div class="col-md-6">
-                        <img id="modalModelImage" src="" class="img-fluid" alt="Model Image">
+                        <div id="modelCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="carouselInner">
+                                <!-- Images will be dynamically added here -->
+                            </div>
+                            <a class="carousel-control-prev" href="#modelCarousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" style="color: black"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#modelCarousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <h4 id="modelName"></h4>
@@ -93,6 +105,5 @@ use app\core\form\ModelOptions;
         </div>
     </div>
 </div>
-
 
 <script src="/js/models.js"></script>

@@ -59,3 +59,8 @@
 .carousel-control-next-icon {
     background-color: black; /* replace with your desired color */
 }
+
+img {
+    margin-left: auto;
+    margin-right: auto;
+}
