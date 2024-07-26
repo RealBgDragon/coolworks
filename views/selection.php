@@ -1,5 +1,6 @@
 <?php use app\core\form\Form;
 use app\core\form\ModelOptions;
+use app\models\PhotoModel;
 
 ?>
 <link rel="stylesheet" href="/css/models.css">
@@ -32,35 +33,42 @@ use app\core\form\ModelOptions;
 </div>
 
 <div class="row">
-    <?php foreach ($modelsData as $model) {
-        $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
-        $hairColor = ModelOptions::getHairColorName($model['hair_color']);
-        ?>
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="/uploads/<?php echo $model['model_id']; ?>/img.png" class="card-img-top img-fluid"
-                    alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
-                    data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
-                    data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
-                    data-model-weight="<?php echo $model['weight']; ?>"
-                    data-model-birthday="<?php echo $model['birthday']; ?>"
-                    data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
-                    data-hair-color="<?php echo $hairColor; ?>" onclick="showModelDetails(this)">
+    <?php
+    if (count($modelsData) == 0) { ?>
+        <h1>There aren't any selected models yet. You can select models <a href="models">here</a>.</h1>
+    <?php } else {
+        foreach ($modelsData as $model) {
+            $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
+            $hairColor = ModelOptions::getHairColorName($model['hair_color']);
+            ?>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <?php $photoModel = new PhotoModel() ?>
+                    <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>" class="card-img-top img-fluid"
+                        alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
+                        data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
+                        data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
+                        data-model-weight="<?php echo $model['weight']; ?>"
+                        data-model-birthday="<?php echo $model['birthday']; ?>"
+                        data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
+                        data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
+                        data-hair-color="<?php echo $hairColor; ?>" onclick="showModelDetails(this)">
 
-                <div class="card-body">
-                    <?php $form = Form::begun('', "post"); ?>
-                    <p class="card-text"><?php echo $model['name'] ?></p>
-                    <p class="card-text"><?php echo $model['height']; ?></p>
-                    <p class="card-text"><?php echo $model['age'] ?></p>
-                    <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
-                    <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
-                    <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
-                            class="fas fa-minus ml-2"></i></button>
-                    <?php Form::end() ?>
+                    <div class="card-body">
+                        <?php $form = Form::begun('', "post"); ?>
+                        <p class="card-text"><?php echo $model['name'] ?></p>
+                        <p class="card-text"><?php echo $model['height']; ?></p>
+                        <p class="card-text"><?php echo $model['age'] ?></p>
+                        <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
+                        <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
+                        <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
+                                class="fas fa-minus ml-2"></i></button>
+                        <?php Form::end() ?>
+                    </div>
                 </div>
             </div>
-        </div>
-    <?php } ?>
+        <?php }
+    } ?>
 </div>
 
 <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel"
