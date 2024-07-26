@@ -97,4 +97,22 @@ $(document).ready(function () {
     $(".carousel-control-next").click(function () {
         $("#modelCarousel").carousel("next");
     });
+
+    $(".custom-select-multiple .option").click(function () {
+        $(this).toggleClass("selected");
+        updateHairColorInput();
+    });
+
+    function updateHairColorInput() {
+        var selectedValues = $(".custom-select-multiple .option.selected")
+            .map(function () {
+                return $(this).data("value");
+            })
+            .get();
+
+        $("#hair_color_input").val(selectedValues.join(","));
+    }
+
+    // Initialize the hair color input
+    updateHairColorInput();
 });

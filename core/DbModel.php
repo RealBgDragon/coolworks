@@ -59,15 +59,15 @@ abstract class DbModel extends Model
         if (!empty($filter['eye_color'])) {
             $sql .= " AND eye_color = :eye_color";
         }
-        if (!empty($filter['hair_color'])) {
-            $sql .= " AND hair_color = :hair_color";
+        if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
+            $a = explode(",", $filter['hair_color'][0]);
+            $sql .= " AND hair_color IN ('" . implode("','", array_map('intval', $a)) . "')";
         }
 
         // Apply sorting
         $allowedSortColumns = ['name', 'age', 'height'];
         $sort = in_array($sort, $allowedSortColumns) ? $sort : 'name';
         $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
-
         if ($sort === 'age') {
             $sql .= " ORDER BY TIMESTAMPDIFF(YEAR, birthday, CURDATE()) $order";
         } else {
@@ -81,22 +81,19 @@ abstract class DbModel extends Model
 
         // Bind filter parameters
         if (!empty($filter['age_min'])) {
-            $statement->bindValue(':age_min', $filter['age_min']);
+            $statement->bindValue(':age_min', $filter['age_min'], \PDO::PARAM_INT);
         }
         if (!empty($filter['age_max'])) {
-            $statement->bindValue(':age_max', $filter['age_max']);
+            $statement->bindValue(':age_max', $filter['age_max'], \PDO::PARAM_INT);
         }
         if (!empty($filter['height_min'])) {
-            $statement->bindValue(':height_min', $filter['height_min']);
+            $statement->bindValue(':height_min', $filter['height_min'], \PDO::PARAM_INT);
         }
         if (!empty($filter['height_max'])) {
-            $statement->bindValue(':height_max', $filter['height_max']);
+            $statement->bindValue(':height_max', $filter['height_max'], \PDO::PARAM_INT);
         }
         if (!empty($filter['eye_color'])) {
-            $statement->bindValue(':eye_color', $filter['eye_color']);
-        }
-        if (!empty($filter['hair_color'])) {
-            $statement->bindValue(':hair_color', $filter['hair_color']);
+            $statement->bindValue(':eye_color', $filter['eye_color'], \PDO::PARAM_STR);
         }
 
         // Bind pagination parameters
@@ -129,30 +126,36 @@ abstract class DbModel extends Model
         if (!empty($filter['eye_color'])) {
             $sql .= " AND eye_color = :eye_color";
         }
-        if (!empty($filter['hair_color'])) {
-            $sql .= " AND hair_color = :hair_color";
+        if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
+            $placeholders = [];
+            foreach ($filter['hair_color'] as $index => $color) {
+                $placeholders[] = ":hair_color_$index";
+            }
+            $sql .= " AND hair_color IN (" . implode(',', $placeholders) . ")";
         }
 
         $statement = self::prepare($sql);
 
         // Bind filter parameters
         if (!empty($filter['age_min'])) {
-            $statement->bindValue(':age_min', $filter['age_min']);
+            $statement->bindValue(':age_min', $filter['age_min'], \PDO::PARAM_INT);
         }
         if (!empty($filter['age_max'])) {
-            $statement->bindValue(':age_max', $filter['age_max']);
+            $statement->bindValue(':age_max', $filter['age_max'], \PDO::PARAM_INT);
         }
         if (!empty($filter['height_min'])) {
-            $statement->bindValue(':height_min', $filter['height_min']);
+            $statement->bindValue(':height_min', $filter['height_min'], \PDO::PARAM_INT);
         }
         if (!empty($filter['height_max'])) {
-            $statement->bindValue(':height_max', $filter['height_max']);
+            $statement->bindValue(':height_max', $filter['height_max'], \PDO::PARAM_INT);
         }
         if (!empty($filter['eye_color'])) {
-            $statement->bindValue(':eye_color', $filter['eye_color']);
+            $statement->bindValue(':eye_color', $filter['eye_color'], \PDO::PARAM_STR);
         }
-        if (!empty($filter['hair_color'])) {
-            $statement->bindValue(':hair_color', $filter['hair_color']);
+        if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
+            foreach ($filter['hair_color'] as $index => $color) {
+                $statement->bindValue(":hair_color_$index", $color, \PDO::PARAM_STR);
+            }
         }
 
         $statement->execute();

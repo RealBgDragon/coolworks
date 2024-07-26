@@ -57,14 +57,23 @@
 
         <div class="form-group mr-2">
             <label for="hair_color">Hair Color:</label>
-            <select name="hair_color" id="hair_color" class="form-control ml-2">
-                <option value="">Any</option>
-                <?php foreach ([ModelOptions::HAIR_COLOR_BLONDE, ModelOptions::HAIR_COLOR_BROWN, ModelOptions::HAIR_COLOR_BLACK] as $value) { ?>
-                    <option value="<?php echo $value; ?>" <?php echo $currentFilter['hair_color'] == $value ? 'selected' : ''; ?>>
+            <div id="hair_color_options" class="custom-select-multiple">
+                <div class="option" data-value="">Any</div>
+                <?php
+                $hairColors = [
+                    ModelOptions::HAIR_COLOR_BLONDE,
+                    ModelOptions::HAIR_COLOR_BROWN,
+                    ModelOptions::HAIR_COLOR_BLACK
+                ];
+                foreach ($hairColors as $value) {
+                    $selected = in_array($value, $currentFilter['hair_color'] ?? []) ? 'selected' : '';
+                    ?>
+                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
                         <?php echo ModelOptions::getHairColorName($value); ?>
-                    </option>
+                    </div>
                 <?php } ?>
-            </select>
+            </div>
+            <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
         </div>
 
         <button type="submit" class="btn btn-primary">Apply</button>

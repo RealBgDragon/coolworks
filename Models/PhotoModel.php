@@ -15,7 +15,7 @@ class PhotoModel extends DbModel
     public $birthday = '';
     public $weight = '';
     public $height = '';
-    public $eye_color = 0; // New column for eye color
+    public $eye_color = 0;
     public $hair_color = 0; // New column for hair color
 
     public function tableName(): string
