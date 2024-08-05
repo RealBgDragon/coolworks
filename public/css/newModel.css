@@ -1,32 +1,98 @@
+/* newModels.css */
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 30px;
+}
+
+h1 {
+    color: #007bff;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .form-group label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
     display: block;
+    color: #495057;
+}
+
+.form-control {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
 }
 
 .radio-group {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+    margin-top: 10px;
 }
 
 .radio-group label {
-    font-size: 16px;
+    font-size: 14px;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .radio-group input[type="radio"] {
-    margin-right: 10px;
-    accent-color: #007bff; /* Custom color for radio buttons */
+    margin-right: 8px;
+    accent-color: #007bff;
 }
 
 .btn {
-    font-size: 18px;
+    font-size: 16px;
     padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-input-wrapper input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.file-input-wrapper .btn-file {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: #495057;
 }

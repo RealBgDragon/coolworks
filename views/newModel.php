@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/css/newModels.css">
+<link rel="stylesheet" href="/css/newModel.css">
 <h1>Add New Model</h1>
 <?php
 use app\core\form\Form;
