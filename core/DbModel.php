@@ -4,6 +4,7 @@ namespace app\core;
 
 use Exception;
 use PDOException;
+use PDO;
 
 abstract class DbModel extends Model
 {
@@ -38,70 +39,58 @@ abstract class DbModel extends Model
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    public function getAll($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
     {
-        $tableName = static::tableName();
-        $sql = "SELECT *, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM $tableName WHERE 1=1";
+        $tableName = $this->tableName();
+        $sql = "SELECT * FROM $tableName WHERE 1=1";
 
         // Apply filters
-        if (!empty($filter['age_min'])) {
-            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) >= :age_min";
-        }
-        if (!empty($filter['age_max'])) {
-            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) <= :age_max";
-        }
-        if (!empty($filter['height_min'])) {
-            $sql .= " AND height >= :height_min";
-        }
-        if (!empty($filter['height_max'])) {
-            $sql .= " AND height <= :height_max";
-        }
-        if (!empty($filter['eye_color'])) {
-            $sql .= " AND eye_color = :eye_color";
-        }
-        if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
-            $a = explode(",", $filter['hair_color'][0]);
-            $sql .= " AND hair_color IN ('" . implode("','", array_map('intval', $a)) . "')";
+        foreach ($filter as $key => $value) {
+            if (!empty($value)) {
+                if (is_array($value)) {
+                    // Handle date range for birthday
+                    if ($key === 'birthday') {
+                        $sql .= " AND ($key BETWEEN ? AND ?)";
+                    } else {
+                        $placeholders = implode(',', array_fill(0, count($value), '?'));
+                        $sql .= " AND $key IN ($placeholders)";
+                    }
+                } else {
+                    $sql .= " AND $key = ?";
+                }
+            }
         }
 
         // Apply sorting
-        $allowedSortColumns = ['name', 'age', 'height'];
-        $sort = in_array($sort, $allowedSortColumns) ? $sort : 'name';
         $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
-        if ($sort === 'age') {
-            $sql .= " ORDER BY TIMESTAMPDIFF(YEAR, birthday, CURDATE()) $order";
-        } else {
+        if ($sort != '')
             $sql .= " ORDER BY $sort $order";
-        }
 
         // Apply pagination
-        $sql .= " LIMIT :limit OFFSET :offset";
+        $sql .= " LIMIT ? OFFSET ?";
 
         $statement = self::prepare($sql);
 
         // Bind filter parameters
-        if (!empty($filter['age_min'])) {
-            $statement->bindValue(':age_min', $filter['age_min'], \PDO::PARAM_INT);
-        }
-        if (!empty($filter['age_max'])) {
-            $statement->bindValue(':age_max', $filter['age_max'], \PDO::PARAM_INT);
-        }
-        if (!empty($filter['height_min'])) {
-            $statement->bindValue(':height_min', $filter['height_min'], \PDO::PARAM_INT);
-        }
-        if (!empty($filter['height_max'])) {
-            $statement->bindValue(':height_max', $filter['height_max'], \PDO::PARAM_INT);
-        }
-        if (!empty($filter['eye_color'])) {
-            $statement->bindValue(':eye_color', $filter['eye_color'], \PDO::PARAM_STR);
+        $paramIndex = 1;
+        foreach ($filter as $key => $value) {
+            if (!empty($value)) {
+                if (is_array($value)) {
+                    foreach ($value as $item) {
+                        $statement->bindValue($paramIndex++, $item);
+                    }
+                } else {
+                    $statement->bindValue($paramIndex++, $value);
+                }
+            }
         }
 
         // Bind pagination parameters
-        $statement->bindValue(':limit', $limit, \PDO::PARAM_INT);
-        $statement->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        $statement->bindValue($paramIndex++, $limit, PDO::PARAM_INT);
+        $statement->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
 
         $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

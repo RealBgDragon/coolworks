@@ -76,7 +76,14 @@
             <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
         </div>
 
-        <button type="submit" class="btn btn-primary">Apply</button>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check"></i>
+                Apply</button>
+            <a href="/wcp/models" class="btn btn-primary">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset filters
+            </a>
+        </div>
         <?php $form::end(); ?>
     </div>
 </div>
@@ -85,6 +92,7 @@
     <?php foreach ($modelsData as $model) {
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
+
         ?>
         <div class="col-md-3 mb-4">
             <div class="card">
@@ -106,7 +114,7 @@
                     <p class="card-text"><?php echo $model['age'] ?></p>
                     <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
                     <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
-                    <button type="submit" class="btn btn-primary">Select model</button>
+                    <button type="submit" class="btn btn-primary"> <i class="bi bi-folder"></i> Select model</button>
                     <?php Form::end() ?>
                 </div>
             </div>

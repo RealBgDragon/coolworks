@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -53,7 +54,9 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Welcome
-                                <?php echo Application::$app->user->getDisplayName(); ?> (Logout)</a>
+                                <?php echo Application::$app->user->getDisplayName(); ?> <i
+                                    class="bi bi-box-arrow-right"></i>
+                            </a>
                         </li>
                     </ul>
                 <?php endif; ?>

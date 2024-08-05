@@ -90,3 +90,7 @@ img {
     background-color: #007bff;
     color: white;
 }
+
+a .btn .btn-primary {
+    text-align: end;
+}

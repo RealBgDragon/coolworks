@@ -62,7 +62,7 @@ use app\models\PhotoModel;
                         <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
                         <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
                         <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
-                                class="fas fa-minus ml-2"></i></button>
+                                class="bi bi-x"></i></button>
                         <?php Form::end() ?>
                     </div>
                 </div>

@@ -14,10 +14,10 @@ class ModelController extends Controller
     public function models(Request $request, Response $response)
     {
         $photoModel = new PhotoModel();
-        $selectModel = new SelectModel();
         $this->checkIfAdmin();
 
         if ($request->isPost()) {
+            $selectModel = new SelectModel();
             $selectModel->loadData($request->getBody());
 
             if ($selectModel->createNew()) {
@@ -51,7 +51,7 @@ class ModelController extends Controller
         $limit = 20;
         $offset = ($page - 1) * $limit;
 
-        $modelsData = $photoModel->getAll($sort, $order, $filter, $limit, $offset);
+        $modelsData = $photoModel->getAllModels($sort, $order, $filter, $limit, $offset);
         $totalModels = $photoModel->countAll($filter);
         $totalPages = ceil($totalModels / $limit);
 
@@ -71,7 +71,6 @@ class ModelController extends Controller
         $this->checkIfAdmin();
         $photoModel = new PhotoModel();
         $session = new Session();
-
 
         if ($request->isPost()) {
             $photoModel->loadData($request->getBody());
@@ -149,5 +148,4 @@ class ModelController extends Controller
             'model' => $photoModel
         ]);
     }
-
 }

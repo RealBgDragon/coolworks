@@ -28,14 +28,58 @@ class PhotoModel extends DbModel
         return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color'];
     }
 
-    public function getId()
-    {
-        return $this->model_id;
-    }
-
     public function primaryKey(): string
     {
         return 'model_id';
+    }
+
+    public function getAllModels($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    {
+        $additionalFilters = [];
+
+        // Convert age range to birthday filter
+        if (isset($filter['age_min']) && isset($filter['age_max'])) {
+            $currentYear = date('Y');
+            $ageMinYear = $currentYear - $filter['age_max'];
+            $ageMaxYear = $currentYear - $filter['age_min'];
+            $additionalFilters['birthday'] = ["$ageMinYear-01-01", "$ageMaxYear-12-31"];
+        }
+
+        // Pass other filters directly
+        if (!empty($filter['height_min'])) {
+            $additionalFilters['height'][] = $filter['height_min'];
+        }
+        if (!empty($filter['height_max'])) {
+            $additionalFilters['height'][] = $filter['height_max'];
+        }
+        if (!empty($filter['eye_color'])) {
+            $additionalFilters['eye_color'] = (array) $filter['eye_color'];
+        }
+        if (!empty($filter['hair_color'])) {
+            $additionalFilters['hair_color'] = (array) $filter['hair_color'];
+        }
+
+
+        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset);
+
+        foreach ($models as &$model) {
+            $model['age'] = $this->calculateAge($model['birthday']);
+        }
+        return $models;
+    }
+
+
+    public function calculateAge($birthday)
+    {
+        $birthDate = new \DateTime($birthday);
+        $currentDate = new \DateTime();
+        $age = $currentDate->diff($birthDate)->y;
+        return $age;
+    }
+
+    public function getId()
+    {
+        return $this->model_id;
     }
 
     public function rules(): array
@@ -47,22 +91,6 @@ class PhotoModel extends DbModel
             'birthday' => [Model::RULE_REQUIRED],
             'weight' => [Model::RULE_REQUIRED],
         ];
-    }
-
-    public function labels(): array
-    {
-        return [
-            'name' => 'Name',
-            'phone' => 'Phone',
-            'height' => 'Height',
-            'weight' => 'Weight',
-            'birthday' => 'Date of birth'
-        ];
-    }
-
-    public function getModel()
-    {
-        return $this->getAll();
     }
 
     public function createNew()
@@ -102,7 +130,7 @@ class PhotoModel extends DbModel
         return $this->hair_color;
     }
 
-    function getImagePath($modelId)
+    public function getImagePath($modelId)
     {
         $baseDir = dirname(__DIR__) . "/public/uploads/{$modelId}/";
         $pngPath = $baseDir . "img.png";
@@ -117,32 +145,23 @@ class PhotoModel extends DbModel
         }
     }
 
-    function getAllImagePaths($modelId)
+    public function getAllImagePaths($modelId)
     {
         $baseDir = dirname(__DIR__) . "/public/uploads/{$modelId}/";
         $imagePaths = [];
 
-        // Check if the directory exists
         if (is_dir($baseDir)) {
-            // Get all files in the directory
             $files = scandir($baseDir);
-
-            // Define allowed image extensions
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
             foreach ($files as $file) {
                 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-                // Check if the file is an image
                 if (in_array($extension, $allowedExtensions)) {
-                    // Add the full path to the image paths array
                     $imagePaths[] = "/uploads/{$modelId}/" . $file;
                 }
             }
         }
 
-        // Join the image paths with commas and return as a single string
         return implode(',', $imagePaths);
     }
-
 }
