@@ -5,21 +5,26 @@ use app\models\PhotoModel;
 ?>
 <link rel="stylesheet" href="/css/models.css">
 <div class="col-md-auto d-flex justify-content-start mb-4">
-    <h3>Saved selections:</h3>
-    <div class="form-group">
-        <a href="selection">New, </a>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="savedSelectionsDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Saved Selections
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="savedSelectionsDropdown">
+            <li><a class="dropdown-item" href="selection">New</a></li>
+            <?php
+            $last = '';
+            foreach ($selectionOptions as $selection) {
+                if ($selection === $last) {
+                    continue;
+                }
+                $last = $selection;
+                ?>
+                <li><a class="dropdown-item" href="selection?name=<?php echo $selection ?>"><?php echo $selection ?></a>
+                </li>
+            <?php } ?>
+        </ul>
     </div>
-    <?php $last = '';
-    foreach ($selectionOptions as $selection) {
-        if ($selection === $last) {
-            continue;
-        }
-        $last = $selection;
-        ?>
-        <div class="form-group">
-            <a href="selection?name=<?php echo $selection ?>"><?php echo $selection ?>, </a>
-        </div>
-    <?php } ?>
 </div>
 <div class="col-md-auto d-flex justify-content-end mb-4">
     <?php $form = Form::begun('', "post"); ?>
@@ -35,7 +40,7 @@ use app\models\PhotoModel;
 <div class="row">
     <?php
     if (count($modelsData) == 0) { ?>
-        <h1>There aren't any selected models yet. You can select models <a href="models">here</a>.</h1>
+        <h2>There aren't any selected models yet. You can select models <a href="models">here</a>.</h2>
     <?php } else {
         foreach ($modelsData as $model) {
             $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
@@ -77,7 +82,7 @@ use app\models\PhotoModel;
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelModalLabel">Model Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -115,3 +120,4 @@ use app\models\PhotoModel;
 </div>
 
 <script src="/js/models.js"></script>
+<script src="/js/selection.js"></script>

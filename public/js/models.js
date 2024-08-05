@@ -19,6 +19,12 @@ $(document).ready(function () {
     var ageMin = ageRange[0];
     var ageMax = ageRange[1];
 
+    $("#modelModal").on("hidden.bs.modal", function () {
+        $("body").removeClass("modal-open");
+        $(".modal-backdrop").remove();
+        $("#modelModal").modal("hide");
+    });
+
     // Initialize the age range slider
     $("#age_slider").slider({
         range: true,
@@ -113,6 +119,15 @@ $(document).ready(function () {
         $("#hair_color_input").val(selectedValues.join(","));
     }
 
+    $("#toggleFilters").click(function () {
+        $("#filterSection").slideToggle(300, function () {
+            if ($("#filterSection").is(":visible")) {
+                $("#toggleFilters").text("Hide Filters");
+            } else {
+                $("#toggleFilters").text("Show Filters");
+            }
+        });
+    });
     // Initialize the hair color input
     updateHairColorInput();
 });

@@ -10,81 +10,83 @@
         use app\models\PhotoModel;
 
         ?>
+        <button id="toggleFilters" class="btn btn-primary mb-3">Toggle Filters</button>
+        <div id="filterSection" style="display: none;">
+            <?php $form = Form::begun('', "get"); ?>
 
-        <?php $form = Form::begun('', "get"); ?>
-
-        <div class="form-group mr-2">
-            <label for="sort">Sort by:</label>
-            <select name="sort" id="sort" class="form-control ml-2">
-                <option value="name" <?php echo $currentSort === 'name' ? 'selected' : ''; ?>>Name</option>
-                <option value="age" <?php echo $currentSort === 'age' ? 'selected' : ''; ?>>Age</option>
-                <option value="height" <?php echo $currentSort === 'height' ? 'selected' : ''; ?>>Height</option>
-            </select>
-        </div>
-        <div class="form-group mr-2">
-            <label for="order">Order:</label>
-            <select name="order" id="order" class="form-control ml-2">
-                <option value="asc" <?php echo $currentOrder === 'asc' ? 'selected' : ''; ?>>Ascending</option>
-                <option value="desc" <?php echo $currentOrder === 'desc' ? 'selected' : ''; ?>>Descending</option>
-            </select>
-        </div>
-
-        <div class="form-group mr-2">
-            <label for="age_range">Age Range:</label>
-            <input type="text" id="age_range" name="age_range" readonly
-                style="border:0; color:#f6931f; font-weight:bold;">
-            <div id="age_slider" style="width: 400px; margin: 10px;"></div>
-        </div>
-
-        <div class="form-group mr-2">
-            <label for="height_min">Height:</label>
-            <input type="number" name="height_min" id="height_min" class="form-control ml-2" placeholder="Min"
-                value="<?php echo $currentFilter['height_min']; ?>">
-            <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
-                value="<?php echo $currentFilter['height_max']; ?>">
-        </div>
-        <div class="form-group mr-2">
-            <label for="eye_color">Eye Color:</label>
-            <select name="eye_color" id="eye_color" class="form-control ml-2">
-                <option value="">Any</option>
-                <?php foreach ([ModelOptions::EYE_COLOR_BLUE, ModelOptions::EYE_COLOR_GREEN, ModelOptions::EYE_COLOR_BROWN] as $value) { ?>
-                    <option value="<?php echo $value; ?>" <?php echo $currentFilter['eye_color'] == $value ? 'selected' : ''; ?>>
-                        <?php echo ModelOptions::getEyeColorName($value); ?>
-                    </option>
-                <?php } ?>
-            </select>
-        </div>
-
-        <div class="form-group mr-2">
-            <label for="hair_color">Hair Color:</label>
-            <div id="hair_color_options" class="custom-select-multiple">
-                <div class="option" data-value="">Any</div>
-                <?php
-                $hairColors = [
-                    ModelOptions::HAIR_COLOR_BLONDE,
-                    ModelOptions::HAIR_COLOR_BROWN,
-                    ModelOptions::HAIR_COLOR_BLACK
-                ];
-                foreach ($hairColors as $value) {
-                    $selected = in_array($value, $currentFilter['hair_color'] ?? []) ? 'selected' : '';
-                    ?>
-                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
-                        <?php echo ModelOptions::getHairColorName($value); ?>
-                    </div>
-                <?php } ?>
+            <div class="form-group mr-2">
+                <label for="sort">Sort by:</label>
+                <select name="sort" id="sort" class="form-control ml-2">
+                    <option value="name" <?php echo $currentSort === 'name' ? 'selected' : ''; ?>>Name</option>
+                    <option value="age" <?php echo $currentSort === 'age' ? 'selected' : ''; ?>>Age</option>
+                    <option value="height" <?php echo $currentSort === 'height' ? 'selected' : ''; ?>>Height</option>
+                </select>
             </div>
-            <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
-        </div>
+            <div class="form-group mr-2">
+                <label for="order">Order:</label>
+                <select name="order" id="order" class="form-control ml-2">
+                    <option value="asc" <?php echo $currentOrder === 'asc' ? 'selected' : ''; ?>>Ascending</option>
+                    <option value="desc" <?php echo $currentOrder === 'desc' ? 'selected' : ''; ?>>Descending</option>
+                </select>
+            </div>
 
-        <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check"></i>
-                Apply</button>
-            <a href="/wcp/models" class="btn btn-primary">
-                <i class="bi bi-arrow-counterclockwise"></i> Reset filters
-            </a>
+            <div class="form-group mr-2">
+                <label for="age_range">Age Range:</label>
+                <input type="text" id="age_range" name="age_range" readonly
+                    style="border:0; color:#f6931f; font-weight:bold;">
+                <div id="age_slider" style="width: 400px; margin: 10px;"></div>
+            </div>
+
+            <div class="form-group mr-2">
+                <label for="height_min">Height:</label>
+                <input type="number" name="height_min" id="height_min" class="form-control ml-2" placeholder="Min"
+                    value="<?php echo $currentFilter['height_min']; ?>">
+                <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
+                    value="<?php echo $currentFilter['height_max']; ?>">
+            </div>
+            <div class="form-group mr-2">
+                <label for="eye_color">Eye Color:</label>
+                <select name="eye_color" id="eye_color" class="form-control ml-2">
+                    <option value="">Any</option>
+                    <?php foreach ([ModelOptions::EYE_COLOR_BLUE, ModelOptions::EYE_COLOR_GREEN, ModelOptions::EYE_COLOR_BROWN] as $value) { ?>
+                        <option value="<?php echo $value; ?>" <?php echo $currentFilter['eye_color'] == $value ? 'selected' : ''; ?>>
+                            <?php echo ModelOptions::getEyeColorName($value); ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="form-group mr-2">
+                <label for="hair_color">Hair Color:</label>
+                <div id="hair_color_options" class="custom-select-multiple">
+                    <div class="option" data-value="">Any</div>
+                    <?php
+                    $hairColors = [
+                        ModelOptions::HAIR_COLOR_BLONDE,
+                        ModelOptions::HAIR_COLOR_BROWN,
+                        ModelOptions::HAIR_COLOR_BLACK
+                    ];
+                    foreach ($hairColors as $value) {
+                        $selected = in_array($value, $currentFilter['hair_color'] ?? []) ? 'selected' : '';
+                        ?>
+                        <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
+                            <?php echo ModelOptions::getHairColorName($value); ?>
+                        </div>
+                    <?php } ?>
+                </div>
+                <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check"></i>
+                    Apply</button>
+                <a href="/wcp/models" class="btn btn-primary">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset filters
+                </a>
+            </div>
+            <?php $form::end(); ?>
         </div>
-        <?php $form::end(); ?>
     </div>
 </div>
 
@@ -142,7 +144,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelModalLabel">Model Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -151,7 +153,7 @@
                     <div class="col-md-6">
                         <div id="modelCarousel" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner" id="carouselInner">
-                                <!-- Images will be dynamically added here -->
+                                <!-- Images are dynamically added here -->
                             </div>
                             <a class="carousel-control-prev" href="#modelCarousel" role="button" data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true" style="color: black"></span>
@@ -178,6 +180,5 @@
         </div>
     </div>
 </div>
-
 
 <script src="/js/models.js"></script>
