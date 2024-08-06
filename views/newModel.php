@@ -51,7 +51,7 @@ if (!isset($model)) {
     </div>
 </div>
 
-<button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Add model</button>
+<button type="submit" class="btn btn-primary">Add model <i class="bi bi-save"></i></button>
 
 <?php Form::end() ?>
 

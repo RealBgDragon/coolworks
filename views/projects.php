@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/models.css">
 <div class="col-md-auto d-flex justify-content-end mb-4">
 </div>
 

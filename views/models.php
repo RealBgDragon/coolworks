@@ -44,39 +44,54 @@
                 <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
                     value="<?php echo $currentFilter['height_max']; ?>">
             </div>
-            <div class="form-group mr-2">
-                <label for="eye_color">Eye Color:</label>
-                <select name="eye_color" id="eye_color" class="form-control ml-2">
-                    <option value="">Any</option>
-                    <?php foreach ([ModelOptions::EYE_COLOR_BLUE, ModelOptions::EYE_COLOR_GREEN, ModelOptions::EYE_COLOR_BROWN] as $value) { ?>
-                        <option value="<?php echo $value; ?>" <?php echo $currentFilter['eye_color'] == $value ? 'selected' : ''; ?>>
-                            <?php echo ModelOptions::getEyeColorName($value); ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-
-            <div class="form-group mr-2">
-                <label for="hair_color">Hair Color:</label>
-                <div id="hair_color_options" class="custom-select-multiple">
-                    <div class="option" data-value="">Any</div>
-                    <?php
-                    $hairColors = [
-                        ModelOptions::HAIR_COLOR_BLONDE,
-                        ModelOptions::HAIR_COLOR_BROWN,
-                        ModelOptions::HAIR_COLOR_BLACK
-                    ];
-                    foreach ($hairColors as $value) {
-                        $selected = in_array($value, $currentFilter['hair_color'] ?? []) ? 'selected' : '';
-                        ?>
-                        <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
-                            <?php echo ModelOptions::getHairColorName($value); ?>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mr-2">
+                            <label for="eye_color">Eye Color:</label>
+                            <div id="eye_color_options" class="custom-select-multiple">
+                                <div class="option" data-value="">Any</div>
+                                <?php
+                                $eyeColors = [
+                                    ModelOptions::EYE_COLOR_BLUE,
+                                    ModelOptions::EYE_COLOR_GREEN,
+                                    ModelOptions::EYE_COLOR_BROWN
+                                ];
+                                foreach ($eyeColors as $value) {
+                                    $selected = in_array($value, $currentFilter['eye_color'] ?? []) ? 'selected' : '';
+                                    ?>
+                                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
+                                        <?php echo ModelOptions::getEyeColorName($value); ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <input type="hidden" name="eye_color[]" id="eye_color_input" value="">
                         </div>
-                    <?php } ?>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mr-2">
+                            <label for="hair_color">Hair Color:</label>
+                            <div id="hair_color_options" class="custom-select-multiple">
+                                <div class="option" data-value="">Any</div>
+                                <?php
+                                $hairColors = [
+                                    ModelOptions::HAIR_COLOR_BLONDE,
+                                    ModelOptions::HAIR_COLOR_BROWN,
+                                    ModelOptions::HAIR_COLOR_BLACK
+                                ];
+                                foreach ($hairColors as $value) {
+                                    $selected = in_array($value, $currentFilter['hair_color'] ?? []) ? 'selected' : '';
+                                    ?>
+                                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
+                                        <?php echo ModelOptions::getHairColorName($value); ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
+                        </div>
+                    </div>
                 </div>
-                <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
             </div>
-
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-check"></i>
@@ -116,7 +131,7 @@
                     <p class="card-text"><?php echo $model['age'] ?></p>
                     <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
                     <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
-                    <button type="submit" class="btn btn-primary"> <i class="bi bi-folder"></i> Select model</button>
+                    <button type="submit" class="btn btn-primary">Select model <i class="bi bi-folder"></i></button>
                     <?php Form::end() ?>
                 </div>
             </div>

@@ -33,18 +33,16 @@ class ModelController extends Controller
         $age_min = (int) trim($age_range[0]);
         $age_max = (int) trim($age_range[1]);
 
-        $hair_colors = isset($_GET['hair_color']) ? (array) $_GET['hair_color'] : null;
-        if ($hair_colors) {
-            $hair_colors = array_filter($hair_colors); // Remove empty values
-        }
+        $hair_colors = isset($_GET['hair_color']) ? (array) $_GET['hair_color'] : [];
+        $eye_colors = isset($_GET['eye_color']) ? (array) $_GET['eye_color'] : [];
 
         $filter = [
             'age_min' => $age_min,
             'age_max' => $age_max,
             'height_min' => $_GET['height_min'] ?? null,
             'height_max' => $_GET['height_max'] ?? null,
-            'eye_color' => $_GET['eye_color'] ?? null,
-            'hair_color' => $hair_colors,
+            'eye_color' => array_filter($eye_colors), // Remove empty values
+            'hair_color' => array_filter($hair_colors), // Remove empty values
         ];
 
         $page = $_GET['page'] ?? 1;

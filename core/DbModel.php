@@ -112,8 +112,12 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $sql .= " AND height <= :height_max";
         }
-        if (!empty($filter['eye_color'])) {
-            $sql .= " AND eye_color = :eye_color";
+        if (!empty($filter['eye_color']) && is_array($filter['eye_color'])) {
+            $placeholders = [];
+            foreach ($filter['eye_color'] as $index => $color) {
+                $placeholders[] = ":eye_color_$index";
+            }
+            $sql .= " AND eye_color IN (" . implode(',', $placeholders) . ")";
         }
         if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
             $placeholders = [];
@@ -138,8 +142,10 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $statement->bindValue(':height_max', $filter['height_max'], \PDO::PARAM_INT);
         }
-        if (!empty($filter['eye_color'])) {
-            $statement->bindValue(':eye_color', $filter['eye_color'], \PDO::PARAM_STR);
+        if (!empty($filter['eye_color']) && is_array($filter['eye_color'])) {
+            foreach ($filter['eye_color'] as $index => $color) {
+                $statement->bindValue(":eye_color_$index", $color, \PDO::PARAM_STR);
+            }
         }
         if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
             foreach ($filter['hair_color'] as $index => $color) {

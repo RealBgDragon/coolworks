@@ -96,6 +96,7 @@ $(document).ready(function () {
 
         console.log("Filtering with age range:", minAge, "-", maxAge);
     });
+
     $(".carousel-control-prev").click(function () {
         $("#modelCarousel").carousel("prev");
     });
@@ -106,28 +107,48 @@ $(document).ready(function () {
 
     $(".custom-select-multiple .option").click(function () {
         $(this).toggleClass("selected");
-        updateHairColorInput();
+        updateColorInputs();
     });
 
-    function updateHairColorInput() {
-        var selectedValues = $(".custom-select-multiple .option.selected")
+    function updateColorInputs() {
+        var selectedHairColors = $("#hair_color_options .option.selected")
+            .map(function () {
+                return $(this).data("value");
+            })
+            .get();
+        var selectedEyeColors = $("#eye_color_options .option.selected")
             .map(function () {
                 return $(this).data("value");
             })
             .get();
 
-        $("#hair_color_input").val(selectedValues.join(","));
+        $("#hair_color_input").val(selectedHairColors.join(","));
+        $("#eye_color_input").val(selectedEyeColors.join(","));
     }
 
+    // Retrieve filter section visibility state from sessionStorage
+    var filterSectionVisible = sessionStorage.getItem("filterSectionVisible");
+    if (filterSectionVisible === "true") {
+        $("#filterSection").show();
+        $("#toggleFilters").text("Hide Filters");
+    } else {
+        $("#filterSection").hide();
+        $("#toggleFilters").text("Show Filters");
+    }
+
+    // Toggle filter section visibility and store state in sessionStorage
     $("#toggleFilters").click(function () {
         $("#filterSection").slideToggle(300, function () {
             if ($("#filterSection").is(":visible")) {
                 $("#toggleFilters").text("Hide Filters");
+                sessionStorage.setItem("filterSectionVisible", "true");
             } else {
                 $("#toggleFilters").text("Show Filters");
+                sessionStorage.setItem("filterSectionVisible", "false");
             }
         });
     });
-    // Initialize the hair color input
-    updateHairColorInput();
+
+    // Initialize the color inputs
+    updateColorInputs();
 });

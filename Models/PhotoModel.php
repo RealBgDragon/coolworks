@@ -28,6 +28,19 @@ class PhotoModel extends DbModel
         return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color'];
     }
 
+    public function labels(): array
+    {
+        return [
+            'name' => 'Name',
+            'phone' => 'Phone',
+            'birthday' => 'Date of birth',
+            'weight' => 'Weight',
+            'height' => 'Height',
+            'eye_color' => 'Eye Color',
+            'hair_color' => 'Hair Color',
+        ];
+    }
+
     public function primaryKey(): string
     {
         return 'model_id';
@@ -53,12 +66,13 @@ class PhotoModel extends DbModel
             $additionalFilters['height'][] = $filter['height_max'];
         }
         if (!empty($filter['eye_color'])) {
-            $additionalFilters['eye_color'] = (array) $filter['eye_color'];
-        }
-        if (!empty($filter['hair_color'])) {
-            $additionalFilters['hair_color'] = (array) $filter['hair_color'];
+            $additionalFilters['eye_color'] = array_map('intval', explode(',', $filter['eye_color'][0]));
         }
 
+        // Split and convert hair_color to an array of integers
+        if (!empty($filter['hair_color'])) {
+            $additionalFilters['hair_color'] = array_map('intval', explode(',', $filter['hair_color'][0]));
+        }
 
         $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset);
 

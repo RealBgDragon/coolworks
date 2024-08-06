@@ -1,7 +1,11 @@
 <?php use app\core\form\Form;
 use app\core\form\ModelOptions;
 use app\models\PhotoModel;
+use app\models\SelectModel;
 
+if (!isset($model)) {
+    $model = new SelectModel();
+}
 ?>
 <link rel="stylesheet" href="/css/models.css">
 <div class="col-md-auto d-flex justify-content-start mb-4">
@@ -28,12 +32,9 @@ use app\models\PhotoModel;
 </div>
 <div class="col-md-auto d-flex justify-content-end mb-4">
     <?php $form = Form::begun('', "post"); ?>
-    <div class="form-group">
-        <label for="selection_name">Selection Name:</label>
-        <input type="text" class="form-control" id="selection_name" name="selection_name" required>
-    </div>
+    <?php echo $form->field($model, 'selection_name') ?>
     <button type="submit" name="save_selection" class="btn btn-primary btn-sm">Save selection <i
-            class="fas fa-plus ml-2"></i></button>
+            class="bi bi-floppy2-fill"></i></button>
     <?php $form::end(); ?>
 </div>
 

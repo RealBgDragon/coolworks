@@ -21,7 +21,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/wcp/home">Navbar</a>
+            <a class="navbar-brand" href="/wcp/home">Coolworks</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -30,21 +30,32 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/wcp/home">Home</a>
+                        <a class="nav-link" aria-current="page" href="/wcp/home" data-page="home">
+                            <i class="bi bi-house-door"></i> Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/wcp/models">Models</a>
+                        <a class="nav-link" href="/wcp/models" data-page="models">
+                            <i class="bi bi-people"></i> Models
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/wcp/projects">Projects</a>
+                        <a class="nav-link" href="/wcp/projects" data-page="projects">
+                            <i class="bi bi-briefcase"></i> Projects
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/wcp/selection"><i class="fas fa-camera"></i> Selection</a>
+                        <a class="nav-link" href="/wcp/selection" data-page="selection">
+                            <i class="bi bi-camera"></i> Selection
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Back to website</a>
+                        <a class="nav-link" href="/" data-page="home">
+                            <i class="bi bi-box-arrow-in-left"></i> Back to website
+                        </a>
                     </li>
                 </ul>
+
                 <?php if (Application::isGuest()): ?>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -88,6 +99,26 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the current URL path
+            var currentPath = window.location.pathname;
+
+            // Select all nav links
+            var navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+            // Iterate over each nav link
+            navLinks.forEach(function (link) {
+                // Compare href with current path
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
 
 </body>
 

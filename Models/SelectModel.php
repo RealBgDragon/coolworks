@@ -44,7 +44,9 @@ class SelectModel extends DbModel
 
     public function labels(): array
     {
-        return [];
+        return [
+            'selection_name' => 'Selection Name'
+        ];
     }
 
     public function getModel()
