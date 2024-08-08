@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\core\Application;
+use app\core\form\ModelOptions;
 use app\core\DbModel;
 use app\core\Model;
 use app\models\User;
@@ -53,6 +54,7 @@ class PhotoModel extends DbModel
     public function getAllModels($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
     {
         $additionalFilters = [];
+        $modelOptions = new ModelOptions();
 
         // Convert age range to birthday filter
         if (isset($filter['age_min']) && isset($filter['age_max'])) {
@@ -76,6 +78,23 @@ class PhotoModel extends DbModel
         // Split and convert hair_color to an array of integers
         if (!empty($filter['hair_color'])) {
             $additionalFilters['hair_color'] = array_map('intval', explode(',', $filter['hair_color'][0]));
+        }
+        if (!empty($filter['language'])) {
+            $additionalFilters['language'] = array_map('intval', explode(',', $filter['language'][0]));
+            foreach ($additionalFilters['language'] as $lan) {
+                switch ($lan) {
+                    case $modelOptions::LANGUAGE_BULGARIAN:
+                        $lan |= $modelOptions::LANGUAGE_ENGLISH;
+                        break;
+                    case $modelOptions::LANGUAGE_ENGLISH:
+                        $lan |= $modelOptions::LANGUAGE_BULGARIAN;
+                        break;
+                }
+                array_push($additionalFilters['language'], $lan);
+            }
+        }
+        if (!empty($filter['talant'])) {
+            $additionalFilters['talant'] = array_map('intval', explode(',', $filter['talant'][0]));
         }
 
         $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset);

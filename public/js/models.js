@@ -111,10 +111,10 @@ $(document).ready(function () {
 
     $(".custom-select-multiple .option").click(function () {
         $(this).toggleClass("selected");
-        updateColorInputs();
+        updateInputs();
     });
 
-    function updateColorInputs() {
+    function updateInputs() {
         var selectedHairColors = $("#hair_color_options .option.selected")
             .map(function () {
                 return $(this).data("value");
@@ -125,9 +125,21 @@ $(document).ready(function () {
                 return $(this).data("value");
             })
             .get();
+        var selectedTalants = $("#talant_options .option.selected")
+            .map(function () {
+                return $(this).data("value");
+            })
+            .get();
+        var selectedLanguages = $("#language_options .option.selected")
+            .map(function () {
+                return $(this).data("value");
+            })
+            .get();
 
         $("#hair_color_input").val(selectedHairColors.join(","));
         $("#eye_color_input").val(selectedEyeColors.join(","));
+        $("#talant_input").val(selectedTalants.join(","));
+        $("#language_input").val(selectedLanguages.join(","));
     }
 
     // Retrieve filter section visibility state from sessionStorage

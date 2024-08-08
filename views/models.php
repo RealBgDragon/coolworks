@@ -44,7 +44,7 @@
                 <input type="number" name="height_max" id="height_max" class="form-control ml-2" placeholder="Max"
                     value="<?php echo $currentFilter['height_max']; ?>">
             </div>
-            <div class="container">
+            <div class="multi-select">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mr-2">
@@ -88,6 +88,52 @@
                                 <?php } ?>
                             </div>
                             <input type="hidden" name="hair_color[]" id="hair_color_input" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="multi-select">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mr-2">
+                            <label for="talant">Talants:</label>
+                            <div id="talant_options" class="custom-select-multiple">
+                                <div class="option" data-value="">Any</div>
+                                <?php
+                                $talants = [
+                                    ModelOptions::TALANT_ACTOR,
+                                    ModelOptions::TALANT_PHOTO_MODEL,
+                                ];
+                                foreach ($talants as $value) {
+                                    $selected = in_array($value, $currentFilter['talant'] ?? []) ? 'selected' : '';
+                                    ?>
+                                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
+                                        <?php echo ModelOptions::getTalantName($value); ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <input type="hidden" name="talant[]" id="talant_input" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mr-2">
+                            <label for="language">Language:</label>
+                            <div id="language_options" class="custom-select-multiple">
+                                <div class="option" data-value="">Any</div>
+                                <?php
+                                $languages = [
+                                    ModelOptions::LANGUAGE_BULGARIAN,
+                                    ModelOptions::LANGUAGE_ENGLISH,
+                                ];
+                                foreach ($languages as $value) {
+                                    $selected = in_array($value, $currentFilter['language'] ?? []) ? 'selected' : '';
+                                    ?>
+                                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
+                                        <?php echo ModelOptions::getLanguages($value); ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <input type="hidden" name="language[]" id="language_input" value="">
                         </div>
                     </div>
                 </div>
