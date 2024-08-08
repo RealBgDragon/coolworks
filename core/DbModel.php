@@ -36,7 +36,7 @@ abstract class DbModel extends Model
         $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
         $statement = self::prepare($sql);
         $statement->execute($params);
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
@@ -131,30 +131,30 @@ abstract class DbModel extends Model
 
         // Bind filter parameters
         if (!empty($filter['age_min'])) {
-            $statement->bindValue(':age_min', $filter['age_min'], \PDO::PARAM_INT);
+            $statement->bindValue(':age_min', $filter['age_min'], PDO::PARAM_INT);
         }
         if (!empty($filter['age_max'])) {
-            $statement->bindValue(':age_max', $filter['age_max'], \PDO::PARAM_INT);
+            $statement->bindValue(':age_max', $filter['age_max'], PDO::PARAM_INT);
         }
         if (!empty($filter['height_min'])) {
-            $statement->bindValue(':height_min', $filter['height_min'], \PDO::PARAM_INT);
+            $statement->bindValue(':height_min', $filter['height_min'], PDO::PARAM_INT);
         }
         if (!empty($filter['height_max'])) {
-            $statement->bindValue(':height_max', $filter['height_max'], \PDO::PARAM_INT);
+            $statement->bindValue(':height_max', $filter['height_max'], PDO::PARAM_INT);
         }
         if (!empty($filter['eye_color']) && is_array($filter['eye_color'])) {
             foreach ($filter['eye_color'] as $index => $color) {
-                $statement->bindValue(":eye_color_$index", $color, \PDO::PARAM_STR);
+                $statement->bindValue(":eye_color_$index", $color, PDO::PARAM_STR);
             }
         }
         if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
             foreach ($filter['hair_color'] as $index => $color) {
-                $statement->bindValue(":hair_color_$index", $color, \PDO::PARAM_STR);
+                $statement->bindValue(":hair_color_$index", $color, PDO::PARAM_STR);
             }
         }
 
         $statement->execute();
-        return $statement->fetch(\PDO::FETCH_ASSOC)['total'];
+        return $statement->fetch(PDO::FETCH_ASSOC)['total'];
     }
 
 

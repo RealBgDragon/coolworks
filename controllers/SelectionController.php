@@ -38,30 +38,13 @@ class SelectionController extends Controller
             }
         }
 
-        $sort = $_GET['sort'] ?? 'name';
-        $order = $_GET['order'] ?? 'asc';
-        $age_range = explode(' - ', $_GET['age_range'] ?? '0 - 100');
-        $age_min = (int) trim($age_range[0]);
-        $age_max = (int) trim($age_range[1]);
-        $filter = [
-            'age_min' => $age_min,
-            'age_max' => $age_max,
-            'height_min' => $_GET['height_min'] ?? null,
-            'height_max' => $_GET['height_max'] ?? null,
-        ];
-        $selection_options = $selectModel->getSelections();
         $selection_name = $_GET['name'] ?? null;
         $selectedModelIds = $selectModel->getSelectedModelIds($selection_name);
-        $modelsData = $selectModel->getModelsByIds($selectedModelIds, $sort, $order, $filter);
+        $modelsData = $selectModel->getModelsByIds($selectedModelIds);
 
         $this->setLayout('admin_main');
         return $this->render('selection', [
             'modelsData' => $modelsData,
-            'currentSort' => $sort,
-            'currentOrder' => $order,
-            'currentFilter' => $filter,
-            'selectionName' => $selection_name,
-            'selectionOptions' => $selection_options
         ]);
     }
 }

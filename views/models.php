@@ -196,4 +196,4 @@
     </div>
 </div>
 
-<script src="/js/models.js"></script>
+<script src="/js/models.js" async></script> <!-- //!if there are problems remove async -->
