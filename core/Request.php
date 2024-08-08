@@ -34,15 +34,22 @@ class Request
         $body = [];
         if ($this->isGet()) {
             foreach ($_GET as $key => $value) {
-                $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                // Check if value is an array, sanitize accordingly
+                $body[$key] = is_array($value)
+                    ? filter_var_array($value, FILTER_SANITIZE_SPECIAL_CHARS)
+                    : filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
             }
         }
 
         if ($this->isPost()) {
             foreach ($_POST as $key => $value) {
-                $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                // Check if value is an array, sanitize accordingly
+                $body[$key] = is_array($value)
+                    ? filter_var_array($value, FILTER_SANITIZE_SPECIAL_CHARS)
+                    : filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
             }
         }
         return $body;
     }
+
 }

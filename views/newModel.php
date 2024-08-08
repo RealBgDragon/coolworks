@@ -34,6 +34,14 @@ if (!isset($model)) {
             <label><input type="radio" name="talant" value="<?php echo ModelOptions::TALANT_PHOTO_MODEL; ?>">
                 Photo model</label>
         </div>
+        <label for="language">Language:</label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="language[]" value="<?php echo ModelOptions::LANGUAGE_BULGARIAN; ?>">
+                Bulgarian</label>
+            <label><input type="checkbox" name="language[]" value="<?php echo ModelOptions::LANGUAGE_ENGLISH; ?>">
+                English</label>
+        </div>
+
     </div>
     <div class="col-md-6">
         <?php echo $form->field($model, 'weight')->numberField() ?>

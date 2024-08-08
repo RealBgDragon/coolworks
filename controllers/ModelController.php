@@ -77,9 +77,11 @@ class ModelController extends Controller
             $eyeColorOption = isset($request->getBody()['eye_color']) ? (int) $request->getBody()['eye_color'] : 0;
             $hairColorOption = isset($request->getBody()['hair_color']) ? (int) $request->getBody()['hair_color'] : 0;
             $talant = isset($request->getBody()['talant']) ? (int) $request->getBody()['talant'] : 0;
+            $language = isset($request->getBody()['language']) ? $request->getBody()['language'] : 0;
             $photoModel->setEyeColor($eyeColorOption);
             $photoModel->setHairColor($hairColorOption);
             $photoModel->setTalant($talant);
+            $photoModel->setLanguage($language);
 
             // Main image upload handling
             if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {

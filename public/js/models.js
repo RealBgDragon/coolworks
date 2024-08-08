@@ -58,6 +58,7 @@ $(document).ready(function () {
         var eyeColor = $(img).data("eye-color");
         var hairColor = $(img).data("hair-color");
         var talant = $(img).data("talant");
+        var languages = $(img).data("language");
         /* var imageSrc = $(img).attr("src"); */
 
         var imageSrcString = $(img).data("model-srcs");
@@ -84,6 +85,7 @@ $(document).ready(function () {
         $("#modelEyeColor").text(eyeColor);
         $("#modelHairColor").text(hairColor);
         $("#modelTalant").text(talant);
+        $("#modelLanguage").text(languages);
 
         $("#modelModal").modal("show");
     };

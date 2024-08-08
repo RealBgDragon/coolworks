@@ -110,7 +110,8 @@
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
         $talant = ModelOptions::getTalantName($model['talant']);
-
+        $languages = ModelOptions::getLanguages($model['language']); // Updated line
+    
         ?>
         <div class="col-md-3 mb-4">
             <div class="card">
@@ -124,7 +125,7 @@
                     data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                     data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
                     data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                    onclick="showModelDetails(this)">
+                    data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)"> <!-- Updated line -->
 
                 <div class="card-body">
                     <?php $form = Form::begun('', "post"); ?>
@@ -140,6 +141,7 @@
         </div>
     <?php } ?>
 </div>
+
 
 <div class="row">
     <div class="col-md-12">
@@ -192,6 +194,7 @@
                         <p>Eye Color: <span id="modelEyeColor"></span></p>
                         <p>Hair Color: <span id="modelHairColor"></span></p>
                         <p>Talant: <span id="modelTalant"></span></p>
+                        <p>Language: <span id="modelLanguage"></span></p>
                     </div>
                 </div>
             </div>

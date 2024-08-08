@@ -7,6 +7,9 @@ class ModelOptions
     const TALANT_ACTOR = 1 << 0; // 00000001 //1
     const TALANT_PHOTO_MODEL = 1 << 1; // 00000010 //2
 
+    const LANGUAGE_BULGARIAN = 1 << 0; // 00000001 //1
+    const LANGUAGE_ENGLISH = 1 << 1; // 00000010 //2
+
     const EYE_COLOR_BLUE = 1 << 0; // 00000001 //1
     const EYE_COLOR_GREEN = 1 << 1; // 00000010 //2
     const EYE_COLOR_BROWN = 1 << 2; // 00000100 //4
@@ -32,6 +35,17 @@ class ModelOptions
         }
     }
 
+    public static function getLanguages($languageBitmask)
+    {
+        $languages = [];
+        if ($languageBitmask & self::LANGUAGE_BULGARIAN) {
+            $languages[] = 'Bulgarian';
+        }
+        if ($languageBitmask & self::LANGUAGE_ENGLISH) {
+            $languages[] = 'English';
+        }
+        return $languages ? implode(', ', $languages) : 'Unknown';
+    }
     public static function getEyeColorName($eyeColor)
     {
         switch ($eyeColor) {
