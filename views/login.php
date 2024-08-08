@@ -17,3 +17,4 @@ if (!isset($model)) {
 
 <button type="submit" class="btn btn-primary">Submit</button>
 <?php Form::end() ?>
+<a href="/wcp">Access the backend</a>

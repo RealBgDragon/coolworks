@@ -37,6 +37,7 @@ class SelectionController extends Controller
                 return;
             }
         }
+        $selection_options = $selectModel->getSelections();
 
         $selection_name = $_GET['name'] ?? null;
         $selectedModelIds = $selectModel->getSelectedModelIds($selection_name);
@@ -45,6 +46,8 @@ class SelectionController extends Controller
         $this->setLayout('admin_main');
         return $this->render('selection', [
             'modelsData' => $modelsData,
+            'selectionName' => $selection_name,
+            'selectionOptions' => $selection_options
         ]);
     }
 }
