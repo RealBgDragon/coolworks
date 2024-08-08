@@ -57,6 +57,7 @@ $(document).ready(function () {
         var modelPhone = $(img).data("model-phone");
         var eyeColor = $(img).data("eye-color");
         var hairColor = $(img).data("hair-color");
+        var talant = $(img).data("talant");
         /* var imageSrc = $(img).attr("src"); */
 
         var imageSrcString = $(img).data("model-srcs");
@@ -82,6 +83,7 @@ $(document).ready(function () {
         $("#modelPhone").text(modelPhone);
         $("#modelEyeColor").text(eyeColor);
         $("#modelHairColor").text(hairColor);
+        $("#modelTalant").text(talant);
 
         $("#modelModal").modal("show");
     };

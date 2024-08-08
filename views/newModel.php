@@ -27,6 +27,13 @@ if (!isset($model)) {
             <label><input type="radio" name="eye_color" value="<?php echo ModelOptions::EYE_COLOR_BROWN; ?>">
                 Brown</label>
         </div>
+        <label for="talant">Talant:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="talant" value="<?php echo ModelOptions::TALANT_ACTOR; ?>">
+                Actor</label>
+            <label><input type="radio" name="talant" value="<?php echo ModelOptions::TALANT_PHOTO_MODEL; ?>">
+                Photo model</label>
+        </div>
     </div>
     <div class="col-md-6">
         <?php echo $form->field($model, 'weight')->numberField() ?>

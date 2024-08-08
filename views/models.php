@@ -109,6 +109,7 @@
     <?php foreach ($modelsData as $model) {
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
+        $talant = ModelOptions::getTalantName($model['talant']);
 
         ?>
         <div class="col-md-3 mb-4">
@@ -122,7 +123,8 @@
                     data-model-birthday="<?php echo $model['birthday']; ?>"
                     data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                     data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
-                    data-hair-color="<?php echo $hairColor; ?>" onclick="showModelDetails(this)">
+                    data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
+                    onclick="showModelDetails(this)">
 
                 <div class="card-body">
                     <?php $form = Form::begun('', "post"); ?>
@@ -189,6 +191,7 @@
                         <p>Phone: <span id="modelPhone"></span></p>
                         <p>Eye Color: <span id="modelEyeColor"></span></p>
                         <p>Hair Color: <span id="modelHairColor"></span></p>
+                        <p>Talant: <span id="modelTalant"></span></p>
                     </div>
                 </div>
             </div>

@@ -41,8 +41,8 @@ class ModelController extends Controller
             'age_max' => $age_max,
             'height_min' => $_GET['height_min'] ?? null,
             'height_max' => $_GET['height_max'] ?? null,
-            'eye_color' => array_filter($eye_colors), // Remove empty values
-            'hair_color' => array_filter($hair_colors), // Remove empty values
+            'eye_color' => array_filter($eye_colors),
+            'hair_color' => array_filter($hair_colors),
         ];
 
         $page = $_GET['page'] ?? 1;
@@ -76,8 +76,10 @@ class ModelController extends Controller
             // Handle eye color and hair color
             $eyeColorOption = isset($request->getBody()['eye_color']) ? (int) $request->getBody()['eye_color'] : 0;
             $hairColorOption = isset($request->getBody()['hair_color']) ? (int) $request->getBody()['hair_color'] : 0;
+            $talant = isset($request->getBody()['talant']) ? (int) $request->getBody()['talant'] : 0;
             $photoModel->setEyeColor($eyeColorOption);
             $photoModel->setHairColor($hairColorOption);
+            $photoModel->setTalant($talant);
 
             // Main image upload handling
             if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
