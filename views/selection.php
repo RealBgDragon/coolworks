@@ -58,7 +58,7 @@ if (!isset($model)) {
                     data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                     data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
                     data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                    data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)"> <!-- Updated line -->
+                    data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)">
 
                 <div class="card-body">
                     <?php $form = Form::begun('', "post"); ?>
@@ -67,7 +67,7 @@ if (!isset($model)) {
                     <p class="card-text"><?php echo $model['age'] ?></p>
                     <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
                     <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
-                    <button type="submit" class="btn btn-primary">Select model <i class="bi bi-folder"></i></button>
+                    <button type="submit" class="btn btn-primary">Deselect model <i class="bi bi-folder"></i></button>
                     <?php Form::end() ?>
                 </div>
             </div>

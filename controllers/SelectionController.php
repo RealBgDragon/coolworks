@@ -19,9 +19,9 @@ class SelectionController extends Controller
 
             if (isset($_POST['save_selection'])) {
                 if ($selectModel->saveSelection()) {
-                    $this->userMessage('success', 'Selection was successfully saved');
+                    $this->userMessage('success', 'Selection was successfully saved!');
                 } else {
-                    $this->userMessage('error', 'Selection could not be saved');
+                    $this->userMessage('error', 'Selection could not be saved!');
                 }
                 $response->redirect('/wcp/selection');
                 return;
@@ -29,9 +29,9 @@ class SelectionController extends Controller
 
             if (isset($_POST['remove_selection'])) {
                 if ($selectModel->removeSelection()) {
-                    $this->userMessage('success', 'Model was successfully removed');
+                    $this->userMessage('success', 'Model was successfully removed!');
                 } else {
-                    $this->userMessage('error', 'Model could not be removed');
+                    $this->userMessage('error', 'Model could not be removed!');
                 }
                 $response->redirect('/wcp/selection');
                 return;
