@@ -28,7 +28,7 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '')
+    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requerment = '')
     {
         if ($table === '') {
             $table = static::tableName();
@@ -36,7 +36,11 @@ abstract class DbModel extends Model
         $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
         $statement = self::prepare($sql);
         $statement->execute($params);
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        if ($requerment == '')
+            return $statement->fetchAll();
+        else
+            return $statement->fetchAll(PDO::FETCH_COLUMN);
+
     }
 
     public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)

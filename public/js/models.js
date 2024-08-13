@@ -166,5 +166,11 @@ $(document).ready(function () {
     });
 
     // Initialize the color inputs
+
+    document.querySelector("img").onerror = function () {
+        this.onerror = null; // Prevent infinite loop in case the default image is also missing
+        this.src = "/uploads/default-image.jpg";
+    };
+
     updateColorInputs();
 });

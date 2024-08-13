@@ -42,7 +42,6 @@ class SelectionController extends Controller
         $selection_name = $_GET['name'] ?? null;
         $selectedModelIds = $selectModel->getSelectedModelIds($selection_name);
         $modelsData = $selectModel->getModelsByIds($selectedModelIds);
-
         $this->setLayout('admin_main');
         return $this->render('selection', [
             'modelsData' => $modelsData,

@@ -152,22 +152,32 @@ body {
     overflow-y: auto;
 }
 
-.dropdown-item {
+.list-group {
+    text-decoration: none;
+}
+.list-group-item {
     padding: 0.5rem 1rem;
+    text-decoration: none;
 }
 
-.dropdown-item:hover {
+.list-group-item:hover {
     background-color: #f8f9fa;
 }
 
-.dropdown-toggle {
+.btn-secondary {
     background-color: #007bff;
 }
 
-.dropdown-toggle:hover {
+.btn-secondary:hover {
     background-color: #0056b3;
 }
 
-.dropdown-toggle:focus {
+.btn-secondary:focus {
     background-color: #0056b3;
+}
+
+.list-group-item a {
+    display: block; /* Make the anchor tag fill the entire list item */
+    width: 70%;
+    height: 100%;
 }

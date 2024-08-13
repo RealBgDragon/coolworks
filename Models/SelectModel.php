@@ -102,7 +102,7 @@ class SelectModel extends DbModel
             $cond = "admin_id = :admin_id AND name = :selection_name";
             $params['selection_name'] = $selection_name;
 
-            $selection_ids = $this->getSpecificInfo('id', $cond, $params, $table);
+            $selection_ids = $this->getSpecificInfo('id', $cond, $params, $table, 'PDO::FETCH_COLUMN');
 
             $info = 'model_id';
             $table = 'selection_items';
@@ -112,12 +112,12 @@ class SelectModel extends DbModel
         }
 
 
-        return $this->getSpecificInfo($info, $condition, $params, $table);
+        return $this->getSpecificInfo($info, $condition, $params, $table, 'PDO::FETCH_COLUMN');
     }
 
     public function getSelections()
     {
-        $info = 'name';
+        $info = 'name, admin_id, selection_date';
         $table = 'saved_selections';
         return $this->getSpecificInfo($info, '1=1', [], $table);
     }

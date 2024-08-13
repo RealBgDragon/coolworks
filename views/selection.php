@@ -8,28 +8,51 @@ if (!isset($model)) {
 }
 ?>
 <link rel="stylesheet" href="/css/models.css">
+
+<!-- Button to Open the Selection Modal -->
 <div class="col-md-auto d-flex justify-content-start mb-4">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="savedSelectionsDropdown"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Saved Selections
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="savedSelectionsDropdown">
-            <li><a class="dropdown-item" href="selection">New</a></li>
-            <?php
-            $last = '';
-            foreach ($selectionOptions as $selection) {
-                if ($selection === $last) {
-                    continue;
-                }
-                $last = $selection;
-                ?>
-                <li><a class="dropdown-item" href="selection?name=<?php echo $selection ?>"><?php echo $selection ?></a>
-                </li>
-            <?php } ?>
-        </ul>
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#selectionModal">
+        Saved Selections
+    </button>
+</div>
+
+<!-- Selection Modal -->
+<div class="modal fade" id="selectionModal" tabindex="-1" aria-labelledby="selectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="selectionModalLabel">Select a saved selection</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="selection"
+                            style="color: inherit; text-decoration: none;">New</a></li>
+                    <?php
+                    $last = '';
+                    foreach ($selectionOptions as $selection) {
+                        if ($selection['name'] === $last) {
+                            continue;
+                        }
+                        $last = $selection['name'];
+                        ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="selection?name=<?php echo $selection['name'] ?>"
+                                style="color: inherit; text-decoration: none;">
+                                <?php echo $selection['name'] ?>
+                            </a>
+                            <?php echo $selection['selection_date'] ?>
+                            <button class="btn btn-danger">Delete</button>
+                        </li>
+
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+
 <div class="col-md-auto d-flex justify-content-end mb-4">
     <?php $form = Form::begun('', "post"); ?>
     <?php echo $form->field($model, 'selection_name') ?>
@@ -43,8 +66,8 @@ if (!isset($model)) {
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
         $talant = ModelOptions::getTalantName($model['talant']);
-        $languages = ModelOptions::getLanguages($model['language']); // Updated line
-    
+        $languages = ModelOptions::getLanguages($model['language']);
+
         ?>
         <div class="col-md-3 mb-4">
             <div class="card">
@@ -67,7 +90,8 @@ if (!isset($model)) {
                     <p class="card-text"><?php echo $model['age'] ?></p>
                     <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
                     <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
-                    <button type="submit" class="btn btn-primary">Deselect model <i class="bi bi-folder"></i></button>
+                    <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
+                            class="bi bi-folder"></i></button>
                     <?php Form::end() ?>
                 </div>
             </div>

@@ -162,7 +162,8 @@
         <div class="col-md-3 mb-4">
             <div class="card">
                 <?php $photoModel = new PhotoModel() ?>
-                <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>" class="card-img-top img-fluid"
+                <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>"
+                    onerror="this.onerror=null; this.src='/uploads/default-image.jpg';" class="card-img-top img-fluid"
                     alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
                     data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
                     data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
