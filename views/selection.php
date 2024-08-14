@@ -21,7 +21,7 @@ if (!isset($model)) {
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="selectionModalLabel">Select a saved selection</h5>
+                <h5 class="modal-title" id="selectionModalLabel">Select a saved selection (click name to preview)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -36,13 +36,17 @@ if (!isset($model)) {
                         }
                         $last = $selection['name'];
                         ?>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href="selection?name=<?php echo $selection['name'] ?>"
-                                style="color: inherit; text-decoration: none;">
+                        <a href="selection?name=<?php echo $selection['name'] ?>"
+                            style="color: inherit; text-decoration: none;">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <?php echo $selection['name'] ?>
-                            </a>
-                            <?php echo $selection['selection_date'] ?>
-                            <button class="btn btn-danger">Delete</button>
+                                | Iteration: <?php echo $selection['iterations'] ?>
+                        </a>
+                        <?php echo $selection['selection_date'] ?>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transferModal"
+                            data-selection-name="<?php echo $selection['name']; ?>">Select</button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal"
+                            data-selection-id="<?php echo $selection['id']; ?>">Delete</button>
                         </li>
 
                     <?php } ?>
@@ -52,8 +56,52 @@ if (!isset($model)) {
     </div>
 </div>
 
+<!-- Delete conformation -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <?php $form = Form::begun('', "post"); ?>
+                <input type="hidden" id="selection_id" name="selection_id" value="">
+                <button type="submit" class="btn btn-danger" id="confirmDelete" name="delete_selection">Delete</button>
+                <?php $form::end(); ?>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div class="col-md-auto d-flex justify-content-end mb-4">
+<!-- Transfer Confirmation Modal -->
+<div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transferModalLabel">Confirm Transfer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to transfer the models for selection: <span id="selectionNameSpan"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <?php $form = Form::begun('', "post"); ?>
+                <input type="hidden" id="selection_name" name="selection_name" value="">
+                <button type="submit" class="btn btn-primary" name="transfer_selection">Confirm Transfer</button>
+                <?php $form::end(); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class=" col-md-auto d-flex justify-content-end mb-4">
     <?php $form = Form::begun('', "post"); ?>
     <?php echo $form->field($model, 'selection_name') ?>
     <button type="submit" name="save_selection" class="btn btn-primary btn-sm">Save selection <i
@@ -90,8 +138,10 @@ if (!isset($model)) {
                     <p class="card-text"><?php echo $model['age'] ?></p>
                     <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
                     <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
-                    <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
-                            class="bi bi-folder"></i></button>
+                    <?php if (!isset($_GET['name'])): ?>
+                        <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
+                                class="bi bi-folder"></i></button>
+                    <?php endif ?>
                     <?php Form::end() ?>
                 </div>
             </div>
@@ -105,9 +155,7 @@ if (!isset($model)) {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelModalLabel">Model Details</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="modelModalBody">
                 <div class="row">

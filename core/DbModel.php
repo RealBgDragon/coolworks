@@ -190,13 +190,15 @@ abstract class DbModel extends Model
         }
     }
 
-    public function remove($id)
+    public function remove($id, $cond)
     {
         try {
             $tableName = static::tableName();
-            $sql = "DELETE FROM $tableName WHERE model_id = :id";
+            $sql = "DELETE FROM $tableName WHERE $cond";
             $statement = self::prepare($sql);
-            $statement->bindValue(':id', $id);
+            preg_match('/:(\w+)/', $cond, $matches);
+            $placeholder = $matches[1]; // e.g., 'model_id' or 'id'
+            $statement->bindValue(':' . $placeholder, $id);
 
             $statement->execute();
             return true;

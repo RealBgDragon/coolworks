@@ -11,11 +11,17 @@ class SelectModel extends DbModel
 {
     public $admin_id = '';
     public $model_id = '';
+    public $selection_id = '';
     public $selection_name = null;
     public $tableName = 'selected_models';
     public function tableName(): string
     {
-        return 'selected_models';
+        return $this->tableName;
+    }
+
+    public function setTableName($tableName)
+    {
+        $this->tableName = $tableName;
     }
 
     public function attributes(): array
@@ -73,13 +79,13 @@ class SelectModel extends DbModel
 
     public function removeSelection()
     {
-        $id = $this->model_id;
-        if (empty($id)) {
+        $model_id = $this->model_id;
+        if (empty($model_id)) {
             $this->addError('error', 'Model ID is not set');
             return false;
         }
-
-        if ($this->remove($id)) {
+        $condition = "model_id = :model_id";
+        if ($this->remove($model_id, $condition)) {
             return true;
         } else {
             $this->addError('error', 'Model wasn`t removed successfully');
@@ -87,11 +93,22 @@ class SelectModel extends DbModel
         }
     }
 
+    public function deleteSelection()
+    {
+        $id = $this->selection_id;
+        $tableName = 'saved_selections';
+        $this->setTableName($tableName);
+        $condition = "id = :id";
+
+        return $this->remove($id, $condition);
+    }
+
     public function getSelectedModelIds($selection_name = '')
     {
         $info = 'model_id';
         $admin_id = $_SESSION['admin'];
         $params = ['admin_id' => $admin_id];
+        $this->setTableName('selected_models');
 
         if ($selection_name == '') {
             $cond = "1=1";
@@ -102,7 +119,7 @@ class SelectModel extends DbModel
             $cond = "admin_id = :admin_id AND name = :selection_name";
             $params['selection_name'] = $selection_name;
 
-            $selection_ids = $this->getSpecificInfo('id', $cond, $params, $table, 'PDO::FETCH_COLUMN');
+            $selection_ids = $this->getSpecificInfo('id', $cond, $params, $table, 'column');
 
             $info = 'model_id';
             $table = 'selection_items';
@@ -112,14 +129,14 @@ class SelectModel extends DbModel
         }
 
 
-        return $this->getSpecificInfo($info, $condition, $params, $table, 'PDO::FETCH_COLUMN');
+        return $this->getSpecificInfo($info, $condition, $params, $table, 'column');
     }
 
     public function getSelections()
     {
-        $info = 'name, admin_id, selection_date';
         $table = 'saved_selections';
-        return $this->getSpecificInfo($info, '1=1', [], $table);
+        $this->setTableName($table);
+        return $this->getAll();
     }
     // New method to get detailed info about selected models
     public function getModelsByIds($ids, $sort = 'name', $order = 'asc', $filter = [])
@@ -176,7 +193,7 @@ class SelectModel extends DbModel
         $admin_id = $_SESSION['admin'];
         $modelIds = $this->getSelectedModelIds();
 
-        $sql = "INSERT INTO saved_selections (name, admin_id) VALUES (:name, :admin_id)";
+        $sql = "INSERT INTO saved_selections (name, admin_id, iterations) VALUES (:name, :admin_id, 1)";
 
         $statement = self::prepare($sql);
         $statement->bindParam(':name', $this->selection_name);
@@ -196,4 +213,36 @@ class SelectModel extends DbModel
 
         return true;
     }
+
+    public function transferSelection($selection_name)
+    {
+        // Retrieve model IDs from the selection
+        $modelIds = $this->getSelectedModelIds($selection_name);
+
+        if (empty($modelIds)) {
+            $this->addError('error', 'No models found in the selection.');
+            return false;
+        }
+
+        // Remove all existing models for the current admin from the selected_models table
+        $admin_id = $_SESSION['admin'];
+        $condition = "admin_id = :admin_id";
+        $params = ['admin_id' => $admin_id];
+        $this->remove($admin_id, $condition);
+
+        // Insert new models into the selected_models table
+        foreach ($modelIds as $modelId) {
+            $params = [
+                'admin_id' => $admin_id,
+                'model_id' => $modelId,
+                'selection_name' => $selection_name
+            ];
+
+            $this->addNew($params);
+        }
+
+        return true;
+    }
+
+
 }

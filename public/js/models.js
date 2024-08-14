@@ -172,5 +172,45 @@ $(document).ready(function () {
         this.src = "/uploads/default-image.jpg";
     };
 
-    updateColorInputs();
+    $("#confirmDelete").click(function () {
+        var model = new bootstrap.Modal($("#confirmModal"));
+        model.hide();
+    });
+
+    /* $("#confirmDelete").click(function () {
+        var model = new bootstrap.Modal($("#confirmModal"));
+        model.hide();
+    }); */
+
+    // passing id for deletion
+    $(document).ready(function () {
+        $("#confirmModal").on("show.bs.modal", function (event) {
+            var button = $(event.relatedTarget);
+            var selectionId = button.data("selection-id");
+            console.log("Selection ID:", selectionId); // Add this line
+            var modal = $(this);
+            modal.find("#selection_id").val(selectionId);
+            console.log(
+                "Hidden field value:",
+                modal.find("#selection_id").val()
+            ); // Add this line
+        });
+    });
+
+    var $transferModal = $("#transferModal");
+    if ($transferModal.length) {
+        $transferModal.on("show.bs.modal", function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var selectionName = button.data("selection-name"); // Extract info from data-* attributes
+            var $hiddenInput = $(this).find("#selection_name");
+            var $selectionNameSpan = $(this).find("#selectionNameSpan");
+
+            if ($hiddenInput.length) {
+                $hiddenInput.val(selectionName); // Set the hidden input value
+            }
+            if ($selectionNameSpan.length) {
+                $selectionNameSpan.text(selectionName); // Set the span text
+            }
+        });
+    }
 });

@@ -36,6 +36,27 @@ class SelectionController extends Controller
                 $response->redirect('/wcp/selection');
                 return;
             }
+
+            if (isset($_POST['delete_selection'])) {
+                if ($selectModel->deleteSelection()) {
+                    $this->userMessage('success', 'Selection was successfully deleted!');
+                } else {
+                    $this->userMessage('error', 'Selection could not be deleted!');
+                }
+                $response->redirect('/wcp/selection');
+                return;
+            }
+
+            if (isset($_POST['transfer_selection'])) {
+                $selection_name = $_POST['selection_name'];
+                if ($selectModel->transferSelection($selection_name)) {
+                    $this->userMessage('success', 'Models were successfully transferred!');
+                } else {
+                    $this->userMessage('error', 'Models could not be transferred!');
+                }
+                $response->redirect('/wcp/selection');
+                return;
+            }
         }
         $selection_options = $selectModel->getSelections();
 
