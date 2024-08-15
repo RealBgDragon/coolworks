@@ -6,3 +6,4 @@ const sliderValue = document.getElementById("sliderValue");
 slider.addEventListener("input", function () {
     sliderValue.textContent = this.value;
 });
+// a
