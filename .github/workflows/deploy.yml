@@ -31,7 +31,7 @@ jobs:
                   SFTP_PRIVATE_KEY: ${{ secrets.SFTP_PRIVATE_KEY }}
               run: |
                   mkdir -p ~/.ssh
-                  echo "$SFTP_PRIVATE_KEY" > ~/.ssh/id_rsa
+                  echo "$SFTP_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
                   chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan -p 20180 srv.bgdragon.com >> ~/.ssh/known_hosts
                   sftp -v -P 20180 -i ~/.ssh/id_rsa user@srv.bgdragon.com <<EOF
