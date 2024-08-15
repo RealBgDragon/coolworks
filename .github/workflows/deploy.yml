@@ -26,15 +26,13 @@ jobs:
             - name: Install SSH client
               run: sudo apt-get update && sudo apt-get install -y openssh-client
 
-            - name: Transfer files via SFTP
-              env:
-                  SFTP_PRIVATE_KEY: ${{ secrets.SFTP_PRIVATE_KEY }}
-              run: |
-                  mkdir -p ~/.ssh
-                  echo "$SFTP_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-                  chmod 600 ~/.ssh/id_rsa
-                  ssh-keyscan -p 20180 srv.bgdragon.com >> ~/.ssh/known_hosts
-                  sftp -v -P 20180 -i ~/.ssh/id_rsa user@srv.bgdragon.com <<EOF
-                  put -r * /var/www/bgdrag0n/www/bgdragon.com
-                  bye
-                  EOF
+            - name: Deploy file
+              uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+              with:
+                  username: "bgdrag0n" # Replace with your actual username
+                  server: "srv.bgdragon.com"
+                  port: 20180
+                  ssh_private_key: ${{ secrets.SFTP_PRIVATE_KEY }}
+                  local_path: "./*"
+                  remote_path: "/var/www/bgdrag0n/www/bgdragon.com"
+                  sftpArgs: "-o ConnectTimeout=5"
