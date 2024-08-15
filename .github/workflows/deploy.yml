@@ -19,7 +19,7 @@ jobs:
             - name: Deploy file
               uses: wlixcc/SFTP-Deploy-Action@v1.2.4
               with:
-                  sftp: true
+                  sftp_only: true
                   username: "bgdrag0n"
                   server: "srv.bgdragon.com"
                   port: 20180
