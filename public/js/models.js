@@ -212,5 +212,5 @@ $(document).ready(function () {
                 $selectionNameSpan.text(selectionName); // Set the span text
             }
         });
-    }
+    } //test
 });
