@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/models.css">
 <link rel="stylesheet" href="/css/newModel.css">
 <h1>Add New Model</h1>
 <?php
@@ -66,7 +67,10 @@ if (!isset($model)) {
     </div>
 </div>
 
-<button type="submit" class="btn btn-primary">Add model <i class="bi bi-save"></i></button>
+<div class="button-div">
+    <button type="submit" class="btn btn-primary">Add model <i class="bi bi-save"></i></button>
+</div>
+
 
 <?php Form::end() ?>
 
