@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use app\controllers\ModelController;
 use app\controllers\ProjectsController;
@@ -10,7 +10,7 @@ use app\controllers\AdminController;
 use app\controllers\SelectionController;
 use app\models\User;
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 
@@ -24,7 +24,7 @@ $config = [
 ];
 
 
-$app = new Application(dirname(__DIR__), $config);
+$app = new Application(__DIR__, $config);
 
 $app->router->get('/', [SiteController::class, 'home']);
 

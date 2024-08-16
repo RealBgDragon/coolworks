@@ -183,7 +183,7 @@ class PhotoModel extends DbModel
 
     public function getImagePath($modelId)
     {
-        $baseDir = dirname(__DIR__) . "/public/uploads/{$modelId}/";
+        $baseDir = dirname(__DIR__) . "/uploads/{$modelId}/";
         $pngPath = $baseDir . "img.png";
         $jpgPath = $baseDir . "img.jpg";
 
@@ -198,7 +198,7 @@ class PhotoModel extends DbModel
 
     public function getAllImagePaths($modelId)
     {
-        $baseDir = dirname(__DIR__) . "/public/uploads/{$modelId}/";
+        $baseDir = dirname(__DIR__) . "/uploads/{$modelId}/";
         $imagePaths = [];
 
         if (is_dir($baseDir)) {
