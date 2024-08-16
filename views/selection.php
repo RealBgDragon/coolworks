@@ -89,8 +89,14 @@ if (!isset($model)) {
             <div class="modal-body">
                 Are you sure you want to transfer the models for selection: <span id="selectionNameSpan"></span>?
             </div>
+            <?php $form = Form::begun('', "post"); ?>
+            <?php echo $form->field($model, 'selection_name') ?>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-warning" name="save_selection">Save the initial selection
+                    first</button>
+                <?php $form::end(); ?>
+                <!-- error -->
                 <?php $form = Form::begun('', "post"); ?>
                 <input type="hidden" id="selection_name" name="selection_name" value="">
                 <button type="submit" class="btn btn-primary" name="transfer_selection">Confirm Transfer</button>

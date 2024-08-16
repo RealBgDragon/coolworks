@@ -226,10 +226,9 @@ class SelectModel extends DbModel
 
         // Remove all existing models for the current admin from the selected_models table
         $admin_id = $_SESSION['admin'];
-        $condition = "admin_id = :admin_id";
         $params = ['admin_id' => $admin_id];
+        $condition = "admin_id = :admin_id";
         $this->remove($admin_id, $condition);
-
         // Insert new models into the selected_models table
         foreach ($modelIds as $modelId) {
             $params = [

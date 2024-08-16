@@ -167,10 +167,13 @@ $(document).ready(function () {
 
     // Initialize the color inputs
 
-    document.querySelector("img").onerror = function () {
-        this.onerror = null; // Prevent infinite loop in case the default image is also missing
-        this.src = "/uploads/default-image.jpg";
-    };
+    var imageElement = document.querySelector("img");
+    if (imageElement) {
+        imageElement.onerror = function () {
+            this.onerror = null; // Prevent infinite loop in case the default image is also missing
+            this.src = "/uploads/default-image.jpg";
+        };
+    }
 
     $("#confirmDelete").click(function () {
         var model = new bootstrap.Modal($("#confirmModal"));

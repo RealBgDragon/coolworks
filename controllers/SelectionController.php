@@ -48,6 +48,8 @@ class SelectionController extends Controller
             }
 
             if (isset($_POST['transfer_selection'])) {
+                var_dump($_POST);
+                //die();
                 $selection_name = $_POST['selection_name'];
                 if ($selectModel->transferSelection($selection_name)) {
                     $this->userMessage('success', 'Models were successfully transferred!');
