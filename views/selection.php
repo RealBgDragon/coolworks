@@ -26,8 +26,7 @@ if (!isset($model)) {
             </div>
             <div class="modal-body">
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="selection"
-                            style="color: inherit; text-decoration: none;">New</a></li>
+                    <li class="list-group-item"><a href="selection" class="selection-link">Current</a></li>
                     <?php
                     $last = '';
                     foreach ($selectionOptions as $selection) {
@@ -36,19 +35,28 @@ if (!isset($model)) {
                         }
                         $last = $selection['name'];
                         ?>
-                        <a href="selection?name=<?php echo $selection['name'] ?>"
-                            style="color: inherit; text-decoration: none;">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <?php echo $selection['name'] ?>
-                                | Iteration: <?php echo $selection['iterations'] ?>
-                        </a>
-                        <?php echo $selection['selection_date'] ?>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transferModal"
-                            data-selection-name="<?php echo $selection['name']; ?>">Select</button>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal"
-                            data-selection-id="<?php echo $selection['id']; ?>">Delete</button>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="selection?name=<?php echo $selection['name'] ?>" class="selection-link">
+                                    <span class="selection-name"><?php echo $selection['name'] ?></span>
+                                    <span class="selection-info">
+                                        | Iteration: <?php echo $selection['iterations'] ?> |
+                                        <?php
+                                        $date = new DateTime($selection['selection_date']);
+                                        echo $date->format('d.m.Y H:i');
+                                        ?>
+                                    </span>
+                                </a>
+                                <div class="selection-buttons">
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#transferModal"
+                                        data-selection-name="<?php echo $selection['name']; ?>">Select</button>
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#confirmModal"
+                                        data-selection-id="<?php echo $selection['id']; ?>">Delete</button>
+                                </div>
+                            </div>
                         </li>
-
                     <?php } ?>
                 </ul>
             </div>
@@ -67,13 +75,11 @@ if (!isset($model)) {
             <div class="modal-body">
                 Are you sure you want to delete this item?
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <?php $form = Form::begun('', "post"); ?>
-                <input type="hidden" id="selection_id" name="selection_id" value="">
-                <button type="submit" class="btn btn-danger" id="confirmDelete" name="delete_selection">Delete</button>
-                <?php $form::end(); ?>
-            </div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <?php $form = Form::begun('', "post"); ?>
+            <input type="hidden" id="selection_id" name="selection_id" value="">
+            <button type="submit" class="btn btn-danger" id="confirmDelete" name="delete_selection">Delete</button>
+            <?php $form::end(); ?>
         </div>
     </div>
 </div>
@@ -123,32 +129,38 @@ if (!isset($model)) {
         $languages = ModelOptions::getLanguages($model['language']);
 
         ?>
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <?php $photoModel = new PhotoModel() ?>
-                <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>" class="card-img-top img-fluid"
-                    alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
-                    data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
-                    data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
-                    data-model-weight="<?php echo $model['weight']; ?>"
-                    data-model-birthday="<?php echo $model['birthday']; ?>"
-                    data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
-                    data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
-                    data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                    data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)">
+        <div class="col-md-2 mb-4">
+            <div class="card model-card">
+                <div class="position-relative">
+                    <?php $photoModel = new PhotoModel() ?>
+                    <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>" class="card-img-top img-fluid"
+                        alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
+                        data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
+                        data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
+                        data-model-weight="<?php echo $model['weight']; ?>"
+                        data-model-birthday="<?php echo $model['birthday']; ?>"
+                        data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
+                        data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
+                        data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
+                        data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)">
 
-                <div class="card-body">
                     <?php $form = Form::begun('', "post"); ?>
-                    <p class="card-text"><?php echo $model['name'] ?></p>
-                    <p class="card-text"><?php echo $model['height']; ?></p>
-                    <p class="card-text"><?php echo $model['age'] ?></p>
-                    <input type="text" name="model_id" style="display:none;" value="<?php echo $model['model_id'] ?>">
-                    <input type="text" name="admin_id" style="display:none;" value="<?php echo $_SESSION['admin'] ?>">
+                    <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
+                    <input type="hidden" name="admin_id" value="<?php echo $_SESSION['admin']; ?>">
                     <?php if (!isset($_GET['name'])): ?>
-                        <button type="submit" name="remove_selection" class="btn btn-primary">Deselect model <i
-                                class="bi bi-folder"></i></button>
+                        <button type="submit" name="remove_selection"
+                            class="btn btn-danger position-absolute bottom-0 end-0 m-2">
+                            <i class="bi bi-person-fill-x"></i>
+                        </button>
                     <?php endif ?>
                     <?php Form::end() ?>
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text"><?php echo $model['name']; ?></p>
+                    <p class="card-text">Age: <?php echo $model['age']; ?> | Height: <?php echo $model['height']; ?>
+                    </p>
+                    <p class="card-text"> Weight: <?php echo $model['weight']; ?></p>
+                    <p> Talants: <?php echo $talant; ?></p>
                 </div>
             </div>
         </div>

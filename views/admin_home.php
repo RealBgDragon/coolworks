@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/models.css">
 <h1 class="mb-4">Dashboard</h1>
 
 <div class="row">
@@ -42,13 +43,16 @@
                 Recent Activities
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">New user registered - 2 minutes ago</li>
-                <li class="list-group-item">Order #1234 processed - 15 minutes ago</li>
-                <li class="list-group-item">Payment received from client - 1 hour ago</li>
-                <li class="list-group-item">System update completed - 3 hours ago</li>
+                <?php foreach ($lastModels as $model): ?>
+                    <li class="list-group-item">
+                        New model added: <?= htmlspecialchars($model['name']) ?> -
+                        <?= date('F j, Y, g:i a', strtotime($model['date_added'])); ?>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>
+
     <div class="col-md-6 mb-4">
         <div class="card">
             <div class="card-header">

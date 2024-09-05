@@ -19,12 +19,6 @@ $(document).ready(function () {
     var ageMin = ageRange[0];
     var ageMax = ageRange[1];
 
-    $("#modelModal").on("hidden.bs.modal", function () {
-        $("body").removeClass("modal-open");
-        $(".modal-backdrop").remove();
-        $("#modelModal").modal("hide");
-    });
-
     // Initialize the age range slider
     $("#age_slider").slider({
         range: true,
@@ -59,7 +53,6 @@ $(document).ready(function () {
         var hairColor = $(img).data("hair-color");
         var talant = $(img).data("talant");
         var languages = $(img).data("language");
-        /* var imageSrc = $(img).attr("src"); */
 
         var imageSrcString = $(img).data("model-srcs");
         var imageSrcs = imageSrcString.split(",").map((src) => src.trim());
@@ -75,7 +68,6 @@ $(document).ready(function () {
             $("#carouselInner").append(carouselItem);
         });
 
-        /* $("#modalModelImage").attr("src", imageSrc); */
         $("#modelName").text(modelName);
         $("#modelAge").text(modelAge);
         $("#modelHeight").text(modelHeight);
@@ -86,8 +78,6 @@ $(document).ready(function () {
         $("#modelHairColor").text(hairColor);
         $("#modelTalant").text(talant);
         $("#modelLanguage").text(languages);
-
-        $("#modelModal").modal("show");
     };
 
     // Handle form submission
@@ -180,11 +170,6 @@ $(document).ready(function () {
         model.hide();
     });
 
-    /* $("#confirmDelete").click(function () {
-        var model = new bootstrap.Modal($("#confirmModal"));
-        model.hide();
-    }); */
-
     // passing id for deletion
     $(document).ready(function () {
         $("#confirmModal").on("show.bs.modal", function (event) {
@@ -215,5 +200,5 @@ $(document).ready(function () {
                 $selectionNameSpan.text(selectionName); // Set the span text
             }
         });
-    } //test1a
+    }
 });

@@ -28,19 +28,30 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requerment = '')
+    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requirement = '', $order = '', $limit = '')
     {
         if ($table === '') {
             $table = static::tableName();
         }
+
         $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
+
+        if ($order !== '') {
+            $sql .= " ORDER BY date_added " . ($order === 'ASC' ? 'ASC' : 'DESC');
+        }
+
+        if ($limit !== '') {
+            $sql .= " LIMIT " . (int) $limit;
+        }
+
         $statement = self::prepare($sql);
         $statement->execute($params);
-        if ($requerment == '')
-            return $statement->fetchAll();
-        else
-            return $statement->fetchAll(PDO::FETCH_COLUMN);
 
+        if ($requirement === '') {
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return $statement->fetchAll(PDO::FETCH_COLUMN);
+        }
     }
 
     public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)

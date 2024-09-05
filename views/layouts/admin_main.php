@@ -40,18 +40,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/wcp/projects" data-page="projects">
-                            <i class="bi bi-briefcase"></i> Projects
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/wcp/selection" data-page="selection">
                             <i class="bi bi-camera"></i> Selection
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/" data-page="home">
-                            <i class="bi bi-box-arrow-in-left"></i> Back to website
                         </a>
                     </li>
                 </ul>
@@ -65,17 +55,40 @@
                 <?php else: ?>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="/logout">Welcome
+                            <button id="logout" type="button" class="nav-link" data-bs-toggle="modal"
+                                data-bs-target="#logoutModal">Welcome
                                 <?php echo Application::$app->user->getDisplayName(); ?> <i
                                     class="bi bi-box-arrow-right"></i>
-                            </a>
+                                </a>
+
                         </li>
                     </ul>
                 <?php endif; ?>
             </div>
         </div>
     </nav>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectionModalLabel">Log out
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to log-off?<br /></p>
+                    <div class="actionsBtns">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                        <a class="btn btn-danger" href="/logout">Log out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container mt-4">
+        <!-- <div class="cont mt-4"> -->
         <?php if (Application::$app->session->getFlash('error')): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <?php echo Application::$app->session->getFlash('error'); ?>

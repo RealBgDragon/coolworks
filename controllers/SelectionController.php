@@ -17,7 +17,10 @@ class SelectionController extends Controller
         if ($request->isPost()) {
             $selectModel->loadData($request->getBody());
 
+            $selectedModelId = $selectModel->model_id;
+
             if (isset($_POST['save_selection'])) {
+                unset($_SESSION['selected_models']);
                 if ($selectModel->saveSelection()) {
                     $this->userMessage('success', 'Selection was successfully saved!');
                 } else {
@@ -28,6 +31,7 @@ class SelectionController extends Controller
             }
 
             if (isset($_POST['remove_selection'])) {
+                unset($_SESSION['selected_models'][$selectedModelId]);
                 if ($selectModel->removeSelection()) {
                     $this->userMessage('success', 'Model was successfully removed!');
                 } else {
@@ -38,6 +42,7 @@ class SelectionController extends Controller
             }
 
             if (isset($_POST['delete_selection'])) {
+                unset($_SESSION['selected_models']);
                 if ($selectModel->deleteSelection()) {
                     $this->userMessage('success', 'Selection was successfully deleted!');
                 } else {
@@ -48,8 +53,7 @@ class SelectionController extends Controller
             }
 
             if (isset($_POST['transfer_selection'])) {
-                var_dump($_POST);
-                //die();
+                unset($_SESSION['selected_models']);
                 $selection_name = $_POST['selection_name'];
                 if ($selectModel->transferSelection($selection_name)) {
                     $this->userMessage('success', 'Models were successfully transferred!');

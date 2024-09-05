@@ -43,7 +43,7 @@ class AuthController extends Controller
                 return;
             }
         }
-        $this->setLayout('admin_main');
+        $this->setLayout('secret_admin_main');
         return $this->render('admin_login', [
             'model' => $loginForm
         ]);

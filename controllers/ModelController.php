@@ -20,6 +20,9 @@ class ModelController extends Controller
             $selectModel = new SelectModel();
             $selectModel->loadData($request->getBody());
 
+            $selectedModelId = $selectModel->model_id;
+            $_SESSION['selected_models'][$selectedModelId] = $selectedModelId;
+
             if ($selectModel->createNew()) {
                 $this->userMessage('success', 'Model was successfully added');
                 $response->redirect('/wcp/models');
@@ -50,12 +53,14 @@ class ModelController extends Controller
         ];
 
         $page = $_GET['page'] ?? 1;
-        $limit = 20;
+        $limit = 24;
         $offset = ($page - 1) * $limit;
 
         $modelsData = $photoModel->getAllModels($sort, $order, $filter, $limit, $offset);
         $totalModels = $photoModel->countAll($filter);
         $totalPages = ceil($totalModels / $limit);
+
+        $selectedModels = $_SESSION['selected_models'] ?? [];
 
         $this->setLayout('admin_main');
         return $this->render('models', [
@@ -64,7 +69,8 @@ class ModelController extends Controller
             'currentOrder' => $order,
             'currentFilter' => $filter,
             'currentPage' => $page,
-            'totalPages' => $totalPages
+            'totalPages' => $totalPages,
+            'selectedModels' => $selectedModels
         ]);
     }
 
