@@ -216,7 +216,7 @@ class PhotoModel extends DbModel
         return implode(',', $imagePaths);
     }
 
-    public function getLastModels($info = 'name', $limit = 10)
+    public function getLastModels($info = 'name', $limit = 10) // getting the last model
     {
         $tableName = $this->tableName();
         $models = $this->getSpecificInfo($info, '1=1', [], '', '', 'DESC', $limit);
