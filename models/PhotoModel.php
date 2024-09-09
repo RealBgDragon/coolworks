@@ -20,6 +20,7 @@ class PhotoModel extends DbModel
     public $hair_color = 0;
     public $talant = 0;
     public $language = 0;
+    public $gender = 0;
 
     public function tableName(): string
     {
@@ -28,7 +29,8 @@ class PhotoModel extends DbModel
 
     public function attributes(): array
     {
-        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color', 'talant', 'language'];
+        /* Testing */
+        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color', 'talant', 'language', 'gender'];
     }
 
     public function labels(): array
@@ -42,7 +44,8 @@ class PhotoModel extends DbModel
             'eye_color' => 'Eye Color',
             'hair_color' => 'Hair Color',
             'talant' => 'Talant',
-            'language' => 'Language'
+            'language' => 'Language',
+            'gender' => 'Gender'
         ];
     }
 
@@ -162,6 +165,11 @@ class PhotoModel extends DbModel
         $this->hair_color = $hairColor;
     }
 
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
+
     public function setTalant($talant)
     {
         $this->talant = $talant;
@@ -177,6 +185,11 @@ class PhotoModel extends DbModel
     }
 
     public function getHairColor()
+    {
+        return $this->hair_color;
+    }
+
+    public function getGender()
     {
         return $this->hair_color;
     }

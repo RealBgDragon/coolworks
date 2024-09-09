@@ -161,6 +161,7 @@
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
         $talant = ModelOptions::getTalantName($model['talant']);
         $languages = ModelOptions::getLanguages($model['language']);
+        $gender = ModelOptions::getGenderName($model['gender']);
 
         $isSelected = in_array($model['model_id'], $selectedModels);
         ?>
@@ -183,7 +184,8 @@
                             data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                             data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
                             data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                            data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)">
+                            data-language="<?php echo $languages; ?>" data-gender="<?php echo $gender; ?>"
+                            onclick="showModelDetails(this)">
 
                         <?php $form = Form::begun('', "post"); ?>
                         <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
@@ -298,6 +300,11 @@
                                 <div class="d-flex justify-content-between align-items-center modal-items">
                                     <dt class="col-6 text-end">Language:</dt>
                                     <dd class="col-6 text-start" id="modelLanguage"></dd>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center modal-items">
+                                    <dt class="col-6 text-end">Gender:</dt>
+                                    <dd class="col-6 text-start" id="modelGender"></dd>
                                 </div>
                             </dl>
 

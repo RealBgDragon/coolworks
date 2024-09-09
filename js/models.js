@@ -53,6 +53,7 @@ $(document).ready(function () {
         var hairColor = $(img).data("hair-color");
         var talant = $(img).data("talant");
         var languages = $(img).data("language");
+        var gender = $(img).data("gender");
 
         var imageSrcString = $(img).data("model-srcs");
         var imageSrcs = imageSrcString.split(",").map((src) => src.trim());
@@ -78,6 +79,7 @@ $(document).ready(function () {
         $("#modelHairColor").text(hairColor);
         $("#modelTalant").text(talant);
         $("#modelLanguage").text(languages);
+        $("#modelGender").text(gender);
     };
 
     // Handle form submission

@@ -64,6 +64,16 @@ if (!isset($model)) {
             <label for="additional_images" class="form-label">Additional Images</label>
             <input class="form-control" type="file" id="additional_images" name="additional_images[]" multiple>
         </div>
+        <!-- Testing -->
+        <label for="gender">Gender:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_MALE; ?>">
+                Male</label>
+            <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_FEMALE; ?>">
+                Female</label>
+            <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_CHILD; ?>">
+                Child</label>
+        </div>
     </div>
 </div>
 

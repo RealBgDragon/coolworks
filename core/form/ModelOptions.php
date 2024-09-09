@@ -18,6 +18,10 @@ class ModelOptions
     const HAIR_COLOR_BROWN = 1 << 4; // 00010000 //32
     const HAIR_COLOR_BLACK = 1 << 5; // 00100000 //64
 
+    const GENDER_MALE = 1 << 0;  // 00000001 //1
+    const GENDER_FEMALE = 1 << 1; // 00000010 //2
+    const GENDER_CHILD = 1 << 2; // 00000100 //4
+
     public static function isOptionSet($options, $option)
     {
         return ($options & $option) === $option;
@@ -69,6 +73,20 @@ class ModelOptions
                 return 'Brown';
             case self::HAIR_COLOR_BLACK:
                 return 'Black';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    public static function getGenderName($gender)
+    {
+        switch ($gender) {
+            case self::GENDER_MALE:
+                return 'Male';
+            case self::GENDER_FEMALE:
+                return 'Female';
+            case self::GENDER_CHILD:
+                return 'Child';
             default:
                 return 'Unknown';
         }
