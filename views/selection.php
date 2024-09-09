@@ -9,13 +9,6 @@ if (!isset($model)) {
 ?>
 <link rel="stylesheet" href="/css/models.css">
 
-<!-- Button to Open the Selection Modal -->
-<div class="col-md-auto d-flex justify-content-start mb-4">
-    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#selectionModal">
-        Saved Selections
-    </button>
-</div>
-
 <!-- Selection Modal -->
 <div class="modal fade" id="selectionModal" tabindex="-1" aria-labelledby="selectionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -112,14 +105,24 @@ if (!isset($model)) {
     </div>
 </div>
 
-
-<div class=" col-md-auto d-flex justify-content-end mb-4">
-    <?php $form = Form::begun('', "post"); ?>
-    <?php echo $form->field($model, 'selection_name') ?>
-    <button type="submit" name="save_selection" class="btn btn-primary btn-sm">Save selection <i
-            class="bi bi-floppy2-fill"></i></button>
-    <?php $form::end(); ?>
+<!-- Button to Open the Selection Modal -->
+<div class="row d-flex justify-content-between">
+    <div class="col-md-auto d-flex justify-content-start mb-4">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#selectionModal">
+            Saved Selections
+        </button>
+    </div>
+    <div class="col-md-auto d-flex justify-content-end mb-4">
+        <?php $form = Form::begun('', "post"); ?>
+        <div class="input-group">
+            <input type="text" name="selection_name" value="" placeholder="Save selection" class="form-control">
+            <button type="submit" name="save_selection" class="btn btn-primary">Save selection <i
+                    class="bi bi-floppy2-fill"></i></button>
+        </div>
+        <?php $form::end(); ?>
+    </div>
 </div>
+
 
 <div class="row">
     <?php foreach ($modelsData as $model) {

@@ -16,12 +16,14 @@ class AdminController extends Controller
     {
         $photoModel = new PhotoModel();
         $this->checkIfAdmin();
+        $modelsCount = $photoModel->getModelsCount();
         $limit = 10;
         $info = 'name, date_added';
         $lastModels = $photoModel->getLastModels($info, $limit);
 
         $params = [
             'name' => "Admin BgDragon",
+            'modelsCount' => $modelsCount,
             'lastModels' => $lastModels
         ];
         $this->setLayout('admin_main');

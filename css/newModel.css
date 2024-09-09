@@ -1,55 +1,83 @@
-/* newModels.css */
+/* Align styles with models.css */
+
+/* General page styling */
 h1 {
     color: #007bff;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     text-align: center;
+    font-weight: bold;
 }
 
+/* Form Group styling */
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-weight: bold;
+    margin-bottom: 10px;
     display: block;
     color: #495057;
 }
 
 .form-control {
-    border-radius: 4px;
+    border-radius: 8px; /* Align border-radius with the global style */
     border: 1px solid #ced4da;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
+    transition: border-color 0.3s ease;
 }
 
-.radio-group {
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: none; /* Removing default box shadow for a cleaner look */
+}
+
+/* Radio and Checkbox styling */
+.radio-group,
+.checkbox-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
     margin-top: 10px;
 }
 
-.radio-group label {
+.radio-group label,
+.checkbox-group label {
     font-size: 14px;
     display: flex;
     align-items: center;
     cursor: pointer;
 }
 
-.radio-group input[type="radio"] {
+.radio-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
     margin-right: 8px;
-    accent-color: #007bff;
+    accent-color: #007bff; /* Align accent color */
 }
 
+/* Button Styling */
 .btn {
-    margin-top: 15px;
-    font-size: 20px;
+    margin-top: 20px;
+    font-size: 18px;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 8px; /* Consistent border-radius */
+    background: linear-gradient(
+        135deg,
+        #007bff,
+        #0056b3
+    ); /* Gradient to match button styles */
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
 }
 
+.btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80);
+}
+
+/* File Input Wrapper Styling */
 .file-input-wrapper {
     position: relative;
     overflow: hidden;
@@ -62,16 +90,52 @@ h1 {
     left: 0;
     top: 0;
     opacity: 0;
+    cursor: pointer;
 }
 
 .file-input-wrapper .btn-file {
     background-color: #f8f9fa;
     border: 1px solid #ced4da;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 10px 15px;
+    border-radius: 8px; /* Updated border-radius */
     color: #495057;
+    transition: all 0.3s ease;
 }
 
+.file-input-wrapper .btn-file:hover {
+    background-color: #e2e6ea;
+}
+
+/* Button alignment */
 .button-div {
     text-align: center;
+}
+
+/* Form Row Styling */
+.row {
+    margin-bottom: 40px;
+}
+
+.col-md-6 {
+    margin-bottom: 20px;
+}
+
+.mb-3 {
+    margin-bottom: 25px !important;
+}
+
+/* Input and Image upload alignment */
+.form-label {
+    font-weight: bold;
+}
+
+/* Consistent border-radius for modal */
+.modal-content,
+.modal-header {
+    border-radius: 8px;
+}
+
+/* Additional spacing */
+label {
+    margin-bottom: 10px;
 }

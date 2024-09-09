@@ -218,10 +218,14 @@ class PhotoModel extends DbModel
 
     public function getLastModels($info = 'name', $limit = 10) // getting the last model
     {
-        $tableName = $this->tableName();
         $models = $this->getSpecificInfo($info, '1=1', [], '', '', 'DESC', $limit);
 
         return $models;
     }
 
+    public function getModelsCount()
+    {
+        $modelsCount = $this->countAll();
+        return $modelsCount;
+    }
 }
