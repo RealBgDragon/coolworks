@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/css/models.css">
 <h1 class="mb-4">Dashboard</h1>
 
+<?php
+use app\core\form\ModelOptions; ?>
+
 <div class="row">
     <div class="col-md-3 mb-4">
         <div class="card bg-primary text-white">
@@ -13,24 +16,24 @@
     <div class="col-md-3 mb-4">
         <div class="card bg-success text-white">
             <div class="card-body">
-                <h5 class="card-title">Revenue</h5>
-                <h2 class="card-text">$5,256,789</h2>
+                <h5 class="card-title">Male models</h5>
+                <h2 class="card-text"><?php echo htmlspecialchars($maleModelsCount) ?></h2>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-4">
         <div class="card bg-warning text-dark">
             <div class="card-body">
-                <h5 class="card-title">New Orders</h5>
-                <h2 class="card-text">256</h2>
+                <h5 class="card-title">Female models</h5>
+                <h2 class="card-text"><?php echo htmlspecialchars($femaleModelsCount) ?></h2>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-4">
         <div class="card bg-info text-white">
             <div class="card-body">
-                <h5 class="card-title">Visitors</h5>
-                <h2 class="card-text">10,678</h2>
+                <h5 class="card-title">Childern models</h5>
+                <h2 class="card-text"><?php echo htmlspecialchars($childrenModelsCount) ?></h2>
             </div>
         </div>
     </div>
@@ -56,32 +59,31 @@
     <div class="col-md-6 mb-4">
         <div class="card">
             <div class="card-header">
-                Top Products
+                Top Models
             </div>
             <div class="card-body">
-                <table class="table table-striped">
+                <table class="table table-striped table-fixed">
                     <thead>
                         <tr>
-                            <th>Model</th>
-                            <th>Sales</th>
+                            <th style="width: 50%;">Name</th>
+                            <th style="width: 20%;">Age</th>
+                            <th style="width: 30%;">Talent</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Model A</td>
-                            <td>250</td>
-                        </tr>
-                        <tr>
-                            <td>Model B</td>
-                            <td>180</td>
-                        </tr>
-                        <tr>
-                            <td>Model C</td>
-                            <td>120</td>
-                        </tr>
+                        <?php foreach ($topModels as $model):
+                            $talant = ModelOptions::getTalantName($model['talant']);
+                            ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($model['name']); ?></td>
+                                <td><?php echo htmlspecialchars($model['age']); ?></td>
+                                <td><?php echo htmlspecialchars($talant); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
 </div>

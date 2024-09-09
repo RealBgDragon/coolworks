@@ -236,9 +236,9 @@ class PhotoModel extends DbModel
         return $models;
     }
 
-    public function getModelsCount()
+    public function getModelsCount($filter)
     {
-        $modelsCount = $this->countAll();
+        $modelsCount = $this->countAll($filter);
         return $modelsCount;
     }
 }

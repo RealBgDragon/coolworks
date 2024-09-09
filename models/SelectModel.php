@@ -188,6 +188,14 @@ class SelectModel extends DbModel
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getRandomModels()
+    {
+        $sql = "SELECT *, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM model ORDER BY RAND() LIMIT 10";
+        $statement = self::prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function saveSelection()
     {
         $admin_id = $_SESSION['admin'];

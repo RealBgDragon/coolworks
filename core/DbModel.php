@@ -141,6 +141,9 @@ abstract class DbModel extends Model
             }
             $sql .= " AND hair_color IN (" . implode(',', $placeholders) . ")";
         }
+        if (!empty($filter['gender'])) {
+            $sql .= " AND gender = :gender";
+        }
 
         $statement = self::prepare($sql);
 
@@ -166,6 +169,9 @@ abstract class DbModel extends Model
             foreach ($filter['hair_color'] as $index => $color) {
                 $statement->bindValue(":hair_color_$index", $color, PDO::PARAM_STR);
             }
+        }
+        if (!empty($filter['gender'])) {
+            $statement->bindValue(':gender', $filter['gender'], PDO::PARAM_INT);
         }
 
         $statement->execute();
