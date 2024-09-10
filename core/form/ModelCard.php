@@ -9,8 +9,11 @@
         $talant = ModelOptions::getTalantName($model['talant']);
         $languages = ModelOptions::getLanguages($model['language']);
         $gender = ModelOptions::getGenderName($model['gender']);
-
-        $isSelected = in_array($model['model_id'], $selectedModels);
+        if (isset($selectedModels)) {
+            $isSelected = in_array($model['model_id'], $selectedModels);
+        } else {
+            $isSelected = false;
+        }
         ?>
         <div class="col-md-2 mb-4">
             <?php if ($isSelected): ?>

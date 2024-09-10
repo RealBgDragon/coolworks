@@ -130,6 +130,7 @@ if (!isset($model)) {
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
         $talant = ModelOptions::getTalantName($model['talant']);
         $languages = ModelOptions::getLanguages($model['language']);
+        $gender = ModelOptions::getGenderName($model['gender']);
 
         ?>
         <div class="col-md-2 mb-4">
@@ -145,7 +146,8 @@ if (!isset($model)) {
                         data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                         data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
                         data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                        data-language="<?php echo $languages; ?>" onclick="showModelDetails(this)">
+                        data-language="<?php echo $languages; ?>" data-gender="<?php echo $gender; ?>"
+                        onclick="showModelDetails(this)">
 
                     <?php $form = Form::begun('', "post"); ?>
                     <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
