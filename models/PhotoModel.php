@@ -117,6 +117,11 @@ class PhotoModel extends DbModel
             $additionalFilters['talant'] = array_map('intval', explode(',', $filter['talant'][0]));
         }
 
+        if ($sort === 'age') {
+            $sort = 'birthday';
+            $order = $order === 'asc' ? 'desc' : 'asc';
+        }
+
         $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset);
 
         foreach ($models as &$model) {
