@@ -127,11 +127,17 @@ $(document).ready(function () {
                 return $(this).data("value");
             })
             .get();
+        var selectedGenders = $("#gender_options .option.selected")
+            .map(function () {
+                return $(this).data("value");
+            })
+            .get();
 
         $("#hair_color_input").val(selectedHairColors.join(","));
         $("#eye_color_input").val(selectedEyeColors.join(","));
         $("#talant_input").val(selectedTalants.join(","));
         $("#language_input").val(selectedLanguages.join(","));
+        $("#gender_input").val(selectedGenders.join(","));
     }
 
     // Retrieve filter section visibility state from sessionStorage

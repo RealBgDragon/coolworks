@@ -142,7 +142,15 @@ abstract class DbModel extends Model
             $sql .= " AND hair_color IN (" . implode(',', $placeholders) . ")";
         }
         if (!empty($filter['gender'])) {
-            $sql .= " AND gender = :gender";
+            if (is_array($filter['gender'])) {
+                $genderPlaceholders = [];
+                foreach ($filter['gender'] as $index => $gender) {
+                    $genderPlaceholders[] = ":gender_$index";
+                }
+                $sql .= " AND gender IN (" . implode(',', $genderPlaceholders) . ")";
+            } else {
+                $sql .= " AND gender = :gender";
+            }
         }
 
         $statement = self::prepare($sql);
@@ -171,7 +179,13 @@ abstract class DbModel extends Model
             }
         }
         if (!empty($filter['gender'])) {
-            $statement->bindValue(':gender', $filter['gender'], PDO::PARAM_INT);
+            if (is_array($filter['gender'])) {
+                foreach ($filter['gender'] as $index => $gender) {
+                    $statement->bindValue(":gender_$index", $gender, PDO::PARAM_STR);
+                }
+            } else {
+                $statement->bindValue(':gender', $filter['gender'], PDO::PARAM_INT);
+            }
         }
 
         $statement->execute();

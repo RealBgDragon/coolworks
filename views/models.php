@@ -17,7 +17,7 @@
         </div>
         <div id="filterSection" style="display: none;">
             <?php $form = Form::begun('', "get"); ?>
-
+            <!-- Sort -->
             <div class="form-group mr-2">
                 <label for="sort">Sort by:</label>
                 <select name="sort" id="sort" class="form-control ml-2">
@@ -26,6 +26,7 @@
                     <option value="height" <?php echo $currentSort === 'height' ? 'selected' : ''; ?>>Height</option>
                 </select>
             </div>
+            <!-- Order -->
             <div class="form-group mr-2">
                 <label for="order">Order:</label>
                 <select name="order" id="order" class="form-control ml-2">
@@ -33,14 +34,14 @@
                     <option value="desc" <?php echo $currentOrder === 'desc' ? 'selected' : ''; ?>>Descending</option>
                 </select>
             </div>
-
+            <!-- Age filter -->
             <div class="form-group mr-2">
                 <label for="age_range">Age Range:</label>
                 <input type="text" id="age_range" name="age_range" readonly
                     style="border:0; color:#f6931f; font-weight:bold;">
                 <div id="age_slider" style="width: 400px; margin: 10px;"></div>
             </div>
-
+            <!-- Height filter -->
             <div class="form-group mr-2">
                 <label for="height_min">Height:</label>
                 <input type="number" name="height_min" id="height_min" class="form-control ml-2" placeholder="Min"
@@ -50,6 +51,7 @@
             </div>
             <div class="multi-select">
                 <div class="row">
+                    <!-- Eye color filter-->
                     <div class="col-md-6">
                         <div class="form-group mr-2">
                             <label for="eye_color">Eye Color:</label>
@@ -72,6 +74,7 @@
                             <input type="hidden" name="eye_color[]" id="eye_color_input" value="">
                         </div>
                     </div>
+                    <!-- Hair color  filter-->
                     <div class="col-md-6">
                         <div class="form-group mr-2">
                             <label for="hair_color">Hair Color:</label>
@@ -98,6 +101,7 @@
             </div>
             <div class="multi-select">
                 <div class="row">
+                    <!-- Talants filter -->
                     <div class="col-md-6">
                         <div class="form-group mr-2">
                             <label for="talant">Talants:</label>
@@ -119,6 +123,7 @@
                             <input type="hidden" name="talant[]" id="talant_input" value="">
                         </div>
                     </div>
+                    <!-- Language filter -->
                     <div class="col-md-6">
                         <div class="form-group mr-2">
                             <label for="language">Language:</label>
@@ -140,6 +145,29 @@
                             <input type="hidden" name="language[]" id="language_input" value="">
                         </div>
                     </div>
+                    <!-- Gender filter -->
+                    <div class="col-md-6">
+                        <div class="form-group mr-2">
+                            <label for="gender">Gender:</label>
+                            <div id="gender_options" class="custom-select-multiple">
+                                <div class="option" data-value="">Any</div>
+                                <?php
+                                $genders = [
+                                    ModelOptions::GENDER_MALE,
+                                    ModelOptions::GENDER_FEMALE,
+                                    ModelOptions::GENDER_CHILD,
+                                ];
+                                foreach ($genders as $value) {
+                                    $selected = in_array($value, $currentFilter['gender'] ?? []) ? 'selected' : '';
+                                    ?>
+                                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
+                                        <?php echo ModelOptions::getGenderName($value); ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <input type="hidden" name="gender[]" id="gender_input" value="">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="d-flex justify-content-between">
@@ -155,164 +183,23 @@
     </div>
 </div>
 
+
+<?php include 'core/form/ModelCard.php'; ?>
+
 <div class="row">
-    <?php foreach ($modelsData as $model) {
-        $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
-        $hairColor = ModelOptions::getHairColorName($model['hair_color']);
-        $talant = ModelOptions::getTalantName($model['talant']);
-        $languages = ModelOptions::getLanguages($model['language']);
-        $gender = ModelOptions::getGenderName($model['gender']);
-
-        $isSelected = in_array($model['model_id'], $selectedModels);
-        ?>
-        <div class="col-md-2 mb-4">
-            <?php if ($isSelected): ?>
-                <div class="card model-card" style="background-color:#f8f9fa">
-                <?php else: ?>
-                    <div class="card model-card">
-                    <?php endif; ?>
-                    <div class="position-relative">
-                        <?php $photoModel = new PhotoModel() ?>
-                        <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>"
-                            onerror="this.onerror=null; this.src='/uploads/default-image.jpg';"
-                            class="card-img-top img-fluid" alt="Model Image" style="width: 300px; height: 300px;"
-                            data-toggle="modal" data-target="#modelModal" data-model-id="<?php echo $model['model_id']; ?>"
-                            data-model-name="<?php echo $model['name']; ?>" data-model-age="<?php echo $model['age']; ?>"
-                            data-model-height="<?php echo $model['height']; ?>"
-                            data-model-weight="<?php echo $model['weight']; ?>"
-                            data-model-birthday="<?php echo $model['birthday']; ?>"
-                            data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
-                            data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
-                            data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                            data-language="<?php echo $languages; ?>" data-gender="<?php echo $gender; ?>"
-                            onclick="showModelDetails(this)">
-
-                        <?php $form = Form::begun('', "post"); ?>
-                        <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
-                        <input type="hidden" name="admin_id" value="<?php echo $_SESSION['admin']; ?>">
-                        <?php if ($isSelected): ?>
-                            <button type="button" class="btn btn-success position-absolute bottom-0 end-0 m-2">
-                                <i class="bi bi-person-fill-check"></i>
-                            </button>
-                        <?php else: ?>
-                            <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 m-2">
-                                <i class="bi bi-person-add"></i>
-                            </button>
-                        <?php endif; ?>
-                        <?php Form::end(); ?>
-                    </div>
-
-                    <div class="card-body text-center">
-                        <p class="card-text"><?php echo $model['name']; ?></p>
-                        <p class="card-text">Age: <?php echo $model['age']; ?> | Height: <?php echo $model['height']; ?>
-                        </p>
-                        <p class="card-text"> Weight: <?php echo $model['weight']; ?></p>
-                        <p> Talants: <?php echo $talant; ?></p>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
+    <div class="col-md-12">
+        <nav>
+            <ul class="pagination justify-content-center">
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item <?php echo $currentPage == $i ? 'active' : ''; ?>">
+                        <a class="page-link" href="/wcp/models?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+            </ul>
+        </nav>
     </div>
+</div>
 
+<?php include 'core/form/Modal.php'; ?>
 
-    <div class="row">
-        <div class="col-md-12">
-            <nav>
-                <ul class="pagination justify-content-center">
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?php echo $currentPage == $i ? 'active' : ''; ?>">
-                            <a class="page-link" href="/wcp/models?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-                </ul>
-            </nav>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modelName"></h4>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modelModalBody">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div id="modelCarousel" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner" id="carouselInner">
-                                    <!-- Images are dynamically added here -->
-                                </div>
-                                <a class="carousel-control-prev" href="#modelCarousel" role="button" data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"
-                                        style="color: black"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#modelCarousel" role="button" data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <dl class="row text-center">
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Age:</dt>
-                                    <dd class="col-6 text-start" id="modelAge"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Height:</dt>
-                                    <dd class="col-6 text-start" id="modelHeight"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Weight:</dt>
-                                    <dd class="col-6 text-start" id="modelWeight"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Birthday:</dt>
-                                    <dd class="col-6 text-start" id="modelBirthday"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Phone:</dt>
-                                    <dd class="col-6 text-start" id="modelPhone"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Eye Color:</dt>
-                                    <dd class="col-6 text-start" id="modelEyeColor"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Hair Color:</dt>
-                                    <dd class="col-6 text-start" id="modelHairColor"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Talent:</dt>
-                                    <dd class="col-6 text-start" id="modelTalant"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Language:</dt>
-                                    <dd class="col-6 text-start" id="modelLanguage"></dd>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center modal-items">
-                                    <dt class="col-6 text-end">Gender:</dt>
-                                    <dd class="col-6 text-start" id="modelGender"></dd>
-                                </div>
-                            </dl>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="/js/models.js" async></script> <!-- //!if there are problems remove async -->
+<script src="/js/models.js" async></script>

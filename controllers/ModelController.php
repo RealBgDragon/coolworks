@@ -40,6 +40,7 @@ class ModelController extends Controller
         $eye_colors = isset($_GET['eye_color']) ? (array) $_GET['eye_color'] : [];
         $talant = isset($_GET['talant']) ? (array) $_GET['talant'] : [];
         $language = isset($_GET['language']) ? (array) $_GET['language'] : [];
+        $gender = isset($_GET['gender']) ? (array) $_GET['gender'] : [];
 
         $filter = [
             'age_min' => $age_min,
@@ -50,6 +51,7 @@ class ModelController extends Controller
             'hair_color' => array_filter($hair_colors),
             'talant' => array_filter($talant),
             'language' => array_filter($language),
+            'gender' => array_filter($gender),
         ];
 
         $page = $_GET['page'] ?? 1;

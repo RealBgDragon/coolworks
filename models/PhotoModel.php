@@ -29,7 +29,6 @@ class PhotoModel extends DbModel
 
     public function attributes(): array
     {
-        /* Testing */
         return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color', 'talant', 'language', 'gender'];
     }
 
@@ -94,6 +93,24 @@ class PhotoModel extends DbModel
                         break;
                 }
                 array_push($additionalFilters['language'], $lan);
+            }
+        }
+
+        if (!empty($filter['gender'])) {
+            $additionalFilters['gender'] = array_map('intval', explode(',', $filter['gender'][0]));
+            foreach ($additionalFilters['gender'] as $gen) {
+                switch ($gen) {
+                    case $modelOptions::GENDER_MALE:
+                        $gen |= $modelOptions::GENDER_MALE;
+                        break;
+                    case $modelOptions::GENDER_FEMALE:
+                        $gen |= $modelOptions::GENDER_FEMALE;
+                        break;
+                    case $modelOptions::GENDER_CHILD:
+                        $gen |= $modelOptions::GENDER_CHILD;
+                        break;
+                }
+                array_push($additionalFilters['gender'], $gen);
             }
         }
         if (!empty($filter['talant'])) {

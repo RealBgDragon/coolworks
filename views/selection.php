@@ -170,48 +170,7 @@ if (!isset($model)) {
     <?php } ?>
 </div>
 
-<div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modelModalLabel">Model Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modelModalBody">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div id="modelCarousel" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner" id="carouselInner">
-                                <!-- Images will be dynamically added here -->
-                            </div>
-                            <a class="carousel-control-prev" href="#modelCarousel" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true" style="color: black"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#modelCarousel" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h4 id="modelName"></h4>
-                        <p>Age: <span id="modelAge"></span></p>
-                        <p>Height: <span id="modelHeight"></span></p>
-                        <p>Weight: <span id="modelWeight"></span></p>
-                        <p>Birthday: <span id="modelBirthday"></span></p>
-                        <p>Phone: <span id="modelPhone"></span></p>
-                        <p>Eye Color: <span id="modelEyeColor"></span></p>
-                        <p>Hair Color: <span id="modelHairColor"></span></p>
-                        <p>Talant: <span id="modelTalant"></span></p>
-                        <p>Language: <span id="modelLanguage"></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php include 'core/form/Modal.php'; ?>
 
 <script src="/js/models.js"></script>
 <script src="/js/selection.js"></script>
