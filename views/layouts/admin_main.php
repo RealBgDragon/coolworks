@@ -1,4 +1,5 @@
-<?php use app\core\Application; ?>
+<?php use app\core\Application;
+use app\models\User; ?>
 
 <!doctype html>
 <html lang="en">
@@ -57,8 +58,9 @@
                         <li class="nav-item">
                             <button id="logout" type="button" class="nav-link" data-bs-toggle="modal"
                                 data-bs-target="#logoutModal">Welcome
-                                <?php echo Application::$app->user->getDisplayName(); ?> <i
-                                    class="bi bi-box-arrow-right"></i>
+                                <?php
+                                $user = new User();
+                                echo $user->getAdminDisplayName(); ?> <i class="bi bi-box-arrow-right"></i>
                                 </a>
 
                         </li>

@@ -107,16 +107,16 @@ class SelectModel extends DbModel
     {
         $info = 'model_id';
         $admin_id = $_SESSION['admin'];
-        $params = ['admin_id' => $admin_id];
         $this->setTableName('selected_models');
 
         if ($selection_name == '') {
+            $params = ['admin_id' => $admin_id];
             $cond = "1=1";
             $table = '';
             $condition = "admin_id = :admin_id AND " . $cond;
         } else {
             $table = 'saved_selections';
-            $cond = "admin_id = :admin_id AND name = :selection_name";
+            $cond = "name = :selection_name";
             $params['selection_name'] = $selection_name;
 
             $selection_ids = $this->getSpecificInfo('id', $cond, $params, $table, 'column');

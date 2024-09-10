@@ -8,7 +8,7 @@ use app\core\form\ModelOptions; ?>
     <div class="col-md-3 mb-4">
         <div class="card bg-primary text-white">
             <div class="card-body">
-                <h5 class="card-title">Total Users</h5>
+                <h5 class="card-title">Total Models</h5>
                 <h2 class="card-text"><?php echo htmlspecialchars($modelsCount) ?></h2>
             </div>
         </div>

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\core\Model;
+use app\core\Session;
 use app\core\UserModel;
 
 class User extends UserModel
@@ -33,8 +34,7 @@ class User extends UserModel
 
     public function tableName(): string
     {
-        global $isAdmin;
-        return $isAdmin ? 'admins' : 'users';
+        return 'admins';
     }
 
 
@@ -80,5 +80,16 @@ class User extends UserModel
     public function getDisplayName(): string
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getAdminDisplayName()
+    {
+        $info = 'username';
+        $condition = 'id = :admin_id';
+        $admin_id = $_SESSION['admin'];
+        $params = [':admin_id' => $admin_id];
+        $name = $this->getSpecificInfo($info, $condition, $params, null, 'colum');
+        $username = $name[0];
+        return $username;
     }
 }

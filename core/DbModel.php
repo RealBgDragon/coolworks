@@ -30,19 +30,20 @@ abstract class DbModel extends Model
 
     public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requirement = '', $order = '', $limit = '')
     {
-        if ($table === '') {
+        if ($table == '') {
             $table = static::tableName();
         }
 
         $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
 
-        if ($order !== '') {
+        if ($order != '') {
             $sql .= " ORDER BY date_added " . ($order === 'ASC' ? 'ASC' : 'DESC');
         }
 
-        if ($limit !== '') {
+        if ($limit != '') {
             $sql .= " LIMIT " . (int) $limit;
         }
+
 
         $statement = self::prepare($sql);
         $statement->execute($params);
