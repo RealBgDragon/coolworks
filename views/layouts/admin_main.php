@@ -80,6 +80,8 @@ use app\models\User; ?>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to log-off?<br /></p>
+                </div>
+                <div class="modal-footer">
                     <div class="actionsBtns">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-danger" href="/logout">Log out</a>
