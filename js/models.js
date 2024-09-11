@@ -208,4 +208,15 @@ $(document).ready(function () {
             }
         });
     }
+
+    $(".btn-container").hover(
+        function () {
+            $(this).find(".initial-btn").hide();
+            $(this).find(".hover-btn").show();
+        },
+        function () {
+            $(this).find(".initial-btn").show();
+            $(this).find(".hover-btn").hide();
+        }
+    );
 });

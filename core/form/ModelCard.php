@@ -41,13 +41,20 @@
                         <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
                         <input type="hidden" name="admin_id" value="<?php echo $_SESSION['admin']; ?>">
                         <?php if ($isSelected): ?>
-                            <button type="button" class="btn btn-success position-absolute bottom-0 end-0 m-2">
-                                <i class="bi bi-person-fill-check"></i>
-                            </button>
+                            <div class="position-absolute bottom-0 end-0 m-2 btn-container">
+                                <button type="button" class="btn btn-success initial-btn">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </button>
+                                <a href="/wcp/selection" class="btn btn-danger hover-btn" style="display: none;">
+                                    <i class="bi bi-person-fill-x"></i>
+                                </a>
+                            </div>
+
                         <?php else: ?>
                             <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 m-2">
                                 <i class="bi bi-person-add"></i>
                             </button>
+
                         <?php endif; ?>
                         <?php Form::end(); ?>
                     </div>

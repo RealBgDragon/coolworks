@@ -25,6 +25,21 @@ body {
     border-radius: 8px;
 }
 
+.btn-success {
+    background: linear-gradient(135deg, #28a745, #218838); /* Green gradient */
+    border: none;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #218838, #196f3d);
+}
+
+.btn-success:focus {
+    outline: none;
+}
+
 .btn-warning {
     border-radius: 8px;
 }
