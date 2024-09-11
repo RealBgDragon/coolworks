@@ -19,7 +19,8 @@ if (!isset($model)) {
             </div>
             <div class="modal-body">
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="selection" class="selection-link">Current</a></li>
+                    <li class="list-group-item"><a href="selection" class="selection-link"
+                            style="font-weight: bold;">Current</a></li>
                     <?php
                     $last = '';
                     foreach ($selectionOptions as $selection) {
