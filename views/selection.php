@@ -18,45 +18,63 @@ if (!isset($model)) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="selection" class="selection-link"
-                            style="font-weight: bold;">Current</a></li>
-                    <?php
-                    $last = '';
-                    foreach ($selectionOptions as $selection) {
-                        if ($selection['name'] === $last) {
-                            continue;
-                        }
-                        $last = $selection['name'];
-                        ?>
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="selection?name=<?php echo $selection['name'] ?>" class="selection-link">
-                                    <span class="selection-name"><?php echo $selection['name'] ?></span>
-                                    <span class="selection-info">
-                                        | Iteration: <?php echo $selection['iterations'] ?> |
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 55%;">Selection Name</th>
+                                <th style="width: 5%;">Iteration</th>
+                                <th style="width: 20%;">Date</th>
+                                <th style="width: 20%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="selection" class="selection-link" style="font-weight: bold;">Current</a>
+                                </td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td></td>
+                            </tr>
+                            <?php
+                            $last = '';
+                            foreach ($selectionOptions as $selection) {
+                                if ($selection['name'] === $last) {
+                                    continue;
+                                }
+                                $last = $selection['name'];
+                                ?>
+                                <tr>
+                                    <td>
+                                        <a href="selection?name=<?php echo $selection['name'] ?>" class="selection-link">
+                                            <?php echo $selection['name'] ?>
+                                        </a>
+                                    </td>
+                                    <td><?php echo $selection['iterations'] ?></td>
+                                    <td>
                                         <?php
                                         $date = new DateTime($selection['selection_date']);
                                         echo $date->format('d.m.Y H:i');
                                         ?>
-                                    </span>
-                                </a>
-                                <div class="selection-buttons">
-                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#transferModal"
-                                        data-selection-name="<?php echo $selection['name']; ?>">Select</button>
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#confirmModal"
-                                        data-selection-id="<?php echo $selection['id']; ?>">Delete</button>
-                                </div>
-                            </div>
-                        </li>
-                    <?php } ?>
-                </ul>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#transferModal"
+                                            data-selection-name="<?php echo $selection['name']; ?>">Select</button>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#confirmModal"
+                                            data-selection-id="<?php echo $selection['id']; ?>">Delete</button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Delete conformation -->
 <div class="modal fade " id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
