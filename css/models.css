@@ -41,7 +41,18 @@ body {
 }
 
 .btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800); /* Yellow gradient */
+    border: none;
+    transition: all 0.3s ease;
     border-radius: 8px;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(
+        135deg,
+        #e0a800,
+        #c69500
+    ); /* Darker yellow on hover */
 }
 
 .btn-primary:hover,

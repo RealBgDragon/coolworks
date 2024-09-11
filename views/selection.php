@@ -58,8 +58,8 @@ if (!isset($model)) {
 </div>
 
 <!-- Delete conformation -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade " id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmModalLabel">Confirm Deletion</h5>
@@ -68,11 +68,15 @@ if (!isset($model)) {
             <div class="modal-body">
                 Are you sure you want to delete this item?
             </div>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <?php $form = Form::begun('', "post"); ?>
-            <input type="hidden" id="selection_id" name="selection_id" value="">
-            <button type="submit" class="btn btn-danger" id="confirmDelete" name="delete_selection">Delete</button>
-            <?php $form::end(); ?>
+            <div class="model-footer d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    style="margin: 5px; margin-bottom: 10px">Cancel</button>
+                <?php $form = Form::begun('', "post"); ?>
+                <input type="hidden" id="selection_id" name="selection_id" value="">
+                <button type="submit" class="btn btn-danger" id="confirmDelete" name="delete_selection"
+                    style="margin: 5px">Delete</button>
+                <?php $form::end(); ?>
+            </div>
         </div>
     </div>
 </div>
@@ -88,13 +92,15 @@ if (!isset($model)) {
             <div class="modal-body">
                 Are you sure you want to transfer the models for selection: <span id="selectionNameSpan"></span>?
                 <?php $form = Form::begun('', "post"); ?>
-                <input type="text" name="selection_name" value="" placeholder="Enter selection name"
-                    class="form-control">
+                <div class="input-group">
+                    <input type="text" name="selection_name" value="" placeholder="Enter selection name"
+                        class="form-control">
+                    <button type="submit" name="save_selection" class="btn btn-warning">Save the current selection
+                    </button>
+                </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-warning" name="save_selection">Save the initial selection
-                    first</button>
                 <?php $form::end(); ?>
                 <!-- error -->
                 <?php $form = Form::begun('', "post"); ?>
@@ -116,8 +122,9 @@ if (!isset($model)) {
     <div class="col-md-auto d-flex justify-content-end mb-4">
         <?php $form = Form::begun('', "post"); ?>
         <div class="input-group">
-            <input type="text" name="selection_name" value="" placeholder="Enter selection name" class="form-control">
-            <button type="submit" name="save_selection" class="btn btn-primary">Save selection <i
+            <input type="text" name="selection_name" value="" placeholder="Enter new selection name"
+                class="form-control">
+            <button type="submit" name="save_selection" class="btn btn-primary">Save <i
                     class="bi bi-floppy2-fill"></i></button>
         </div>
         <?php $form::end(); ?>
