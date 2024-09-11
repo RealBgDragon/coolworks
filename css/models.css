@@ -17,21 +17,12 @@ body {
     margin-top: 40px;
 }
 
-/* .cont {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    margin: 40px;
-} */
-
 .btn-primary,
 .btn-secondary {
     background: linear-gradient(135deg, #007bff, #0056b3);
     border: none;
     transition: all 0.3s ease;
-    border-radius: 8px; /* Updated border-radius */
-    /* box-shadow removed */
+    border-radius: 8px;
 }
 
 .btn-warning {
@@ -41,13 +32,12 @@ body {
 .btn-primary:hover,
 .btn-secondary:hover {
     background: linear-gradient(135deg, #0056b3, #003d80);
-    /* box-shadow removed */
 }
 
 .model-card {
     transition: all 0.3s ease;
     background-color: #ffffff;
-    border-radius: 8px; /* Updated border-radius */
+    border-radius: 8px;
 }
 
 .model-card:hover {
@@ -63,7 +53,7 @@ body {
 }
 
 .form-control {
-    border-radius: 8px; /* Updated border-radius */
+    border-radius: 8px;
     padding: 12px 20px;
     border: 1px solid #ced4da;
     transition: border-color 0.3s ease;
@@ -71,7 +61,6 @@ body {
 
 .form-control:focus {
     border-color: #007bff;
-    /* box-shadow removed */
 }
 
 #age_slider {
@@ -107,7 +96,7 @@ body {
 
 .custom-select-multiple {
     border: 1px solid #ced4da;
-    border-radius: 8px; /* Updated border-radius */
+    border-radius: 8px;
     padding: 0.375rem 0.75rem;
 }
 
@@ -125,12 +114,12 @@ body {
 .custom-select-multiple .option.selected {
     background-color: #007bff;
     color: white;
-    border-radius: 8px; /* Updated border-radius */
+    border-radius: 8px;
 }
 
 .pagination .page-link {
     color: #007bff;
-    border-radius: 8px; /* Updated border-radius */
+    border-radius: 8px;
     margin: 0 3px;
 }
 
@@ -147,10 +136,6 @@ body {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
-
-/* .modal-body {
-    padding: 40px;
-} */
 
 .carousel-control-prev,
 .carousel-control-next {
@@ -217,7 +202,7 @@ body {
 }
 
 .list-group-item a {
-    display: block; /* Make the anchor tag fill the entire list item */
+    display: block;
     width: 100%;
     height: 100%;
 }
@@ -226,18 +211,15 @@ body {
     background: linear-gradient(135deg, #dc3545, #a71d2a);
     border: none;
     transition: all 0.3s ease;
-    border-radius: 8px; /* Updated border-radius */
-    /* box-shadow removed */
+    border-radius: 8px;
 }
 
 .btn-danger:hover {
     background: linear-gradient(135deg, #a71d2a, #7d1320);
-    /* box-shadow removed */
 }
 
 .btn-danger:focus {
     outline: none;
-    /* box-shadow removed */
 }
 
 #logout {

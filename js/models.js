@@ -164,11 +164,10 @@ $(document).ready(function () {
     });
 
     // Initialize the color inputs
-
     var imageElement = document.querySelector("img");
     if (imageElement) {
         imageElement.onerror = function () {
-            this.onerror = null; // Prevent infinite loop in case the default image is also missing
+            this.onerror = null;
             this.src = "/uploads/default-image.jpg";
         };
     }
