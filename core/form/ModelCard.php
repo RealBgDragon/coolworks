@@ -6,8 +6,9 @@
     foreach ($modelsData as $model) {
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
-        $talant = ModelOptions::getTalantName($model['talant']);
-        $languages = ModelOptions::getLanguages($model['language']);
+        $talant = ModelOptions::getTalantName($model['talant_id']);
+        /* $languages = ModelOptions::getLanguages($model['language']); */
+        $languages = 'Unknown';
         $gender = ModelOptions::getGenderName($model['gender']);
         if (isset($selectedModels)) {
             $isSelected = in_array($model['model_id'], $selectedModels);

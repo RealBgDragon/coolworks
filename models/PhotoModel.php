@@ -24,12 +24,12 @@ class PhotoModel extends DbModel
 
     public function tableName(): string
     {
-        return 'model';
+        return 'models';
     }
 
     public function attributes(): array
     {
-        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color', 'talant', 'language', 'gender'];
+        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'talant', 'hair_color', 'gender'];
     }
 
     public function labels(): array
@@ -43,7 +43,6 @@ class PhotoModel extends DbModel
             'eye_color' => 'Eye Color',
             'hair_color' => 'Hair Color',
             'talant' => 'Talant',
-            'language' => 'Language',
             'gender' => 'Gender'
         ];
     }
@@ -53,7 +52,7 @@ class PhotoModel extends DbModel
         return 'model_id';
     }
 
-    public function getAllModels($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    public function getAllModels($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join)
     {
         $additionalFilters = [];
         $modelOptions = new ModelOptions();
@@ -122,7 +121,9 @@ class PhotoModel extends DbModel
             $order = $order === 'asc' ? 'desc' : 'asc';
         }
 
-        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset);
+        /* $models = $this->getAllModelsWithTalents($sort, $order, $additionalFilters, $limit, $offset); */
+
+        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset, $join);
 
         foreach ($models as &$model) {
             $model['age'] = $this->calculateAge($model['birthday']);
@@ -262,5 +263,25 @@ class PhotoModel extends DbModel
     {
         $modelsCount = $this->countAll($filter);
         return $modelsCount;
+    }
+
+    public function getNameFromDb($info, $cond, $params, $table, $join = '')
+    {
+        if ($join == '') {
+            return $this->getSpecificInfo($info, $cond, $params, $table, 'colum');
+        } else {
+            return $this->getSpecificInfo($info, $cond, $params, $table, 'colum', '', '', $join);
+
+        }
+    }
+
+    public function getAllNames($info, $table)
+    {
+        return $this->getSpecificInfo($info, '1=1', [], $table);
+    }
+
+    public function getAllTalants()
+    {
+        return $this->getSpecificInfo('model_id, talant_id', '1=1', [], 'c_models_talants');
     }
 }

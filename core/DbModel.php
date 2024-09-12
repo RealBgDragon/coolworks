@@ -28,10 +28,14 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requirement = '', $order = '', $limit = '')
+    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requirement = '', $order = '', $limit = '', $join = '')
     {
         if ($table == '') {
             $table = static::tableName();
+        }
+
+        if ($join != '') {
+            $sql = "INNER JOIN $join";
         }
 
         $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
@@ -44,7 +48,6 @@ abstract class DbModel extends Model
             $sql .= " LIMIT " . (int) $limit;
         }
 
-
         $statement = self::prepare($sql);
         $statement->execute($params);
 
@@ -55,11 +58,14 @@ abstract class DbModel extends Model
         }
     }
 
-    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join = '')
     {
         $tableName = $this->tableName();
-        $sql = "SELECT * FROM $tableName WHERE 1=1";
-
+        if ($join == '') {
+            $sql = "SELECT * FROM $tableName WHERE 1=1";
+        } else {
+            $sql = "SELECT * FROM $tableName $join WHERE 1=1";
+        }
         // Apply filters
         foreach ($filter as $key => $value) {
             if (!empty($value)) {
@@ -81,6 +87,64 @@ abstract class DbModel extends Model
         $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
         if ($sort != '')
             $sql .= " ORDER BY $sort $order";
+
+        // Apply pagination
+        $sql .= " LIMIT ? OFFSET ?";
+
+        $statement = self::prepare($sql);
+
+        // Bind filter parameters
+        $paramIndex = 1;
+        foreach ($filter as $key => $value) {
+            if (!empty($value)) {
+                if (is_array($value)) {
+                    foreach ($value as $item) {
+                        $statement->bindValue($paramIndex++, $item);
+                    }
+                } else {
+                    $statement->bindValue($paramIndex++, $value);
+                }
+            }
+        }
+
+        // Bind pagination parameters
+        $statement->bindValue($paramIndex++, $limit, PDO::PARAM_INT);
+        $statement->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
+
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllModelsWithTalents($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    {
+        $tableName = $this->tableName();
+        $sql = "SELECT m.*, GROUP_CONCAT(mt.talant_id) as talants 
+                FROM $tableName m 
+                LEFT JOIN c_models_talants mt ON m.model_id = mt.model_id 
+                WHERE 1=1";
+
+        // Apply filters
+        foreach ($filter as $key => $value) {
+            if (!empty($value)) {
+                if (is_array($value)) {
+                    if ($key === 'birthday') {
+                        $sql .= " AND (m.$key BETWEEN ? AND ?)";
+                    } else {
+                        $placeholders = implode(',', array_fill(0, count($value), '?'));
+                        $sql .= " AND m.$key IN ($placeholders)";
+                    }
+                } else {
+                    $sql .= " AND m.$key = ?";
+                }
+            }
+        }
+
+        $sql .= " GROUP BY m.model_id";
+
+        // Apply sorting
+        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+        if ($sort != '')
+            $sql .= " ORDER BY m.$sort $order";
 
         // Apply pagination
         $sql .= " LIMIT ? OFFSET ?";

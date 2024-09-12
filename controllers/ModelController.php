@@ -39,7 +39,7 @@ class ModelController extends Controller
         $hair_colors = isset($_GET['hair_color']) ? (array) $_GET['hair_color'] : [];
         $eye_colors = isset($_GET['eye_color']) ? (array) $_GET['eye_color'] : [];
         $talant = isset($_GET['talant']) ? (array) $_GET['talant'] : [];
-        $language = isset($_GET['language']) ? (array) $_GET['language'] : [];
+        /* $language = isset($_GET['language']) ? (array) $_GET['language'] : []; */
         $gender = isset($_GET['gender']) ? (array) $_GET['gender'] : [];
 
         $filter = [
@@ -50,19 +50,23 @@ class ModelController extends Controller
             'eye_color' => array_filter($eye_colors),
             'hair_color' => array_filter($hair_colors),
             'talant' => array_filter($talant),
-            'language' => array_filter($language),
+            /* 'language' => array_filter($language), */
             'gender' => array_filter($gender),
         ];
 
         $page = $_GET['page'] ?? 1;
         $limit = 24;
         $offset = ($page - 1) * $limit;
-
-        $modelsData = $photoModel->getAllModels($sort, $order, $filter, $limit, $offset);
+        $join = 'LEFT JOIN c_models_talants mt ON models.model_id = mt.model_id ';
+        $modelsData = $photoModel->getAllModels($sort, $order, $filter, $limit, $offset, $join);
         $totalModels = $photoModel->countAll($filter);
         $totalPages = ceil($totalModels / $limit);
 
         $selectedModels = $_SESSION['selected_models'] ?? [];
+
+        $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
+        $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
+        $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
 
         $this->setLayout('admin_main');
         return $this->render('models', [
@@ -72,7 +76,10 @@ class ModelController extends Controller
             'currentFilter' => $filter,
             'currentPage' => $page,
             'totalPages' => $totalPages,
-            'selectedModels' => $selectedModels
+            'selectedModels' => $selectedModels,
+            'eyeColorOptions' => $eyeColorOptions,
+            'hairColorOptions' => $hairColorOptions,
+            'talantOptions' => $talantOptions
         ]);
     }
 
@@ -89,12 +96,12 @@ class ModelController extends Controller
             $eyeColorOption = isset($request->getBody()['eye_color']) ? (int) $request->getBody()['eye_color'] : 0;
             $hairColorOption = isset($request->getBody()['hair_color']) ? (int) $request->getBody()['hair_color'] : 0;
             $talant = isset($request->getBody()['talant']) ? (int) $request->getBody()['talant'] : 0;
-            $language = isset($request->getBody()['language']) ? $request->getBody()['language'] : 0;
+            /* $language = isset($request->getBody()['language']) ? $request->getBody()['language'] : 0; */
             $gender = isset($request->getBody()['gender']) ? $request->getBody()['gender'] : 0;
             $photoModel->setEyeColor($eyeColorOption);
             $photoModel->setHairColor($hairColorOption);
             $photoModel->setTalant($talant);
-            $photoModel->setLanguage($language);
+            /* $photoModel->setLanguage($language); */
             $photoModel->setGender($gender);
 
             // Main image upload handling
