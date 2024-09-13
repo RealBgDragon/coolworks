@@ -58,8 +58,9 @@
                             <div id="eye_color_options" class="custom-select-multiple">
                                 <div class="option" data-value="">Any</div>
                                 <?php
+                                $selectedEyeColors = isset($currentFilter['eye_color']) ? explode(',', $currentFilter['eye_color']) : [];
                                 foreach ($eyeColorOptions as $eyeColor) {
-                                    $selected = in_array($eyeColor['eye_color_id'], $currentFilter['eyeColor'] ?? []) ? 'selected' : '';
+                                    $selected = in_array($eyeColor['eye_color_id'], $selectedEyeColors) ? 'selected' : '';
                                     ?>
                                     <div class="option <?php echo $selected; ?>"
                                         data-value="<?php echo $eyeColor['eye_color_id']; ?>">
@@ -77,8 +78,11 @@
                             <div id="hair_color_options" class="custom-select-multiple">
                                 <div class="option" data-value="">Any</div>
                                 <?php
+                                // Assuming $currentFilter['hair_color'] is a string like "1,4,7"
+                                $selectedHairColors = isset($currentFilter['hair_color']) ? explode(',', $currentFilter['hair_color']) : [];
+
                                 foreach ($hairColorOptions as $hairColor) {
-                                    $selected = in_array($hairColor['hair_color_id'], $currentFilter['hair_color'] ?? []) ? 'selected' : '';
+                                    $selected = in_array($hairColor['hair_color_id'], $selectedHairColors) ? 'selected' : '';
                                     ?>
                                     <div class="option <?php echo $selected; ?>"
                                         data-value="<?php echo $hairColor['hair_color_id']; ?>">
@@ -119,15 +123,12 @@
                             <div id="language_options" class="custom-select-multiple">
                                 <div class="option" data-value="">Any</div>
                                 <?php
-                                $languages = [
-                                    ModelOptions::LANGUAGE_BULGARIAN,
-                                    ModelOptions::LANGUAGE_ENGLISH,
-                                ];
-                                foreach ($languages as $value) {
-                                    $selected = in_array($value, $currentFilter['language'] ?? []) ? 'selected' : '';
+                                foreach ($languages as $language) {
+                                    $selected = in_array($language['language_id'], $currentFilter['language'] ?? []) ? 'selected' : '';
                                     ?>
-                                    <div class="option <?php echo $selected; ?>" data-value="<?php echo $value; ?>">
-                                        <?php echo ModelOptions::getLanguages($value); ?>
+                                    <div class="option <?php echo $selected; ?>"
+                                        data-value="<?php echo $language['language_id']; ?>">
+                                        <?php echo $language['language']; ?>
                                     </div>
                                 <?php } ?>
                             </div>
@@ -144,7 +145,6 @@
                                 $genders = [
                                     ModelOptions::GENDER_MALE,
                                     ModelOptions::GENDER_FEMALE,
-                                    ModelOptions::GENDER_CHILD,
                                 ];
                                 foreach ($genders as $value) {
                                     $selected = in_array($value, $currentFilter['gender'] ?? []) ? 'selected' : '';
@@ -160,12 +160,12 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-check"></i>
-                    Apply</button>
                 <a href="/wcp/models" class="btn btn-primary">
                     <i class="bi bi-arrow-counterclockwise"></i> Reset filters
                 </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check"></i>
+                    Apply</button>
             </div>
             <?php $form::end(); ?>
         </div>
@@ -183,29 +183,29 @@
                 $pageRange = 2; // Number of pages to show on either side of the current page
                 $startPage = max(1, $currentPage - $pageRange);
                 $endPage = min($totalPages, $currentPage + $pageRange);
+                $currentFilters = $_GET;
 
                 // Show "First" page link
                 if ($startPage > 1) {
-                    echo '<li class="page-item"><a class="page-link" href="/wcp/models?page=1">1</a></li>';
+                    echo '<li class="page-item"><a class="page-link" href="/wcp/models?page=1&' . http_build_query($currentFilters) . '">1</a></li>';
                     if ($startPage > 2) {
                         echo '<li class="page-item"><span class="page-link">...</span></li>';
                     }
                 }
 
                 // Loop through the pages within the defined range
-                for ($i = $startPage; $i <= $endPage; $i++): ?>
-                    <li class="page-item <?php echo $currentPage == $i ? 'active' : ''; ?>">
-                        <a class="page-link" href="/wcp/models?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php endfor; ?>
+                for ($i = $startPage; $i <= $endPage; $i++) {
+                    $currentFilters['page'] = $i;
+                    echo '<li class="page-item' . ($currentPage == $i ? ' active' : '') . '"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">' . $i . '</a></li>';
+                }
 
-                <?php
                 // Show "Last" page link
                 if ($endPage < $totalPages) {
                     if ($endPage < $totalPages - 1) {
                         echo '<li class="page-item"><span class="page-link">...</span></li>';
                     }
-                    echo '<li class="page-item"><a class="page-link" href="/wcp/models?page=' . $totalPages . '">' . $totalPages . '</a></li>';
+                    $currentFilters['page'] = $totalPages;
+                    echo '<li class="page-item"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">' . $totalPages . '</a></li>';
                 }
                 ?>
             </ul>

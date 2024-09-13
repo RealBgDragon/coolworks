@@ -39,18 +39,19 @@ class ModelController extends Controller
         $hair_colors = isset($_GET['hair_color']) ? (array) $_GET['hair_color'] : [];
         $eye_colors = isset($_GET['eye_color']) ? (array) $_GET['eye_color'] : [];
         $talant = isset($_GET['talant']) ? (array) $_GET['talant'] : [];
-        /* $language = isset($_GET['language']) ? (array) $_GET['language'] : []; */
+        $language = isset($_GET['language']) ? (array) $_GET['language'] : [];
         $gender = isset($_GET['gender']) ? (array) $_GET['gender'] : [];
-
+        $eye_colors = isset($eye_colors[0]) ? $eye_colors[0] : '';
+        $hair_colors = isset($hair_colors[0]) ? $hair_colors[0] : '';
         $filter = [
             'age_min' => $age_min,
             'age_max' => $age_max,
             'height_min' => $_GET['height_min'] ?? null,
             'height_max' => $_GET['height_max'] ?? null,
-            'eye_color' => array_filter($eye_colors),
-            'hair_color' => array_filter($hair_colors),
+            'eye_color' => $eye_colors,
+            'hair_color' => $hair_colors,
             'talant' => array_filter($talant),
-            /* 'language' => array_filter($language), */
+            'language' => array_filter($language),
             'gender' => array_filter($gender),
         ];
 
@@ -58,6 +59,7 @@ class ModelController extends Controller
         $limit = 24;
         $offset = ($page - 1) * $limit;
         $join = 'LEFT JOIN c_models_talants mt ON models.model_id = mt.model_id ';
+        $join .= 'LEFT JOIN c_models_languages ml ON models.model_id = ml.model_id ';
         $modelsData = $photoModel->getAllModels($sort, $order, $filter, $limit, $offset, $join);
         $totalModels = $photoModel->countAll($filter);
         $totalPages = ceil($totalModels / $limit);
@@ -67,6 +69,7 @@ class ModelController extends Controller
         $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
         $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
         $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
+        $languages = $photoModel->getAllNames('language_id, language', 'c_languages');
 
         $this->setLayout('admin_main');
         return $this->render('models', [
@@ -79,7 +82,8 @@ class ModelController extends Controller
             'selectedModels' => $selectedModels,
             'eyeColorOptions' => $eyeColorOptions,
             'hairColorOptions' => $hairColorOptions,
-            'talantOptions' => $talantOptions
+            'talantOptions' => $talantOptions,
+            'languages' => $languages
         ]);
     }
 

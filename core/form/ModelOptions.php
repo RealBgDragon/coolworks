@@ -19,30 +19,26 @@ class ModelOptions
     const HAIR_COLOR_BROWN = 1 << 4; // 00010000 //32
     const HAIR_COLOR_BLACK = 1 << 5; // 00100000 //64
 
-    const GENDER_MALE = 1 << 0;  // 00000001 //1
-    const GENDER_FEMALE = 1 << 1; // 00000010 //2
+    const GENDER_MALE = 'm';
+    const GENDER_FEMALE = 'f';
     const GENDER_CHILD = 1 << 2; // 00000100 //4
 
     public static function getTalantName($talentId)
     {
         $photoModel = new PhotoModel();
-        $join = "models_talents mt ON t.talent_id = mt.talent_id";
+        $join = "INNER JOIN c_models_talants mt ON talents.talent_id = mt.talant_id";
         $talent = $photoModel->getNameFromDb('name', 'talent_id = :id', [':id' => $talentId], 'talents', $join);
         return $talent ? $talent[0] : 'Unknown';
     }
 
-
-    public static function getLanguages($languageBitmask)
+    public static function getLanguages($languageId)
     {
-        $languages = [];
-        if ($languageBitmask & self::LANGUAGE_BULGARIAN) {
-            $languages[] = 'Bulgarian';
-        }
-        if ($languageBitmask & self::LANGUAGE_ENGLISH) {
-            $languages[] = 'English';
-        }
-        return $languages ? implode(', ', $languages) : 'Unknown';
+        $photoModel = new PhotoModel();
+        $join = "INNER JOIN c_models_languages ml ON c_languages.language_id = ml.language_id";
+        $language = $photoModel->getNameFromDb('language', 'c_languages.language_id = :id', [':id' => $languageId], 'c_languages', $join);
+        return $language ? $language[0] : 'Unknown';
     }
+
     public static function getEyeColorName($eyeColorId)
     {
         $photoModel = new PhotoModel();
@@ -65,8 +61,6 @@ class ModelOptions
                 return 'Male';
             case self::GENDER_FEMALE:
                 return 'Female';
-            case self::GENDER_CHILD:
-                return 'Child';
             default:
                 return 'Unknown';
         }

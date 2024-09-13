@@ -139,7 +139,33 @@ class SelectModel extends DbModel
         return $this->getAll();
     }
     // New method to get detailed info about selected models
-    public function getModelsByIds($ids, $sort = 'name', $order = 'asc', $filter = [])
+    public function getModelsByIds($ids, $join = '')
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        $sql = "SELECT DISTINCT models.*, c_models_languages.language_id, c_models_talants.talant_id, TIMESTAMPDIFF(YEAR, models.birthday, CURDATE()) AS age 
+            FROM models";
+
+        if (!empty($join)) {
+            $sql .= " $join";
+        }
+
+        $sql .= " WHERE models.model_id IN ($placeholders)";
+
+        $statement = self::prepare($sql);
+        $paramNumber = 1;
+        foreach ($ids as $id) {
+            $statement->bindValue($paramNumber++, $id);
+        }
+
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    /* public function getModelsByIds($ids)
     {
         if (empty($ids)) {
             return [];
@@ -147,35 +173,6 @@ class SelectModel extends DbModel
 
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
         $sql = "SELECT *, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM model WHERE model_id IN ($placeholders)";
-
-        // Apply filters
-        if (!empty($filter['age_min'])) {
-            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) >= ?";
-            $ids[] = $filter['age_min'];
-        }
-        if (!empty($filter['age_max'])) {
-            $sql .= " AND TIMESTAMPDIFF(YEAR, birthday, CURDATE()) <= ?";
-            $ids[] = $filter['age_max'];
-        }
-        if (!empty($filter['height_min'])) {
-            $sql .= " AND height >= ?";
-            $ids[] = $filter['height_min'];
-        }
-        if (!empty($filter['height_max'])) {
-            $sql .= " AND height <= ?";
-            $ids[] = $filter['height_max'];
-        }
-
-        // Apply sorting
-        $allowedSortColumns = ['name', 'age', 'height'];
-        $sort = in_array($sort, $allowedSortColumns) ? $sort : 'name';
-        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
-
-        if ($sort === 'age') {
-            $sql .= " ORDER BY TIMESTAMPDIFF(YEAR, birthday, CURDATE()) $order";
-        } else {
-            $sql .= " ORDER BY $sort $order";
-        }
 
         $statement = self::prepare($sql);
 
@@ -186,14 +183,19 @@ class SelectModel extends DbModel
 
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
+    } */
+
 
     public function getRandomModels()
     {
-        $sql = "SELECT *, TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM model ORDER BY RAND() LIMIT 10";
-        $statement = self::prepare($sql);
-        $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $photoModel = new PhotoModel();
+        $info = '*';
+        $join = 'LEFT JOIN c_models_talants mt ON models.model_id = mt.model_id ';
+        $randomModels = $this->getSpecificInfo($info, '1=1', [], 'models', '', 'RAND()', 10, $join);
+        foreach ($randomModels as &$model) {
+            $model['age'] = $photoModel->calculateAge($model['birthday']);
+        }
+        return $randomModels;
     }
 
     public function saveSelection()

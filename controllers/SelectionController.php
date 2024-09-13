@@ -68,7 +68,9 @@ class SelectionController extends Controller
 
         $selection_name = $_GET['name'] ?? null;
         $selectedModelIds = $selectModel->getSelectedModelIds($selection_name);
-        $modelsData = $selectModel->getModelsByIds($selectedModelIds);
+        $join = ' JOIN c_models_talants mt ON models.model_id = mt.model_id ';
+        $join .= ' JOIN c_models_languages ml ON models.model_id = ml.model_id ';
+        $modelsData = $selectModel->getModelsByIds($selectedModelIds, $join);
         $this->setLayout('admin_main');
         return $this->render('selection', [
             'modelsData' => $modelsData,

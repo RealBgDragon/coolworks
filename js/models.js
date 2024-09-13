@@ -133,11 +133,11 @@ $(document).ready(function () {
             })
             .get();
 
-        $("#hair_color_input").val(selectedHairColors.join(","));
-        $("#eye_color_input").val(selectedEyeColors.join(","));
-        $("#talant_input").val(selectedTalants.join(","));
-        $("#language_input").val(selectedLanguages.join(","));
-        $("#gender_input").val(selectedGenders.join(","));
+        $("#hair_color_input").val(selectedHairColors.join(", "));
+        $("#eye_color_input").val(selectedEyeColors.join(", "));
+        $("#talant_input").val(selectedTalants.join(", "));
+        $("#language_input").val(selectedLanguages.join(", "));
+        $("#gender_input").val(selectedGenders.join(", "));
     }
 
     // Retrieve filter section visibility state from sessionStorage

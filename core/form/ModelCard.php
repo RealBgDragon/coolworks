@@ -7,8 +7,7 @@
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
         $talant = ModelOptions::getTalantName($model['talant_id']);
-        /* $languages = ModelOptions::getLanguages($model['language']); */
-        $languages = 'Unknown';
+        $languages = ModelOptions::getLanguages($model['language_id']);
         $gender = ModelOptions::getGenderName($model['gender']);
         if (isset($selectedModels)) {
             $isSelected = in_array($model['model_id'], $selectedModels);

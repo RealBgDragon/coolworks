@@ -152,54 +152,76 @@ if (!isset($model)) {
 
 
 <div class="row">
-    <?php foreach ($modelsData as $model) {
+    <?php var_dump($modelsData); ?>
+    <?php foreach ($modelsData as $index => $model) {
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
-        $talant = ModelOptions::getTalantName($model['talant']);
-        $languages = ModelOptions::getLanguages($model['language']);
+        $talant = ModelOptions::getTalantName($model['talant_id']);
+        $languages = ModelOptions::getLanguages($model['language_id']);
         $gender = ModelOptions::getGenderName($model['gender']);
-
+        if (isset($selectedModels)) {
+            $isSelected = in_array($model['model_id'], $selectedModels);
+        } else {
+            $isSelected = false;
+        }
         ?>
         <div class="col-md-2 mb-4">
-            <div class="card model-card">
-                <div class="position-relative">
-                    <?php $photoModel = new PhotoModel() ?>
-                    <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>" class="card-img-top img-fluid"
-                        alt="Model Image" style="width: 300px; height: 300px;" data-toggle="modal" data-target="#modelModal"
-                        data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
-                        data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
-                        data-model-weight="<?php echo $model['weight']; ?>"
-                        data-model-birthday="<?php echo $model['birthday']; ?>"
-                        data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
-                        data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
-                        data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                        data-language="<?php echo $languages; ?>" data-gender="<?php echo $gender; ?>"
-                        onclick="showModelDetails(this)">
+            <?php if ($isSelected): ?>
+                <div class="card model-card" style="background-color:#f8f9fa">
+                <?php else: ?>
+                    <div class="card model-card">
+                    <?php endif; ?>
+                    <div class="position-relative">
+                        <?php $photoModel = new PhotoModel() ?>
+                        <img src="<?php echo $photoModel->getImagePath($model['model_id']) ?>"
+                            onerror="this.onerror=null; this.src='/uploads/default-image.jpg';"
+                            class="card-img-top img-fluid" alt="Model Image" style="width: 300px; height: 300px;"
+                            data-toggle="modal" data-target="#modelModal" data-model-id="<?php echo $model['model_id']; ?>"
+                            data-model-name="<?php echo $model['name']; ?>" data-model-age="<?php echo $model['age']; ?>"
+                            data-model-height="<?php echo $model['height']; ?>"
+                            data-model-weight="<?php echo $model['weight']; ?>"
+                            data-model-birthday="<?php echo $model['birthday']; ?>"
+                            data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
+                            data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
+                            data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
+                            data-language="<?php echo $languages; ?>" data-gender="<?php echo $gender; ?>"
+                            onclick="showModelDetails(this)">
 
-                    <?php $form = Form::begun('', "post"); ?>
-                    <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
-                    <input type="hidden" name="admin_id" value="<?php echo $_SESSION['admin']; ?>">
-                    <?php if (!isset($_GET['name'])): ?>
-                        <button type="submit" name="remove_selection"
-                            class="btn btn-danger position-absolute bottom-0 end-0 m-2">
-                            <i class="bi bi-person-fill-x"></i>
-                        </button>
-                    <?php endif ?>
-                    <?php Form::end() ?>
-                </div>
-                <div class="card-body text-center">
-                    <p class="card-text"><?php echo $model['name']; ?></p>
-                    <p class="card-text">Age: <?php echo $model['age']; ?> | Height: <?php echo $model['height']; ?>
-                    </p>
-                    <p class="card-text"> Weight: <?php echo $model['weight']; ?></p>
-                    <p> Talants: <?php echo $talant; ?></p>
+                        <?php $form = Form::begun('', "post"); ?>
+                        <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
+                        <input type="hidden" name="admin_id" value="<?php echo $_SESSION['admin']; ?>">
+                        <?php if ($isSelected): ?>
+                            <div class="position-absolute bottom-0 end-0 m-2 btn-container">
+                                <button type="button" class="btn btn-success initial-btn">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </button>
+                                <a href="/wcp/selection" class="btn btn-danger hover-btn" style="display: none;">
+                                    <i class="bi bi-person-fill-x"></i>
+                                </a>
+                            </div>
+
+                        <?php else: ?>
+                            <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 m-2">
+                                <i class="bi bi-person-add"></i>
+                            </button>
+
+                        <?php endif; ?>
+                        <?php Form::end(); ?>
+                    </div>
+
+                    <div class="card-body text-center">
+                        <p class="card-text"><?php echo $model['name']; ?></p>
+                        <p class="card-text">Age: <?php echo $model['age']; ?> | Height: <?php echo $model['height']; ?>
+                        </p>
+                        <p class="card-text"> Weight: <?php echo $model['weight']; ?></p>
+                        <p> Talants: <?php echo $talant; ?></p>
+                    </div>
                 </div>
             </div>
-        </div>
-    <?php } ?>
-</div>
+        <?php } ?>
+    </div>
 
-<?php include 'core/form/Modal.php'; ?>
+    <?php include 'core/form/Modal.php'; ?>
 
-<script src="/js/models.js"></script>
-<script src="/js/selection.js"></script>
+    <script src="/js/models.js"></script>
+    <script src="/js/selection.js"></script>
