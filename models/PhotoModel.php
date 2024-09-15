@@ -24,7 +24,7 @@ class PhotoModel extends DbModel
 
     public function tableName(): string
     {
-        return 'models';
+        return 'models m';
     }
 
     public function attributes(): array
@@ -120,10 +120,9 @@ class PhotoModel extends DbModel
             $sort = 'birthday';
             $order = $order === 'asc' ? 'desc' : 'asc';
         }
-
-        /* $models = $this->getAllModelsWithTalents($sort, $order, $additionalFilters, $limit, $offset); */
-
-        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset, $join);
+        $group = ',GROUP_CONCAT(DISTINCT mt.talant_id SEPARATOR ", ") AS talant_id, 
+        GROUP_CONCAT(DISTINCT ml.language_id SEPARATOR ", ") AS language_id';
+        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset, $join, $group);
 
         foreach ($models as &$model) {
             $model['age'] = $this->calculateAge($model['birthday']);

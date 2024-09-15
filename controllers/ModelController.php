@@ -58,8 +58,8 @@ class ModelController extends Controller
         $page = $_GET['page'] ?? 1;
         $limit = 24;
         $offset = ($page - 1) * $limit;
-        $join = 'LEFT JOIN c_models_talants mt ON models.model_id = mt.model_id ';
-        $join .= 'LEFT JOIN c_models_languages ml ON models.model_id = ml.model_id ';
+        $join = 'LEFT JOIN c_models_talants mt ON m.model_id = mt.model_id ';
+        $join .= 'LEFT JOIN c_models_languages ml ON m.model_id = ml.model_id ';
         $modelsData = $photoModel->getAllModels($sort, $order, $filter, $limit, $offset, $join);
         $totalModels = $photoModel->countAll($filter);
         $totalPages = ceil($totalModels / $limit);

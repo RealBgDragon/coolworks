@@ -6,8 +6,18 @@
     foreach ($modelsData as $model) {
         $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
         $hairColor = ModelOptions::getHairColorName($model['hair_color']);
-        $talant = ModelOptions::getTalantName($model['talant_id']);
-        $languages = ModelOptions::getLanguages($model['language_id']);
+        $model['talant_id'] = explode(',', $model['talant_id']);
+        $model['language_id'] = explode(',', $model['language_id']);
+        $talants = [];
+        foreach ($model['talant_id'] as $talant_id) {
+            $talant = ModelOptions::getTalantName($talant_id);
+            $talants[] = $talant;
+        }
+        $languages = [];
+        foreach ($model['language_id'] as $language_id) {
+            $language = ModelOptions::getLanguages($language_id);
+            $languages[] = $language;
+        }
         $gender = ModelOptions::getGenderName($model['gender']);
         if (isset($selectedModels)) {
             $isSelected = in_array($model['model_id'], $selectedModels);
@@ -33,8 +43,8 @@
                             data-model-birthday="<?php echo $model['birthday']; ?>"
                             data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
                             data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
-                            data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo $talant; ?>"
-                            data-language="<?php echo $languages; ?>" data-gender="<?php echo $gender; ?>"
+                            data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo implode(', ', $talants); ?>"
+                            data-language="<?php echo implode(', ', $languages) ?>" data-gender="<?php echo $gender; ?>"
                             onclick="showModelDetails(this)">
 
                         <?php $form = Form::begun('', "post"); ?>
@@ -64,7 +74,7 @@
                         <p class="card-text">Age: <?php echo $model['age']; ?> | Height: <?php echo $model['height']; ?>
                         </p>
                         <p class="card-text"> Weight: <?php echo $model['weight']; ?></p>
-                        <p> Talants: <?php echo $talant; ?></p>
+                        <p> Talants: <?php echo implode(', ', $talants); ?></p>
                     </div>
                 </div>
             </div>

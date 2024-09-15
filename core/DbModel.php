@@ -60,13 +60,13 @@ abstract class DbModel extends Model
         }
     }
 
-    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join = '')
+    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join = '', $group)
     {
         $tableName = $this->tableName();
         if ($join == '') {
             $sql = "SELECT * FROM $tableName WHERE 1=1";
         } else {
-            $sql = "SELECT * FROM $tableName $join WHERE 1=1";
+            $sql = "SELECT m.* $group FROM $tableName $join WHERE 1=1";
         }
         // Apply filters
         foreach ($filter as $key => $value) {
@@ -87,6 +87,8 @@ abstract class DbModel extends Model
 
         // Apply sorting
         $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+        $sql .= 'GROUP BY 
+        m.name';
         if ($sort != '')
             $sql .= " ORDER BY $sort $order";
 
@@ -112,7 +114,7 @@ abstract class DbModel extends Model
         // Bind pagination parameters
         $statement->bindValue($paramIndex++, $limit, PDO::PARAM_INT);
         $statement->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
-
+        $statement->debugDumpParams();
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -182,7 +184,7 @@ abstract class DbModel extends Model
         if (!empty($filter['eye_color'])) {
             $eyeColors = explode(',', $filter['eye_color']);
             foreach ($eyeColors as $index => $color) {
-                $statement->bindValue(":eye_color_$index", $color, PDO::PARAM_INT);
+                $statement->bindValue(":eye_color_$index", $color);
             }
         }
         if (!empty($filter['hair_color'])) {
