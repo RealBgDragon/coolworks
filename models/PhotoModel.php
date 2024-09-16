@@ -24,12 +24,12 @@ class PhotoModel extends DbModel
 
     public function tableName(): string
     {
-        return 'model';
+        return 'models m';
     }
 
     public function attributes(): array
     {
-        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'hair_color', 'talant', 'language', 'gender'];
+        return ['name', 'phone', 'birthday', 'weight', 'height', 'eye_color', 'talant', 'hair_color', 'gender'];
     }
 
     public function labels(): array
@@ -43,8 +43,11 @@ class PhotoModel extends DbModel
             'eye_color' => 'Eye Color',
             'hair_color' => 'Hair Color',
             'talant' => 'Talant',
-            'language' => 'Language',
-            'gender' => 'Gender'
+            'gender' => 'Gender',
+            'clothes_size' => 'Clothes size',
+            'shoes_size' => 'Shoes size',
+            'jeans_size' => 'Jeans size',
+            'pants_size' => 'Pants size',
         ];
     }
 
@@ -53,7 +56,7 @@ class PhotoModel extends DbModel
         return 'model_id';
     }
 
-    public function getAllModels($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    public function getAllModels($sort = 'name', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join)
     {
         $additionalFilters = [];
         $modelOptions = new ModelOptions();
@@ -97,21 +100,7 @@ class PhotoModel extends DbModel
         }
 
         if (!empty($filter['gender'])) {
-            $additionalFilters['gender'] = array_map('intval', explode(',', $filter['gender'][0]));
-            foreach ($additionalFilters['gender'] as $gen) {
-                switch ($gen) {
-                    case $modelOptions::GENDER_MALE:
-                        $gen |= $modelOptions::GENDER_MALE;
-                        break;
-                    case $modelOptions::GENDER_FEMALE:
-                        $gen |= $modelOptions::GENDER_FEMALE;
-                        break;
-                    case $modelOptions::GENDER_CHILD:
-                        $gen |= $modelOptions::GENDER_CHILD;
-                        break;
-                }
-                array_push($additionalFilters['gender'], $gen);
-            }
+            $additionalFilters['gender'] = $filter['gender'];
         }
         if (!empty($filter['talant'])) {
             $additionalFilters['talant'] = array_map('intval', explode(',', $filter['talant'][0]));
@@ -121,8 +110,9 @@ class PhotoModel extends DbModel
             $sort = 'birthday';
             $order = $order === 'asc' ? 'desc' : 'asc';
         }
-
-        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset);
+        $group = ',GROUP_CONCAT(DISTINCT mt.talant_id SEPARATOR ", ") AS talant_id, 
+        GROUP_CONCAT(DISTINCT ml.language_id SEPARATOR ", ") AS language_id';
+        $models = $this->getAll($sort, $order, $additionalFilters, $limit, $offset, $join, $group);
 
         foreach ($models as &$model) {
             $model['age'] = $this->calculateAge($model['birthday']);
@@ -142,6 +132,11 @@ class PhotoModel extends DbModel
     public function getId()
     {
         return $this->model_id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function rules(): array
@@ -218,22 +213,16 @@ class PhotoModel extends DbModel
 
     public function getImagePath($modelId)
     {
-        $baseDir = dirname(__DIR__) . "/uploads/{$modelId}/";
-        $pngPath = $baseDir . "img.png";
-        $jpgPath = $baseDir . "img.jpg";
-
-        if (file_exists($pngPath)) {
-            return "/uploads/{$modelId}/img.png";
-        } elseif (file_exists($jpgPath)) {
-            return "/uploads/{$modelId}/img.jpg";
-        } else {
-            return "/uploads/{$modelId}/img.png";
-        }
+        $img = $this->getSpecificInfo('main_img', 'model_id = :id', [':id' => $modelId], '', 'colum');
+        return "/$img[0]";
     }
 
-    public function getAllImagePaths($modelId)
+    public function getAllImagePaths($modelId, $name)
     {
-        $baseDir = dirname(__DIR__) . "/uploads/{$modelId}/";
+        $parts = explode(' ', $name);
+        $name = strtolower(implode('-', $parts));
+        $folder = "$name-$modelId";
+        $baseDir = dirname(__DIR__) . "\\img\\models\\$folder";
         $imagePaths = [];
 
         if (is_dir($baseDir)) {
@@ -243,11 +232,10 @@ class PhotoModel extends DbModel
             foreach ($files as $file) {
                 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                 if (in_array($extension, $allowedExtensions)) {
-                    $imagePaths[] = "/uploads/{$modelId}/" . $file;
+                    $imagePaths[] = "\\img\\models\\$folder\\" . $file;
                 }
             }
         }
-
         return implode(',', $imagePaths);
     }
 
@@ -262,5 +250,25 @@ class PhotoModel extends DbModel
     {
         $modelsCount = $this->countAll($filter);
         return $modelsCount;
+    }
+
+    public function getNameFromDb($info, $cond, $params, $table, $join = '')
+    {
+        if ($join == '') {
+            return $this->getSpecificInfo($info, $cond, $params, $table, 'colum');
+        } else {
+            return $this->getSpecificInfo($info, $cond, $params, $table, 'colum', '', '', $join);
+
+        }
+    }
+
+    public function getAllNames($info, $table)
+    {
+        return $this->getSpecificInfo($info, '1=1', [], $table);
+    }
+
+    public function getAllTalants()
+    {
+        return $this->getSpecificInfo('model_id, talant_id', '1=1', [], 'c_models_talants');
     }
 }

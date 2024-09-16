@@ -28,22 +28,27 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requirement = '', $order = '', $limit = '')
+    public function getSpecificInfo($info, $condition = '1=1', $params = [], $table = '', $requirement = '', $order = '', $limit = '', $join = '')
     {
         if ($table == '') {
             $table = static::tableName();
         }
 
-        $sql = "SELECT $info FROM " . $table . " WHERE " . $condition;
+        $sql = "SELECT $info FROM " . $table;
+        if ($join != '') {
+            $sql .= " $join";
+        }
+        $sql .= " WHERE " . $condition;
 
-        if ($order != '') {
-            $sql .= " ORDER BY date_added " . ($order === 'ASC' ? 'ASC' : 'DESC');
+        if ($order == 'RAND()') {
+            $sql .= " ORDER BY RAND() ";
+        } elseif ($order != '') {
+            $sql .= " ORDER BY add_date " . ($order === 'ASC' ? 'ASC' : 'DESC');
         }
 
         if ($limit != '') {
             $sql .= " LIMIT " . (int) $limit;
         }
-
 
         $statement = self::prepare($sql);
         $statement->execute($params);
@@ -55,11 +60,14 @@ abstract class DbModel extends Model
         }
     }
 
-    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0)
+    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join = '', $group = '')
     {
         $tableName = $this->tableName();
-        $sql = "SELECT * FROM $tableName WHERE 1=1";
-
+        if ($join == '') {
+            $sql = "SELECT * FROM $tableName WHERE 1=1";
+        } else {
+            $sql = "SELECT m.* $group FROM $tableName $join WHERE 1=1";
+        }
         // Apply filters
         foreach ($filter as $key => $value) {
             if (!empty($value)) {
@@ -79,6 +87,8 @@ abstract class DbModel extends Model
 
         // Apply sorting
         $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+        if ($join != '')
+            $sql .= 'GROUP BY m.name';
         if ($sort != '')
             $sql .= " ORDER BY $sort $order";
 
@@ -104,11 +114,9 @@ abstract class DbModel extends Model
         // Bind pagination parameters
         $statement->bindValue($paramIndex++, $limit, PDO::PARAM_INT);
         $statement->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
-
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
     public function countAll($filter = [])
     {
@@ -128,16 +136,19 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $sql .= " AND height <= :height_max";
         }
-        if (!empty($filter['eye_color']) && is_array($filter['eye_color'])) {
+        if (!empty($filter['eye_color'])) {
+            $eyeColors = explode(',', $filter['eye_color']);
             $placeholders = [];
-            foreach ($filter['eye_color'] as $index => $color) {
+            foreach ($eyeColors as $index => $color) {
                 $placeholders[] = ":eye_color_$index";
             }
             $sql .= " AND eye_color IN (" . implode(',', $placeholders) . ")";
         }
-        if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
+
+        if (!empty($filter['hair_color'])) {
+            $hairColors = explode(',', $filter['hair_color']);
             $placeholders = [];
-            foreach ($filter['hair_color'] as $index => $color) {
+            foreach ($hairColors as $index => $color) {
                 $placeholders[] = ":hair_color_$index";
             }
             $sql .= " AND hair_color IN (" . implode(',', $placeholders) . ")";
@@ -169,14 +180,16 @@ abstract class DbModel extends Model
         if (!empty($filter['height_max'])) {
             $statement->bindValue(':height_max', $filter['height_max'], PDO::PARAM_INT);
         }
-        if (!empty($filter['eye_color']) && is_array($filter['eye_color'])) {
-            foreach ($filter['eye_color'] as $index => $color) {
-                $statement->bindValue(":eye_color_$index", $color, PDO::PARAM_STR);
+        if (!empty($filter['eye_color'])) {
+            $eyeColors = explode(',', $filter['eye_color']);
+            foreach ($eyeColors as $index => $color) {
+                $statement->bindValue(":eye_color_$index", $color);
             }
         }
-        if (!empty($filter['hair_color']) && is_array($filter['hair_color'])) {
-            foreach ($filter['hair_color'] as $index => $color) {
-                $statement->bindValue(":hair_color_$index", $color, PDO::PARAM_STR);
+        if (!empty($filter['hair_color'])) {
+            $hairColors = explode(',', $filter['hair_color']);
+            foreach ($hairColors as $index => $color) {
+                $statement->bindValue(":hair_color_$index", $color, PDO::PARAM_INT);
             }
         }
         if (!empty($filter['gender'])) {
@@ -185,10 +198,9 @@ abstract class DbModel extends Model
                     $statement->bindValue(":gender_$index", $gender, PDO::PARAM_STR);
                 }
             } else {
-                $statement->bindValue(':gender', $filter['gender'], PDO::PARAM_INT);
+                $statement->bindValue(':gender', $filter['gender'], PDO::PARAM_STR);
             }
         }
-
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC)['total'];
     }

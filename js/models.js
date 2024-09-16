@@ -52,8 +52,14 @@ $(document).ready(function () {
         var eyeColor = $(img).data("eye-color");
         var hairColor = $(img).data("hair-color");
         var talant = $(img).data("talant");
-        var languages = $(img).data("language");
+        var language = $(img).data("language");
         var gender = $(img).data("gender");
+        var city = $(img).data("city");
+        var clothesSize = $(img).data("clothes-size");
+        var shoesSize = $(img).data("shoes-size");
+        var JeansSize = $(img).data("jeans-size");
+        var pantsSize = $(img).data("pants-size");
+        var note = $(img).data("note");
 
         var imageSrcString = $(img).data("model-srcs");
         var imageSrcs = imageSrcString.split(",").map((src) => src.trim());
@@ -77,9 +83,17 @@ $(document).ready(function () {
         $("#modelPhone").text(modelPhone);
         $("#modelEyeColor").text(eyeColor);
         $("#modelHairColor").text(hairColor);
+        $("#modelTalant").empty();
+        $("#modelLanguage").empty();
         $("#modelTalant").text(talant);
-        $("#modelLanguage").text(languages);
+        $("#modelLanguage").text(language);
         $("#modelGender").text(gender);
+        $("#modelCity").text(city);
+        $("#modelClothesSize").text(clothesSize);
+        $("#modelShoesSize").text(shoesSize);
+        $("#modelJeansSize").text(JeansSize);
+        $("#modelPantsSize").text(pantsSize);
+        $("#modelNote").text(note);
     };
 
     // Handle form submission
@@ -133,11 +147,11 @@ $(document).ready(function () {
             })
             .get();
 
-        $("#hair_color_input").val(selectedHairColors.join(","));
-        $("#eye_color_input").val(selectedEyeColors.join(","));
-        $("#talant_input").val(selectedTalants.join(","));
-        $("#language_input").val(selectedLanguages.join(","));
-        $("#gender_input").val(selectedGenders.join(","));
+        $("#hair_color_input").val(selectedHairColors.join(", "));
+        $("#eye_color_input").val(selectedEyeColors.join(", "));
+        $("#talant_input").val(selectedTalants.join(", "));
+        $("#language_input").val(selectedLanguages.join(", "));
+        $("#gender_input").val(selectedGenders.join(", "));
     }
 
     // Retrieve filter section visibility state from sessionStorage

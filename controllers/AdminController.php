@@ -19,11 +19,11 @@ class AdminController extends Controller
         $selectModel = new SelectModel();
         $this->checkIfAdmin();
         $modelsCount = $photoModel->getModelsCount([]);
-        $maleModelsCount = $photoModel->getModelsCount(['gender' => 1]);
-        $femaleModelsCount = $photoModel->getModelsCount(['gender' => 2]);
-        $childrenModelsCount = $photoModel->getModelsCount(['gender' => 4]);
+        $maleModelsCount = $photoModel->getModelsCount(['gender' => 'm']);
+        $femaleModelsCount = $photoModel->getModelsCount(['gender' => 'f']);
+        $childrenModelsCount = $photoModel->getModelsCount(['age_max' => 18]);
         $limit = 10;
-        $info = 'name, date_added';
+        $info = 'name, add_date';
         $lastModels = $photoModel->getLastModels($info, $limit);
         $topModels = $selectModel->getRandomModels();
 

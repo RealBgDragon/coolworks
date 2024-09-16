@@ -1,6 +1,7 @@
 <?php
 
 namespace app\core\form;
+use app\models\PhotoModel;
 
 class ModelOptions
 {
@@ -18,64 +19,39 @@ class ModelOptions
     const HAIR_COLOR_BROWN = 1 << 4; // 00010000 //32
     const HAIR_COLOR_BLACK = 1 << 5; // 00100000 //64
 
-    const GENDER_MALE = 1 << 0;  // 00000001 //1
-    const GENDER_FEMALE = 1 << 1; // 00000010 //2
+    const GENDER_MALE = 'm';
+    const GENDER_FEMALE = 'f';
     const GENDER_CHILD = 1 << 2; // 00000100 //4
 
-    public static function isOptionSet($options, $option)
+    public static function getTalantName($talentId)
     {
-        return ($options & $option) === $option;
+        $photoModel = new PhotoModel();
+        $join = "INNER JOIN c_models_talants mt ON talents.talent_id = mt.talant_id";
+        $talent = $photoModel->getNameFromDb('name', 'talent_id = :id', [':id' => $talentId], 'talents', $join);
+        return $talent ? $talent[0] : 'Unknown';
     }
 
-    public static function getTalantName($eyeColor)
+    public static function getLanguages($languageId)
     {
-        switch ($eyeColor) {
-            case self::TALANT_ACTOR:
-                return 'Actor';
-            case self::TALANT_PHOTO_MODEL:
-                return 'Photo model';
-            default:
-                return 'Unknown';
-        }
+        $photoModel = new PhotoModel();
+        $join = "INNER JOIN c_models_languages ml ON c_languages.language_id = ml.language_id";
+        $language = $photoModel->getNameFromDb('language', 'c_languages.language_id = :id', [':id' => $languageId], 'c_languages', $join);
+        return $language ? $language[0] : 'Unknown';
     }
 
-    public static function getLanguages($languageBitmask)
+    public static function getEyeColorName($eyeColorId)
     {
-        $languages = [];
-        if ($languageBitmask & self::LANGUAGE_BULGARIAN) {
-            $languages[] = 'Bulgarian';
-        }
-        if ($languageBitmask & self::LANGUAGE_ENGLISH) {
-            $languages[] = 'English';
-        }
-        return $languages ? implode(', ', $languages) : 'Unknown';
-    }
-    public static function getEyeColorName($eyeColor)
-    {
-        switch ($eyeColor) {
-            case self::EYE_COLOR_BLUE:
-                return 'Blue';
-            case self::EYE_COLOR_GREEN:
-                return 'Green';
-            case self::EYE_COLOR_BROWN:
-                return 'Brown';
-            default:
-                return 'Unknown';
-        }
+        $photoModel = new PhotoModel();
+        $eyeColor = $photoModel->getNameFromDb('name', 'eye_color_id = :id', [':id' => $eyeColorId], 'eye_colors');
+        return $eyeColor ? $eyeColor[0] : 'Unknown';
     }
 
-    public static function getHairColorName($hairColor)
+    public static function getHairColorName($hairColorId)
     {
-        switch ($hairColor) {
-            case self::HAIR_COLOR_BLONDE:
-                return 'Blonde';
-            case self::HAIR_COLOR_BROWN:
-                return 'Brown';
-            case self::HAIR_COLOR_BLACK:
-                return 'Black';
-            default:
-                return 'Unknown';
-        }
+        $photoModel = new PhotoModel();
+        $hairColor = $photoModel->getNameFromDb('name', 'hair_color_id = :id', [':id' => $hairColorId], 'hair_colors');
+
+        return $hairColor ? $hairColor[0] : 'Unknown';
     }
 
     public static function getGenderName($gender)
@@ -85,8 +61,6 @@ class ModelOptions
                 return 'Male';
             case self::GENDER_FEMALE:
                 return 'Female';
-            case self::GENDER_CHILD:
-                return 'Child';
             default:
                 return 'Unknown';
         }

@@ -49,7 +49,7 @@ use app\core\form\ModelOptions; ?>
                 <?php foreach ($lastModels as $model): ?>
                     <li class="list-group-item">
                         New model added: <?= htmlspecialchars($model['name']) ?> -
-                        <?= date('F j, Y, g:i a', strtotime($model['date_added'])); ?>
+                        <?= date('F j, Y, g:i a', strtotime($model['add_date'])); ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -72,7 +72,7 @@ use app\core\form\ModelOptions; ?>
                     </thead>
                     <tbody>
                         <?php foreach ($topModels as $model):
-                            $talant = ModelOptions::getTalantName($model['talant']);
+                            $talant = ModelOptions::getTalantName($model['talant_id']);
                             ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($model['name']); ?></td>
