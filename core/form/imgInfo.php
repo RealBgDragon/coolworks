@@ -4,7 +4,7 @@
     data-model-id="<?php echo $model['model_id']; ?>" data-model-name="<?php echo $model['name']; ?>"
     data-model-age="<?php echo $model['age']; ?>" data-model-height="<?php echo $model['height']; ?>"
     data-model-weight="<?php echo $model['weight']; ?>" data-model-birthday="<?php echo $model['birthday']; ?>"
-    data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id']); ?>"
+    data-model-srcs="<?php echo $photoModel->getAllImagePaths($model['model_id'], $model['name']); ?>"
     data-model-phone="<?php echo $model['phone']; ?>" data-eye-color="<?php echo $eyeColor; ?>"
     data-hair-color="<?php echo $hairColor; ?>" data-talant="<?php echo implode(', ', $talants); ?>"
     data-language="<?php echo implode(', ', $languages) ?>" data-gender="<?php echo $gender; ?>"

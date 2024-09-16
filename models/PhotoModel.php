@@ -148,6 +148,11 @@ class PhotoModel extends DbModel
         return $this->model_id;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function rules(): array
     {
         return [
@@ -222,22 +227,16 @@ class PhotoModel extends DbModel
 
     public function getImagePath($modelId)
     {
-        $baseDir = dirname(__DIR__) . "/uploads/{$modelId}/";
-        $pngPath = $baseDir . "img.png";
-        $jpgPath = $baseDir . "img.jpg";
-
-        if (file_exists($pngPath)) {
-            return "/uploads/{$modelId}/img.png";
-        } elseif (file_exists($jpgPath)) {
-            return "/uploads/{$modelId}/img.jpg";
-        } else {
-            return "/uploads/{$modelId}/img.png";
-        }
+        $img = $this->getSpecificInfo('main_img', 'model_id = :id', [':id' => $modelId], '', 'colum');
+        return "/$img[0]";
     }
 
-    public function getAllImagePaths($modelId)
+    public function getAllImagePaths($modelId, $name)
     {
-        $baseDir = dirname(__DIR__) . "/uploads/{$modelId}/";
+        $parts = explode(' ', $name);
+        $name = strtolower(implode('-', $parts));
+        $folder = "$name-$modelId";
+        $baseDir = dirname(__DIR__) . "\\img\\models\\$folder";
         $imagePaths = [];
 
         if (is_dir($baseDir)) {
@@ -247,11 +246,10 @@ class PhotoModel extends DbModel
             foreach ($files as $file) {
                 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                 if (in_array($extension, $allowedExtensions)) {
-                    $imagePaths[] = "/uploads/{$modelId}/" . $file;
+                    $imagePaths[] = "\\img\\models\\$folder\\" . $file;
                 }
             }
         }
-
         return implode(',', $imagePaths);
     }
 

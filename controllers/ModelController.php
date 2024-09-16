@@ -104,86 +104,97 @@ class ModelController extends Controller
             // Handle eye color and hair color
             $eyeColorOption = isset($request->getBody()['eye_color']) ? (int) $request->getBody()['eye_color'] : 0;
             $hairColorOption = isset($request->getBody()['hair_color']) ? (int) $request->getBody()['hair_color'] : 0;
-            $talant = isset($request->getBody()['talant']) ? (int) $request->getBody()['talant'] : 0;
-            /* $language = isset($request->getBody()['language']) ? $request->getBody()['language'] : 0; */
-            $gender = isset($request->getBody()['gender']) ? $request->getBody()['gender'] : 0;
+            /* $talant = isset($request->getBody()['talant']) ? (int) $request->getBody()['talant'] : 0;
+            $gender = isset($request->getBody()['gender']) ? (int) $request->getBody()['gender'] : 0; */
+
             $photoModel->setEyeColor($eyeColorOption);
             $photoModel->setHairColor($hairColorOption);
-            $photoModel->setTalant($talant);
-            /* $photoModel->setLanguage($language); */
-            $photoModel->setGender($gender);
+            /* $photoModel->setTalant($talant);
+            $photoModel->setGender($gender); */
 
-            // Main image upload handling
-            if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
-                $fileTmpPath = $_FILES['main_image']['tmp_name'];
-                $fileName = $_FILES['main_image']['name'];
-                $fileNameCmps = explode(".", $fileName);
-                $fileExtension = strtolower(end($fileNameCmps));
+            // Create the new model entry in the database
+            if ($photoModel->createNew()) {
+                $modelId = $photoModel->getId();
+                $name = $photoModel->getName();
+                $parts = explode(' ', $name);
+                $name = strtolower(implode('-', $parts));
 
-                $allowedFileExtensions = ['jpg', 'gif', 'png'];
+                $uploadFileDir = './uploads/' . $name . '-' . $modelId . '/';
 
-                if ($photoModel->createNew() && in_array($fileExtension, $allowedFileExtensions)) {
-                    $modelId = $photoModel->getId();
-                    $uploadFileDir = './uploads/' . $modelId . '/';
-                    if (!is_dir($uploadFileDir)) {
-                        mkdir($uploadFileDir, 0755, true);
-                    }
-
-                    $newFileName = 'img.' . $fileExtension;
-                    $destPath = $uploadFileDir . $newFileName;
-
-                    if (!move_uploaded_file($fileTmpPath, $destPath)) {
-                        $photoModel->addError('error', 'Error moving the main image to the upload directory.');
-                    }
-                } else {
-                    $photoModel->addError('error', 'Invalid file extension or error creating the model.');
+                // Create the directory if it doesn't exist
+                if (!is_dir($uploadFileDir)) {
+                    mkdir($uploadFileDir, 0755, true);
                 }
-            } else {
-                $photoModel->addError('error', 'Error uploading the main image.');
-            }
 
-            // Additional images upload handling
-            if (isset($_FILES['additional_images']) && !empty($_FILES['additional_images']['name'][0])) {
-                $allowedFileExtensions = ['jpg', 'gif', 'png'];
-
-                foreach ($_FILES['additional_images']['tmp_name'] as $key => $tmp_name) {
-                    $fileName = $_FILES['additional_images']['name'][$key];
+                // Handle Main Image Upload
+                if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
+                    $fileTmpPath = $_FILES['main_image']['tmp_name'];
+                    $fileName = $_FILES['main_image']['name'];
                     $fileNameCmps = explode(".", $fileName);
                     $fileExtension = strtolower(end($fileNameCmps));
+                    $allowedFileExtensions = ['jpg', 'gif', 'png'];
 
                     if (in_array($fileExtension, $allowedFileExtensions)) {
-                        $newFileName = uniqid() . '.' . $fileExtension;
-                        $destPath = $uploadFileDir . $newFileName;
+                        // Save the main image as '1.<file extension>'
+                        $mainImageFileName = '1.' . $fileExtension;
+                        $mainImageDestPath = $uploadFileDir . $mainImageFileName;
 
-                        if (!move_uploaded_file($tmp_name, $destPath)) {
-                            $photoModel->addError('error', 'Error moving an additional image to the upload directory.');
+                        if (move_uploaded_file($fileTmpPath, $mainImageDestPath)) {
+                            // Save the path to the database
+                            $photoModel->setMainImage($mainImageDestPath);
+                            $photoModel->updateMainImage();
+                        } else {
+                            $photoModel->addError('error', 'Error moving the main image to the upload directory.');
                         }
                     } else {
-                        $photoModel->addError('error', 'Invalid file extension for additional images.');
+                        $photoModel->addError('error', 'Invalid file extension for the main image.');
+                    }
+                } else {
+                    $photoModel->addError('error', 'Error uploading the main image.');
+                }
+
+                // Handle Additional Images Upload
+                if (isset($_FILES['additional_images']) && !empty($_FILES['additional_images']['name'][0])) {
+                    $allowedFileExtensions = ['jpg', 'gif', 'png'];
+
+                    foreach ($_FILES['additional_images']['tmp_name'] as $key => $tmp_name) {
+                        $fileName = $_FILES['additional_images']['name'][$key];
+                        $fileNameCmps = explode(".", $fileName);
+                        $fileExtension = strtolower(end($fileNameCmps));
+
+                        if (in_array($fileExtension, $allowedFileExtensions)) {
+                            // Save additional images as '2.jpg', '3.jpg', etc.
+                            $additionalImageFileName = ($key + 2) . '.' . $fileExtension;
+                            $additionalImageDestPath = $uploadFileDir . $additionalImageFileName;
+
+                            if (!move_uploaded_file($tmp_name, $additionalImageDestPath)) {
+                                $photoModel->addError('error', 'Error moving additional image to the upload directory.');
+                            }
+                        } else {
+                            $photoModel->addError('error', 'Invalid file extension for additional images.');
+                        }
                     }
                 }
+
+                if ($photoModel->hasError('error')) {
+                    $msg = $photoModel->getFirstError('error');
+                    $session->setFlash('error', "$msg");
+
+                    $this->setLayout('admin_main');
+                    return $this->render('newModel', [
+                        'model' => $photoModel,
+                        'eyeColorOptions' => $eyeColorOptions,
+                        'hairColorOptions' => $hairColorOptions,
+                        'talantOptions' => $talantOptions,
+                        'languages' => $languages
+                    ]);
+                }
+
+                $response->redirect('/wcp/models');
+                return;
+            } else {
+                $photoModel->addError('error', 'Error creating the model.');
             }
-            if ($photoModel->hasError('error')) {
-                $msg = $photoModel->getFirstError('error');
-                $session->setFlash('error', "$msg");
-
-                $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
-                $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
-                $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
-                $languages = $photoModel->getAllNames('language_id, language', 'c_languages');
-
-                $this->setLayout('admin_main');
-                return $this->render('newModel', [
-                    'model' => $photoModel,
-                    'eyeColorOptions' => $eyeColorOptions,
-                    'hairColorOptions' => $hairColorOptions,
-                    'talantOptions' => $talantOptions,
-                    'languages' => $languages
-                ]);
-            }
-
-            $response->redirect('/wcp/models');
-            return;
         }
 
         $this->setLayout('admin_main');
@@ -195,4 +206,5 @@ class ModelController extends Controller
             'languages' => $languages
         ]);
     }
+
 }
