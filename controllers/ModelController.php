@@ -68,7 +68,7 @@ class ModelController extends Controller
 
         $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
         $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
-        $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
+        $talantOptions = $photoModel->getAllNames('talant_id, talant', 'talents');
         $languages = $photoModel->getAllNames('language_id, language', 'c_languages');
 
         $this->setLayout('admin_main');
@@ -95,7 +95,7 @@ class ModelController extends Controller
 
         $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
         $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
-        $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
+        $talantOptions = $photoModel->getAllNames('talant_id, talant', 'talents');
         $languages = $photoModel->getAllNames('language_id, language', 'c_languages');
 
         if ($request->isPost()) {

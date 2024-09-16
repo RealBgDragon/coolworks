@@ -258,7 +258,6 @@ class PhotoModel extends DbModel
             return $this->getSpecificInfo($info, $cond, $params, $table, 'colum');
         } else {
             return $this->getSpecificInfo($info, $cond, $params, $table, 'colum', '', '', $join);
-
         }
     }
 

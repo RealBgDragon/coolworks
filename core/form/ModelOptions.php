@@ -26,8 +26,8 @@ class ModelOptions
     public static function getTalantName($talentId)
     {
         $photoModel = new PhotoModel();
-        $join = "INNER JOIN c_models_talants mt ON talents.talent_id = mt.talant_id";
-        $talent = $photoModel->getNameFromDb('name', 'talent_id = :id', [':id' => $talentId], 'talents', $join);
+        $join = "INNER JOIN c_models_talants mt ON talents.talant_id = mt.talant_id";
+        $talent = $photoModel->getNameFromDb('talents.talant', 'talents.talant_id = :id', [':id' => $talentId], 'talents', $join);
         return $talent ? $talent[0] : 'Unknown';
     }
 
