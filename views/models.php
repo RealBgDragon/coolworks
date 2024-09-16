@@ -173,47 +173,115 @@
 </div>
 
 
-<?php include 'core/form/ModelCard.php'; ?>
-
 <div class="row">
-    <div class="col-md-12">
-        <nav>
-            <ul class="pagination justify-content-center">
-                <?php
-                $pageRange = 2; // Number of pages to show on either side of the current page
-                $startPage = max(1, $currentPage - $pageRange);
-                $endPage = min($totalPages, $currentPage + $pageRange);
-                $currentFilters = $_GET;
+    <?php
+    foreach ($modelsData as $model) {
+        $eyeColor = ModelOptions::getEyeColorName($model['eye_color']);
+        $hairColor = ModelOptions::getHairColorName($model['hair_color']);
+        $model['talant_id'] = explode(',', $model['talant_id']);
+        $model['language_id'] = explode(',', $model['language_id']);
+        $talants = [];
+        foreach ($model['talant_id'] as $talant_id) {
+            $talant = ModelOptions::getTalantName($talant_id);
+            $talants[] = $talant;
+        }
+        $languages = [];
+        foreach ($model['language_id'] as $language_id) {
+            $language = ModelOptions::getLanguages($language_id);
+            $languages[] = $language;
+        }
+        $gender = ModelOptions::getGenderName($model['gender']);
+        if (isset($selectedModels)) {
+            $isSelected = in_array($model['model_id'], $selectedModels);
+        } else {
+            $isSelected = false;
+        }
+        ?>
+        <div class="col-md-2 mb-4">
+            <?php if ($isSelected): ?>
+                <div class="card model-card" style="background-color:#f8f9fa">
+                <?php else: ?>
+                    <div class="card model-card">
+                    <?php endif; ?>
+                    <div class="position-relative">
+                        <?php $photoModel = new PhotoModel() ?>
+                        <?php require 'core/form/imgInfo.php'; ?>
 
-                // Show "First" page link
-                if ($startPage > 1) {
-                    echo '<li class="page-item"><a class="page-link" href="/wcp/models?page=1&' . http_build_query($currentFilters) . '">1</a></li>';
-                    if ($startPage > 2) {
-                        echo '<li class="page-item"><span class="page-link">...</span></li>';
-                    }
-                }
+                        <?php $form = Form::begun('', "post"); ?>
+                        <input type="hidden" name="model_id" value="<?php echo $model['model_id']; ?>">
+                        <input type="hidden" name="admin_id" value="<?php echo $_SESSION['admin']; ?>">
+                        <?php if ($isSelected): ?>
+                            <div class="position-absolute bottom-0 end-0 m-2 btn-container">
+                                <button type="button" class="btn btn-success initial-btn">
+                                    <i class="bi bi-person-fill-check"></i>
+                                </button>
+                                <a href="/wcp/selection" class="btn btn-danger hover-btn" style="display: none;">
+                                    <i class="bi bi-person-fill-x"></i>
+                                </a>
+                            </div>
 
-                // Loop through the pages within the defined range
-                for ($i = $startPage; $i <= $endPage; $i++) {
-                    $currentFilters['page'] = $i;
-                    echo '<li class="page-item' . ($currentPage == $i ? ' active' : '') . '"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">' . $i . '</a></li>';
-                }
+                        <?php else: ?>
+                            <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 m-2">
+                                <i class="bi bi-person-add"></i>
+                            </button>
 
-                // Show "Last" page link
-                if ($endPage < $totalPages) {
-                    if ($endPage < $totalPages - 1) {
-                        echo '<li class="page-item"><span class="page-link">...</span></li>';
-                    }
-                    $currentFilters['page'] = $totalPages;
-                    echo '<li class="page-item"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">' . $totalPages . '</a></li>';
-                }
-                ?>
-            </ul>
-        </nav>
+                        <?php endif; ?>
+                        <?php Form::end(); ?>
+                    </div>
+
+                    <div class="card-body text-center">
+                        <p class="card-text"><?php echo $model['name']; ?></p>
+                        <p class="card-text">Age: <?php echo $model['age']; ?> | Height: <?php echo $model['height']; ?>
+                        </p>
+                        <p class="card-text"> Weight: <?php echo $model['weight']; ?></p>
+                        <p> Talants: <?php echo implode(', ', $talants); ?></p>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <?php
+                    $pageRange = 2; // Number of pages to show on either side of the current page
+                    $startPage = max(1, $currentPage - $pageRange);
+                    $endPage = min($totalPages, $currentPage + $pageRange);
+                    $currentFilters = $_GET;
+
+                    // Show "First" page link
+                    if ($startPage > 1) {
+                        $currentFilters['page'] = 1; // Explicitly set page to 1
+                        echo '<li class="page-item"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">1</a></li>';
+                        if ($startPage > 2) {
+                            echo '<li class="page-item"><span class="page-link">...</span></li>';
+                        }
+                    }
 
 
-<?php include 'core/form/Modal.php'; ?>
+                    // Loop through the pages within the defined range
+                    for ($i = $startPage; $i <= $endPage; $i++) {
+                        $currentFilters['page'] = $i;
+                        echo '<li class="page-item' . ($currentPage == $i ? ' active' : '') . '"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">' . $i . '</a></li>';
+                    }
 
-<script src="/js/models.js" async></script>
+                    // Show "Last" page link
+                    if ($endPage < $totalPages) {
+                        if ($endPage < $totalPages - 1) {
+                            echo '<li class="page-item"><span class="page-link">...</span></li>';
+                        }
+                        $currentFilters['page'] = $totalPages;
+                        echo '<li class="page-item"><a class="page-link" href="/wcp/models?' . http_build_query($currentFilters) . '">' . $totalPages . '</a></li>';
+                    }
+                    ?>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <?php include 'core/form/Modal.php'; ?>
+
+    <script src="/js/models.js" async></script>

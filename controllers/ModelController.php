@@ -93,6 +93,11 @@ class ModelController extends Controller
         $photoModel = new PhotoModel();
         $session = new Session();
 
+        $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
+        $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
+        $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
+        $languages = $photoModel->getAllNames('language_id, language', 'c_languages');
+
         if ($request->isPost()) {
             $photoModel->loadData($request->getBody());
 
@@ -162,8 +167,19 @@ class ModelController extends Controller
                 $msg = $photoModel->getFirstError('error');
                 $session->setFlash('error', "$msg");
 
+                $eyeColorOptions = $photoModel->getAllNames('eye_color_id, name', 'eye_colors');
+                $hairColorOptions = $photoModel->getAllNames('hair_color_id, name', 'hair_colors');
+                $talantOptions = $photoModel->getAllNames('talent_id, name', 'talents');
+                $languages = $photoModel->getAllNames('language_id, language', 'c_languages');
+
                 $this->setLayout('admin_main');
-                return $this->render('newModel', ['model' => $photoModel]);
+                return $this->render('newModel', [
+                    'model' => $photoModel,
+                    'eyeColorOptions' => $eyeColorOptions,
+                    'hairColorOptions' => $hairColorOptions,
+                    'talantOptions' => $talantOptions,
+                    'languages' => $languages
+                ]);
             }
 
             $response->redirect('/wcp/models');
@@ -172,7 +188,11 @@ class ModelController extends Controller
 
         $this->setLayout('admin_main');
         return $this->render('newModel', [
-            'model' => $photoModel
+            'model' => $photoModel,
+            'eyeColorOptions' => $eyeColorOptions,
+            'hairColorOptions' => $hairColorOptions,
+            'talantOptions' => $talantOptions,
+            'languages' => $languages
         ]);
     }
 }

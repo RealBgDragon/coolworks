@@ -24,37 +24,41 @@ if (!isset($model)) {
         <?php echo $form->field($model, 'birthday')->dateField() ?>
         <?php echo $form->field($model, 'height')->numberField() ?>
         <?php echo $form->field($model, 'weight')->numberField() ?>
+        <?php echo $form->field($model, 'city') ?>
+        <?php echo $form->field($model, 'clothes_size') ?>
+        <?php echo $form->field($model, 'shoes_size') ?>
+        <?php echo $form->field($model, 'jeans_size') ?>
+        <?php echo $form->field($model, 'pants_size') ?>
     </div>
 
     <!-- Right Column (Appearance & Uploads) -->
     <div class="col-md-6">
         <label for="eye_color">Eye Color:</label>
         <div class="radio-group">
-            <label><input type="radio" name="eye_color" value="<?php echo ModelOptions::EYE_COLOR_BLUE; ?>">
-                Blue</label>
-            <label><input type="radio" name="eye_color" value="<?php echo ModelOptions::EYE_COLOR_GREEN; ?>">
-                Green</label>
-            <label><input type="radio" name="eye_color" value="<?php echo ModelOptions::EYE_COLOR_BROWN; ?>">
-                Brown</label>
+            <?php
+            foreach ($eyeColorOptions as $eyeColor) {
+                ?>
+                <label><input type="radio" name="eye_color" value="<?php echo $eyeColor['eye_color_id']; ?>">
+                    <?php echo $eyeColor['name']; ?>
+                </label>
+            <?php } ?>
         </div>
 
         <label for="hair_color">Hair Color:</label>
         <div class="radio-group">
-            <label><input type="radio" name="hair_color" value="<?php echo ModelOptions::HAIR_COLOR_BLACK; ?>">
-                Black</label>
-            <label><input type="radio" name="hair_color" value="<?php echo ModelOptions::HAIR_COLOR_BROWN; ?>">
-                Brown</label>
-            <label><input type="radio" name="hair_color" value="<?php echo ModelOptions::HAIR_COLOR_BLONDE; ?>">
-                Blonde</label>
+            <?php
+            foreach ($hairColorOptions as $hairColor) {
+                ?>
+                <label><input type="radio" name="hair_color" value="<?php echo $hairColor['hair_color_id']; ?>">
+                    <?php echo $hairColor['name']; ?>
+                </label>
+            <?php } ?>
         </div>
 
         <label for="gender">Gender:</label>
         <div class="radio-group">
             <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_MALE; ?>"> Male</label>
-            <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_FEMALE; ?>">
-                Female</label>
-            <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_CHILD; ?>">
-                Child</label>
+            <label><input type="radio" name="gender" value="<?php echo ModelOptions::GENDER_FEMALE; ?>"> Female</label>
         </div>
 
         <div class="mb-3">
@@ -66,11 +70,15 @@ if (!isset($model)) {
             <label for="additional_images" class="form-label">Additional Images</label>
             <input class="form-control" type="file" id="additional_images" name="additional_images[]" multiple>
         </div>
+
+        <label for="note">Additional Notes:</label>
+        <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+
     </div>
 </div>
 
 <div class="row">
-    <label for="talant">Talent:</label>
+    <!--     <label for="talant">Talent:</label>
     <div class="radio-group">
         <label><input type="radio" name="talant" value="<?php echo ModelOptions::TALANT_ACTOR; ?>">
             Actor</label>
@@ -84,7 +92,7 @@ if (!isset($model)) {
             Bulgarian</label>
         <label><input type="checkbox" name="language[]" value="<?php echo ModelOptions::LANGUAGE_ENGLISH; ?>">
             English</label>
-    </div>
+    </div> -->
 </div>
 
 <div class="button-div">

@@ -60,7 +60,7 @@ abstract class DbModel extends Model
         }
     }
 
-    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join = '', $group)
+    public function getAll($sort = '', $order = 'asc', $filter = [], $limit = 20, $offset = 0, $join = '', $group = '')
     {
         $tableName = $this->tableName();
         if ($join == '') {
@@ -87,8 +87,8 @@ abstract class DbModel extends Model
 
         // Apply sorting
         $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
-        $sql .= 'GROUP BY 
-        m.name';
+        if ($join != '')
+            $sql .= 'GROUP BY m.name';
         if ($sort != '')
             $sql .= " ORDER BY $sort $order";
 
@@ -114,7 +114,6 @@ abstract class DbModel extends Model
         // Bind pagination parameters
         $statement->bindValue($paramIndex++, $limit, PDO::PARAM_INT);
         $statement->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
-        $statement->debugDumpParams();
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -226,7 +225,6 @@ abstract class DbModel extends Model
             foreach ($params as $key => $value) {
                 $statement->bindValue($paramNumber++, $value); // Use numeric index 
             }
-            $statement->debugDumpParams();
             $statement->execute();
             return self::getLastId();
         } catch (PDOException $e) {

@@ -147,14 +147,15 @@ class SelectModel extends DbModel
 
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
 
-        $sql = "SELECT DISTINCT models.*, c_models_languages.language_id, c_models_talants.talant_id, TIMESTAMPDIFF(YEAR, models.birthday, CURDATE()) AS age 
-            FROM models";
+        $sql = "SELECT m.*, GROUP_CONCAT(DISTINCT mt.talant_id SEPARATOR ', ') AS talant_id, 
+        GROUP_CONCAT(DISTINCT ml.language_id SEPARATOR ', ') AS language_id, TIMESTAMPDIFF(YEAR, m.birthday, CURDATE()) AS age 
+            FROM models m";
 
         if (!empty($join)) {
             $sql .= " $join";
         }
 
-        $sql .= " WHERE models.model_id IN ($placeholders)";
+        $sql .= " WHERE m.model_id IN ($placeholders) GROUP BY m.model_id";
 
         $statement = self::prepare($sql);
         $paramNumber = 1;

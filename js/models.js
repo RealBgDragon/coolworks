@@ -52,9 +52,14 @@ $(document).ready(function () {
         var eyeColor = $(img).data("eye-color");
         var hairColor = $(img).data("hair-color");
         var talant = $(img).data("talant");
-        console.log(talant);
         var language = $(img).data("language");
         var gender = $(img).data("gender");
+        var city = $(img).data("city");
+        var clothesSize = $(img).data("clothes-size");
+        var shoesSize = $(img).data("shoes-size");
+        var JeansSize = $(img).data("jeans-size");
+        var pantsSize = $(img).data("pants-size");
+        var note = $(img).data("note");
 
         var imageSrcString = $(img).data("model-srcs");
         var imageSrcs = imageSrcString.split(",").map((src) => src.trim());
@@ -83,6 +88,12 @@ $(document).ready(function () {
         $("#modelTalant").text(talant);
         $("#modelLanguage").text(language);
         $("#modelGender").text(gender);
+        $("#modelCity").text(city);
+        $("#modelClothesSize").text(clothesSize);
+        $("#modelShoesSize").text(shoesSize);
+        $("#modelJeansSize").text(JeansSize);
+        $("#modelPantsSize").text(pantsSize);
+        $("#modelNote").text(note);
     };
 
     // Handle form submission

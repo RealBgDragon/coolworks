@@ -43,7 +43,11 @@ class PhotoModel extends DbModel
             'eye_color' => 'Eye Color',
             'hair_color' => 'Hair Color',
             'talant' => 'Talant',
-            'gender' => 'Gender'
+            'gender' => 'Gender',
+            'clothes_size' => 'Clothes size',
+            'shoes_size' => 'Shoes size',
+            'jeans_size' => 'Jeans size',
+            'pants_size' => 'Pants size',
         ];
     }
 

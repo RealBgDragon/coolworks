@@ -65,6 +65,31 @@
                                 <dt class="col-6 text-end">Gender:</dt>
                                 <dd class="col-6 text-start" id="modelGender"></dd>
                             </div>
+                            <div class="d-flex justify-content-between align-items-center modal-items">
+                                <dt class="col-6 text-end">City:</dt>
+                                <dd class="col-6 text-start" id="modelCity"></dd>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center modal-items">
+                                <dt class="col-6 text-end">Clothes size:</dt>
+                                <dd class="col-6 text-start" id="modelClothesSize"></dd>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center modal-items">
+                                <dt class="col-6 text-end">Shoes size:</dt>
+                                <dd class="col-6 text-start" id="modelShoesSize"></dd>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center modal-items">
+                                <dt class="col-6 text-end">Jeans size:</dt>
+                                <dd class="col-6 text-start" id="modelJeansSize"></dd>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center modal-items">
+                                <dt class="col-6 text-end">Pants size:</dt>
+                                <dd class="col-6 text-start" id="modelPantsSize"></dd>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center modal-items">
+                                <dt class="col-6 text-end">Note:</dt>
+                                <dd class="col-6 text-start" id="modelNote"></dd>
+                            </div>
                         </dl>
                     </div>
                 </div>
