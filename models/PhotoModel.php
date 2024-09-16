@@ -100,21 +100,7 @@ class PhotoModel extends DbModel
         }
 
         if (!empty($filter['gender'])) {
-            $additionalFilters['gender'] = array_map('intval', explode(',', $filter['gender'][0]));
-            foreach ($additionalFilters['gender'] as $gen) {
-                switch ($gen) {
-                    case $modelOptions::GENDER_MALE:
-                        $gen |= $modelOptions::GENDER_MALE;
-                        break;
-                    case $modelOptions::GENDER_FEMALE:
-                        $gen |= $modelOptions::GENDER_FEMALE;
-                        break;
-                    case $modelOptions::GENDER_CHILD:
-                        $gen |= $modelOptions::GENDER_CHILD;
-                        break;
-                }
-                array_push($additionalFilters['gender'], $gen);
-            }
+            $additionalFilters['gender'] = $filter['gender'];
         }
         if (!empty($filter['talant'])) {
             $additionalFilters['talant'] = array_map('intval', explode(',', $filter['talant'][0]));
